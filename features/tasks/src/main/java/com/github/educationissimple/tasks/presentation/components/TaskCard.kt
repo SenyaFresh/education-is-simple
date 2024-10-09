@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +62,7 @@ fun TaskCard(modifier: Modifier = Modifier, isCompleted: Boolean, text: String, 
                 Text(
                     text = text,
                     maxLines = 1,
+                    fontWeight = FontWeight.Medium,
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(textDecoration = if (isCompleted) TextDecoration.LineThrough else null),
                 )
