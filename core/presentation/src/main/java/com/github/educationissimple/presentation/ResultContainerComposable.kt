@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
-import com.github.presentation.R
 
 
 /**

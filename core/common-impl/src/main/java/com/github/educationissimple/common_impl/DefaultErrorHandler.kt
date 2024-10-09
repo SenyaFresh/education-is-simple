@@ -1,6 +1,5 @@
 package com.github.educationissimple.common_impl
 
-import com.github.common_impl.R
 import com.github.educationissimple.common.Logger
 import com.github.educationissimple.common.Resources
 import com.github.educationissimple.common.Toaster
