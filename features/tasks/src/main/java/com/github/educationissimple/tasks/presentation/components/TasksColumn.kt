@@ -1,5 +1,6 @@
 package com.github.educationissimple.tasks.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,12 +32,23 @@ fun TasksColumn(title: String, tasks: List<Task>) {
     var isListVisible by rememberSaveable { mutableStateOf(true) }
 
     Column(verticalArrangement = Arrangement.Top) {
-        Row(Modifier.padding(start = 12.dp, top = 8.dp, end = 12.dp)) {
+        Row(
+            Modifier
+                .padding(start = 12.dp, top = 8.dp, end = 12.dp)
+                .clickable { isListVisible = !isListVisible }) {
             Text(text = title, fontWeight = FontWeight.Bold)
             if (isListVisible) {
-                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = null, modifier = Modifier.size(16.dp))
+                Icon(
+                    Icons.Filled.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
             } else {
-                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = null, modifier = Modifier.size(16.dp))
+                Icon(
+                    Icons.Filled.KeyboardArrowUp,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
             }
         }
 
@@ -62,12 +74,24 @@ fun TasksColumn(title: String, tasks: List<Task>) {
 @Preview(showSystemUi = true)
 @Composable
 fun TasksColumnPreview() {
-    TasksColumn(
-        "Задачи на сегодня",
-        listOf(
-            Task(id = 1, text = "Побегать"),
-            Task(id = 2, text = "Попрыгать"),
-            Task(id = 3, text = "Полежать")
+    Column {
+        TasksColumn(
+            "Задачи на сегодня",
+            listOf(
+                Task(id = 1, text = "Побегать"),
+                Task(id = 2, text = "Попрыгать"),
+                Task(id = 3, text = "Полежать")
+            )
         )
-    )
+
+        TasksColumn(
+            "Выполненные сегодня задачи",
+            listOf(
+                Task(id = 1, text = "Побегать", isCompleted = true, date = "10-08"),
+                Task(id = 2, text = "Попрыгать", isCompleted = true),
+                Task(id = 3, text = "Полежать", isCompleted = true)
+            )
+        )
+    }
+
 }
