@@ -34,7 +34,6 @@ import com.github.common.ResultContainer
 fun ResultContainerComposable(
     container: ResultContainer<*>,
     onTryAgain: () -> Unit,
-    onRestartApp: () -> Unit,
     onSuccess: @Composable () -> Unit
 ) {
 
