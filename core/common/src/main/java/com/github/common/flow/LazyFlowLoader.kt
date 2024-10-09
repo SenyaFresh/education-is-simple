@@ -1,8 +1,14 @@
 package com.github.common.flow
 
+import com.github.common.ResultContainer
+import kotlinx.coroutines.flow.Flow
+
 /**
  * Async container based on [Flow] for loading data and listening current status of loading.
  */
+
+typealias ValueLoader<T> = suspend () -> T
+
 interface LazyFlowLoader<T> {
 
     /**

@@ -1,5 +1,6 @@
 package com.github.common.flow
 
+import com.github.common.ResultContainer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,9 +17,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import ru.edu.hse.common.ResultContainer
-import ru.edu.hse.common.flow.DefaultLazyFlowLoader.Value.InstantValue
-import ru.edu.hse.common.flow.DefaultLazyFlowLoader.Value.LoadValue
 
 class DefaultLazyFlowLoader<T>(
     private var valueLoader: ValueLoader<T>,

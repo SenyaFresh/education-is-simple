@@ -1,8 +1,8 @@
 package com.github.common.flow
 
+import com.github.common.Core
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import ru.edu.hse.common.Core
 
 class DefaultLazyFlowLoaderFactory(
     private val dispatcher: CoroutineDispatcher,
