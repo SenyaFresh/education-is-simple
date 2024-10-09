@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.presentation"
+    namespace = "com.github.educationissimple.presentation"
     compileSdk = 34
 
     defaultConfig {

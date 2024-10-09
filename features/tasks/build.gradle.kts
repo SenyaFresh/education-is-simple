@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.tasks"
+    namespace = "com.github.educationissimple.tasks"
     compileSdk = 34
 
     defaultConfig {

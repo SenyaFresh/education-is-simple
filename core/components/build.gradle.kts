@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.components"
+    namespace = "com.github.educationissimple.components"
     compileSdk = 34
 
     defaultConfig {

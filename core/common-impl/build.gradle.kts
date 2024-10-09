@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.common_impl"
+    namespace = "com.github.educationissimple.common_impl"
     compileSdk = 34
 
     defaultConfig {
