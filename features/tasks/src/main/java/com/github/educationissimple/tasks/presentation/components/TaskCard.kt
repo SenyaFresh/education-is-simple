@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,14 +30,14 @@ import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
 @Composable
-fun TaskCard(isCompleted: Boolean, text: String, date: String? = null) {
+fun TaskCard(modifier: Modifier = Modifier, isCompleted: Boolean, text: String, date: String? = null) {
 
     var checkBoxFlag by rememberSaveable { mutableStateOf(isCompleted) }
 
-    OutlinedCard(
+    Card(
         colors = CardDefaults.cardColors(containerColor = if (checkBoxFlag) Highlight.Lightest else Neutral.Light.Lightest),
-        border = CardDefaults.outlinedCardBorder(enabled = !isCompleted),
-        modifier = Modifier
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = modifier
             .fillMaxWidth()
             .height(40.dp)
     ) {
@@ -61,7 +60,6 @@ fun TaskCard(isCompleted: Boolean, text: String, date: String? = null) {
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(
                     text = text,
-                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(textDecoration = if (isCompleted) TextDecoration.LineThrough else null),
@@ -84,9 +82,9 @@ fun TaskCard(isCompleted: Boolean, text: String, date: String? = null) {
 @Preview(showSystemUi = true)
 @Composable
 fun TaskCardPreview() {
-    Column(modifier = Modifier.padding(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        TaskCard(false, "Go to work", "10-08")
+    Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        TaskCard(isCompleted =  false, text = "Go to work", date = "10-08")
 
-        TaskCard(true, "Task with long long long long long long long long long long long long")
+        TaskCard(isCompleted = true, text = "Task with long long long long long long long long long long long long")
     }
 }
