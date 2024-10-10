@@ -27,11 +27,11 @@ import com.github.educationissimple.tasks.domain.entities.Task
 
 
 @Composable
-fun TasksColumn(title: String, tasks: List<Task>) {
+fun TasksColumn(title: String, tasks: List<Task>, modifier: Modifier = Modifier) {
 
     var isListVisible by rememberSaveable { mutableStateOf(true) }
 
-    Column(verticalArrangement = Arrangement.Top) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Top) {
         Row(
             Modifier
                 .padding(start = 12.dp, top = 8.dp, end = 12.dp)
@@ -39,13 +39,13 @@ fun TasksColumn(title: String, tasks: List<Task>) {
             Text(text = title, fontWeight = FontWeight.Bold)
             if (isListVisible) {
                 Icon(
-                    Icons.Filled.KeyboardArrowDown,
+                    Icons.Filled.KeyboardArrowUp,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )
             } else {
                 Icon(
-                    Icons.Filled.KeyboardArrowUp,
+                    Icons.Filled.KeyboardArrowDown,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )

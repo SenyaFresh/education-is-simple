@@ -31,7 +31,7 @@ import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
 @Composable
-fun TaskCard(modifier: Modifier = Modifier, isCompleted: Boolean, text: String, date: String? = null) {
+fun TaskCard(isCompleted: Boolean, text: String, modifier: Modifier = Modifier,  date: String? = null) {
 
     var checkBoxFlag by rememberSaveable { mutableStateOf(isCompleted) }
 
