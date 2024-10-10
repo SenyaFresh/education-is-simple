@@ -29,7 +29,7 @@ import com.github.educationissimple.tasks.domain.entities.Task
 @Composable
 fun TasksColumn(title: String, tasks: List<Task>, modifier: Modifier = Modifier) {
 
-    var isListVisible by rememberSaveable { mutableStateOf(true) }
+    var isListVisible by rememberSaveable { mutableStateOf(tasks.isNotEmpty()) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Top) {
         Row(
