@@ -14,6 +14,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 room = "2.7.0-alpha09"
 ksp = "1.9.10-1.0.13"
+dagger = "2.49"
 
 [libraries]
 kotlinx = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx"}
@@ -36,6 +37,8 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger"}
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger"}
 
 
 [plugins]
