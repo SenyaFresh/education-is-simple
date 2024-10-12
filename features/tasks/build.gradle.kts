@@ -51,6 +51,7 @@ dependencies {
     api(project(":core:common"))
     api(project(":core:components"))
 
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
     implementation(libs.androidx.core.ktx)
