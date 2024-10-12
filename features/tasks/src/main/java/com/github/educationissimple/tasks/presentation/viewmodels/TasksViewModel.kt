@@ -10,6 +10,7 @@ import com.github.educationissimple.tasks.domain.usecases.CancelTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.CompleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetTasksUseCase
+import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -43,25 +44,34 @@ class TasksViewModel @Inject constructor(
         collectCompletedTasks()
     }
 
-    fun addTask(task: Task) {
+    fun onEvent(event: TasksEvent) {
+        when (event) {
+            is TasksEvent.AddTask -> addTask(event.task)
+            is TasksEvent.CancelTaskCompletion -> cancelTask(event.task)
+            is TasksEvent.CompleteTask -> completeTask(event.task)
+            is TasksEvent.DeleteTask -> deleteTask(event.task)
+        }
+    }
+
+    private fun addTask(task: Task) {
         viewModelScope.launch {
             addTaskUseCase.addTask(task)
         }
     }
 
-    fun cancelTask(task: Task) {
+    private fun cancelTask(task: Task) {
         viewModelScope.launch {
             cancelTaskUseCase.cancelTask(task)
         }
     }
 
-    fun completeTask(task: Task) {
+    private fun completeTask(task: Task) {
         viewModelScope.launch {
             completeTaskUseCase.completeTask(task)
         }
     }
 
-    fun deleteTask(task: Task) {
+    private fun deleteTask(task: Task) {
         viewModelScope.launch {
             deleteTaskUseCase.deleteTask(task)
         }

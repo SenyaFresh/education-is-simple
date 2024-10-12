@@ -14,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,14 +23,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.tasks.di.TasksDiContainer
+import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.presentation.components.TasksColumn
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
+import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
+
 
 @Composable
 fun TasksScreen(
+    diContainer: TasksDiContainer = rememberTasksDiContainer(),
+    viewModel: TasksViewModel = viewModel(factory = diContainer.viewModelFactory)
+) {
+    TasksContent(
+        previousTasks = viewModel.previousTasks.collectAsState().value,
+        todayTasks = viewModel.todayTasks.collectAsState().value,
+        futureTasks = viewModel.futureTasks.collectAsState().value,
+        completedTasks = viewModel.completedTasks.collectAsState().value,
+        onTasksEvent = viewModel::onEvent
+    )
+}
+
+
+@Composable
+fun TasksContent(
     previousTasks: ResultContainer<List<Task>>,
     todayTasks: ResultContainer<List<Task>>,
     futureTasks: ResultContainer<List<Task>>,
@@ -91,8 +113,8 @@ fun TasksScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun TasksScreenPreview() {
-    TasksScreen(
+fun TasksContentPreview() {
+    TasksContent(
         ResultContainer.Done(
             listOf(
                 Task(id = 1, text = "Побегать", isCompleted = false, date = "10-08"),
