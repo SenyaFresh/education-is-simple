@@ -9,9 +9,9 @@ import com.github.educationissimple.data.tasks.sources.room.TasksDatabase
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import java.time.LocalDate
-import java.time.LocalDateTime
+import javax.inject.Inject
 
-class RoomTasksDataSource(context: Context) : TasksDataSource {
+class RoomTasksDataSource @Inject constructor(context: Context) : TasksDataSource {
 
     private val db: TasksDatabase by lazy<TasksDatabase> {
         Room.databaseBuilder(

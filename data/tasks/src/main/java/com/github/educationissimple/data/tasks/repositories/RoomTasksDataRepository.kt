@@ -8,8 +8,9 @@ import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import javax.inject.Inject
 
-class RoomTasksDataRepository(
+class RoomTasksDataRepository @Inject constructor(
     private val tasksDataSource: TasksDataSource,
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
