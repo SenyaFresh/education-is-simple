@@ -4,8 +4,9 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetTasksUseCase(private val tasksRepository: TasksRepository) {
+class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepository) {
 
     suspend fun getPreviousTasks(): Flow<ResultContainer<List<Task>>> =
         tasksRepository.getPreviousTasks()

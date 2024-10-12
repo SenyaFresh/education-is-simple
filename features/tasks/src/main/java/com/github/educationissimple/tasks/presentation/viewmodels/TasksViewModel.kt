@@ -1,5 +1,7 @@
 package com.github.educationissimple.tasks.presentation.viewmodels
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.BaseViewModel
 import com.github.educationissimple.tasks.domain.entities.Task
@@ -11,8 +13,9 @@ import com.github.educationissimple.tasks.domain.usecases.GetTasksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TasksViewModel(
+class TasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val cancelTaskUseCase: CancelTaskUseCase,
     private val completeTaskUseCase: CompleteTaskUseCase,
@@ -93,6 +96,27 @@ class TasksViewModel(
             getTasksUseCase.getCompletedTasks().collect {
                 _completedTasks.value = it
             }
+        }
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
+    class Factory @Inject constructor(
+        private val addTaskUseCase: AddTaskUseCase,
+        private val cancelTaskUseCase: CancelTaskUseCase,
+        private val completeTaskUseCase: CompleteTaskUseCase,
+        private val deleteTaskUseCase: DeleteTaskUseCase,
+        private val getTasksUseCase: GetTasksUseCase
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            require(modelClass == TasksViewModel::class.java)
+            return TasksViewModel(
+                addTaskUseCase,
+                cancelTaskUseCase,
+                completeTaskUseCase,
+                deleteTaskUseCase,
+                getTasksUseCase
+            ) as T
         }
     }
 
