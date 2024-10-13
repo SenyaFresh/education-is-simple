@@ -2,16 +2,14 @@ package com.github.educationissimple.tasks.presentation.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
@@ -32,19 +30,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.R
@@ -97,7 +92,7 @@ fun TasksContent(
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         ResultContainerComposable(container = previousTasks, onTryAgain = { }) {
             TasksColumn(
                 stringResource(R.string.previous_tasks),
@@ -132,14 +127,18 @@ fun TasksContent(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        FloatingActionButton(
-            onClick = { isAddingTask = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(20.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+    if (!isAddingTask) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            FloatingActionButton(
+                onClick = { isAddingTask = true },
+                containerColor = Highlight.Darkest,
+                contentColor = Neutral.Light.Lightest,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(20.dp)
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
         }
     }
 
