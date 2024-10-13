@@ -55,7 +55,7 @@ fun TaskCard(
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(if (date != null) 70.dp else 60.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
