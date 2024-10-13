@@ -13,8 +13,10 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,14 +41,14 @@ fun TaskCard(
     onTaskCompletionChange: (Boolean) -> Unit
 ) {
 
-    var checkBoxFlag by rememberSaveable { mutableStateOf(isCompleted) }
+    var checkBoxFlag by remember { mutableStateOf(isCompleted) }
 
     Card(
         colors = CardDefaults.cardColors(containerColor = if (checkBoxFlag) Highlight.Lightest else Neutral.Light.Lightest),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(60.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -57,8 +59,8 @@ fun TaskCard(
             Checkbox(
                 checked = checkBoxFlag,
                 onCheckedChange = {
-                    checkBoxFlag = it
                     onTaskCompletionChange(it)
+                    checkBoxFlag = it
                 },
                 colors = CheckboxDefaults.colors(
                     uncheckedColor = Neutral.Light.Darkest,
