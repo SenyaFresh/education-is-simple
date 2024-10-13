@@ -59,8 +59,8 @@ fun TaskCard(
             Checkbox(
                 checked = checkBoxFlag,
                 onCheckedChange = {
-                    onTaskCompletionChange(it)
                     checkBoxFlag = it
+                    onTaskCompletionChange(it)
                 },
                 colors = CheckboxDefaults.colors(
                     uncheckedColor = Neutral.Light.Darkest,
