@@ -44,7 +44,7 @@ class TasksViewModel @Inject constructor(
         collectCompletedTasks()
     }
 
-    fun onEvent(event: TasksEvent) {
+    fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
             is TasksEvent.CancelTaskCompletion -> cancelTask(event.task)
