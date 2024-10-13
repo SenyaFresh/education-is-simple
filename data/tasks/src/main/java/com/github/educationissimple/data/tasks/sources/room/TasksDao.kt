@@ -20,13 +20,13 @@ interface TasksDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     suspend fun deleteTask(id: Long)
 
-    @Query("SELECT * FROM tasks WHERE date < :date")
+    @Query("SELECT * FROM tasks WHERE date < :date AND is_completed = 0")
     suspend fun getTasksBeforeDate(date: String): List<TaskDataEntity>
 
-    @Query("SELECT * FROM tasks WHERE date = :date")
+    @Query("SELECT * FROM tasks WHERE date = :date AND is_completed = 0")
     suspend fun getTasksByDate(date: String): List<TaskDataEntity>
 
-    @Query("SELECT * FROM tasks WHERE date > :date")
+    @Query("SELECT * FROM tasks WHERE date > :date AND is_completed = 0")
     suspend fun getTasksAfterDate(date: String): List<TaskDataEntity>
 
     @Query("SELECT * FROM tasks WHERE is_completed = 1")

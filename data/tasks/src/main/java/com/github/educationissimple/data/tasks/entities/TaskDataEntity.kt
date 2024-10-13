@@ -10,5 +10,5 @@ data class TaskDataEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val text: String,
     val date: LocalDate,
-    @ColumnInfo(name = "is_completed", defaultValue = "1") val isCompleted: Boolean
+    @ColumnInfo(name = "is_completed", defaultValue = "0") val isCompleted: Boolean
 )
