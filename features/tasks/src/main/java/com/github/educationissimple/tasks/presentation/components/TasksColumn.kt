@@ -27,7 +27,12 @@ import com.github.educationissimple.tasks.domain.entities.Task
 
 
 @Composable
-fun TasksColumn(title: String, tasks: List<Task>, modifier: Modifier = Modifier) {
+fun TasksColumn(
+    title: String,
+    tasks: List<Task>,
+    modifier: Modifier = Modifier,
+    onTaskCompletionChange: (Long, Boolean) -> Unit
+) {
 
     var isListVisible by rememberSaveable { mutableStateOf(tasks.isNotEmpty()) }
 
@@ -62,7 +67,10 @@ fun TasksColumn(title: String, tasks: List<Task>, modifier: Modifier = Modifier)
                         isCompleted = task.isCompleted,
                         text = task.text,
                         date = task.date,
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier.padding(top = 8.dp),
+                        onTaskCompletionChange = {
+                            onTaskCompletionChange(task.id, it)
+                        }
                     )
                 }
             }
@@ -81,7 +89,8 @@ fun TasksColumnPreview() {
                 Task(id = 1, text = "Побегать"),
                 Task(id = 2, text = "Попрыгать"),
                 Task(id = 3, text = "Полежать")
-            )
+            ),
+            onTaskCompletionChange = { _, _ -> }
         )
 
         TasksColumn(
@@ -90,7 +99,8 @@ fun TasksColumnPreview() {
                 Task(id = 1, text = "Побегать", isCompleted = true, date = "10-08"),
                 Task(id = 2, text = "Попрыгать", isCompleted = true),
                 Task(id = 3, text = "Полежать", isCompleted = true)
-            )
+            ),
+            onTaskCompletionChange = { _, _ -> }
         )
     }
 

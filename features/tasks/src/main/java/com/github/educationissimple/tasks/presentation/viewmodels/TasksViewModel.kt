@@ -47,9 +47,9 @@ class TasksViewModel @Inject constructor(
     fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
-            is TasksEvent.CancelTaskCompletion -> cancelTask(event.task)
-            is TasksEvent.CompleteTask -> completeTask(event.task)
-            is TasksEvent.DeleteTask -> deleteTask(event.task)
+            is TasksEvent.CancelTaskCompletion -> cancelTask(event.taskId)
+            is TasksEvent.CompleteTask -> completeTask(event.taskId)
+            is TasksEvent.DeleteTask -> deleteTask(event.taskId)
         }
     }
 
@@ -59,21 +59,21 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private fun cancelTask(task: Task) {
+    private fun cancelTask(taskId: Long) {
         viewModelScope.launch {
-            cancelTaskUseCase.cancelTask(task)
+            cancelTaskUseCase.cancelTask(taskId)
         }
     }
 
-    private fun completeTask(task: Task) {
+    private fun completeTask(taskId: Long) {
         viewModelScope.launch {
-            completeTaskUseCase.completeTask(task)
+            completeTaskUseCase.completeTask(taskId)
         }
     }
 
-    private fun deleteTask(task: Task) {
+    private fun deleteTask(taskId: Long) {
         viewModelScope.launch {
-            deleteTaskUseCase.deleteTask(task)
+            deleteTaskUseCase.deleteTask(taskId)
         }
     }
 

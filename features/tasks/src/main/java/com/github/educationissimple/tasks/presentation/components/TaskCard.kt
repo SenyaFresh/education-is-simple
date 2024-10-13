@@ -31,7 +31,13 @@ import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
 @Composable
-fun TaskCard(isCompleted: Boolean, text: String, modifier: Modifier = Modifier,  date: String? = null) {
+fun TaskCard(
+    isCompleted: Boolean,
+    text: String,
+    modifier: Modifier = Modifier,
+    date: String? = null,
+    onTaskCompletionChange: (Boolean) -> Unit
+) {
 
     var checkBoxFlag by rememberSaveable { mutableStateOf(isCompleted) }
 
@@ -50,7 +56,10 @@ fun TaskCard(isCompleted: Boolean, text: String, modifier: Modifier = Modifier, 
         ) {
             Checkbox(
                 checked = checkBoxFlag,
-                onCheckedChange = { checkBoxFlag = it },
+                onCheckedChange = {
+                    checkBoxFlag = it
+                    onTaskCompletionChange(it)
+                },
                 colors = CheckboxDefaults.colors(
                     uncheckedColor = Neutral.Light.Darkest,
                     checkedColor = Highlight.Darkest
@@ -85,8 +94,16 @@ fun TaskCard(isCompleted: Boolean, text: String, modifier: Modifier = Modifier, 
 @Composable
 fun TaskCardPreview() {
     Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        TaskCard(isCompleted =  false, text = "Go to work", date = "10-08")
+        TaskCard(
+            isCompleted = false,
+            text = "Go to work",
+            date = "10-08",
+            onTaskCompletionChange = { })
 
-        TaskCard(isCompleted = true, text = "Task with long long long long long long long long long long long long")
+        TaskCard(
+            isCompleted = true,
+            text = "Task with long long long long long long long long long long long long",
+            onTaskCompletionChange = { }
+        )
     }
 }

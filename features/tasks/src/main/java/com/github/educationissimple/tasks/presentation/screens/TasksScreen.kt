@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -23,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
@@ -61,12 +66,56 @@ fun TasksContent(
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
 
-    Column {
-        TasksColumn("Прошлые задачи", previousTasks.unwrap())
-        TasksColumn("Задачи на сегодня", todayTasks.unwrap())
-        TasksColumn("Будущие задачи", futureTasks.unwrap())
-        TasksColumn("Выполненные сегодня задачи", completedTasks.unwrap())
+    val onTaskCompletionChange: (Long, Boolean) -> Unit = { taskId, isCompleted ->
+        if (isCompleted) {
+            onTasksEvent(TasksEvent.CompleteTask(taskId))
+        } else {
+            onTasksEvent(TasksEvent.CancelTaskCompletion(taskId))
+        }
     }
+
+    Column {
+        ResultContainerComposable(container = previousTasks, onTryAgain = { }) {
+            TasksColumn(
+                "Прошлые задачи",
+                previousTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange
+            )
+        }
+        ResultContainerComposable(container = todayTasks, onTryAgain = { }) {
+            TasksColumn(
+                "Задачи на сегодня",
+                todayTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange
+            )
+        }
+        ResultContainerComposable(container = futureTasks, onTryAgain = { }) {
+            TasksColumn(
+                "Будущие задачи",
+                futureTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange
+            )
+        }
+        ResultContainerComposable(container = completedTasks, onTryAgain = { }) {
+            TasksColumn(
+                "Выполненные сегодня задачи",
+                completedTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange
+            )
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        FloatingActionButton(
+            onClick = { isAddingTask = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(20.dp)
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+        }
+    }
+
 
     if (isAddingTask) {
         Surface(
