@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class CompleteTaskUseCase @Inject constructor(private val tasksRepository: TasksRepository) {
 
-    suspend fun completeTask(task: Task) {
-        tasksRepository.completeTask(task)
+    suspend fun completeTask(taskId: Long) {
+        tasksRepository.completeTask(taskId)
     }
 
 }

@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class CancelTaskUseCase @Inject constructor(private val tasksRepository: TasksRepository) {
 
-    suspend fun cancelTask(task: Task) {
-        tasksRepository.cancelTask(task)
+    suspend fun cancelTask(taskId: Long) {
+        tasksRepository.cancelTask(taskId)
     }
 
 }

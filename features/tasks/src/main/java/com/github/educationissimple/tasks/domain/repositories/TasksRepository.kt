@@ -14,12 +14,12 @@ interface TasksRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<Task>>>
 
-    suspend fun completeTask(task: Task)
+    suspend fun completeTask(taskId: Long)
 
-    suspend fun cancelTask(task: Task)
+    suspend fun cancelTask(taskId: Long)
 
     suspend fun addTask(task: Task)
 
-    suspend fun deleteTask(task: Task)
+    suspend fun deleteTask(taskId: Long)
 
 }

@@ -28,20 +28,20 @@ class AdapterTasksRepository @Inject constructor(
         return tasksDataRepository.getCompletedTasks().mapToTask()
     }
 
-    override suspend fun completeTask(task: Task) {
-        tasksDataRepository.completeTask(task.id)
+    override suspend fun completeTask(taskId: Long) {
+        tasksDataRepository.completeTask(taskId)
     }
 
-    override suspend fun cancelTask(task: Task) {
-        tasksDataRepository.cancelTaskCompletion(task.id)
+    override suspend fun cancelTask(taskId: Long) {
+        tasksDataRepository.cancelTaskCompletion(taskId)
     }
 
     override suspend fun addTask(task: Task) {
         tasksDataRepository.addTask(NewTaskTuple(task.id, task.text))
     }
 
-    override suspend fun deleteTask(task: Task) {
-        tasksDataRepository.deleteTask(task.id)
+    override suspend fun deleteTask(taskId: Long) {
+        tasksDataRepository.deleteTask(taskId)
     }
 
 

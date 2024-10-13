@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class DeleteTaskUseCase @Inject constructor(private val tasksRepository: TasksRepository) {
 
-    suspend fun deleteTask(task: Task) {
-        tasksRepository.deleteTask(task)
+    suspend fun deleteTask(taskId: Long) {
+        tasksRepository.deleteTask(taskId)
     }
 
 }
