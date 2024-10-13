@@ -31,7 +31,8 @@ fun TasksColumn(
     title: String,
     tasks: List<Task>,
     modifier: Modifier = Modifier,
-    onTaskCompletionChange: (Long, Boolean) -> Unit
+    onTaskCompletionChange: (Long, Boolean) -> Unit,
+    onTaskDelete: (Long) -> Unit
 ) {
 
     var isListVisible by rememberSaveable { mutableStateOf(tasks.isNotEmpty()) }
@@ -70,6 +71,9 @@ fun TasksColumn(
                         modifier = Modifier.padding(top = 8.dp),
                         onTaskCompletionChange = {
                             onTaskCompletionChange(task.id, it)
+                        },
+                        onTaskDelete = {
+                            onTaskDelete(task.id)
                         }
                     )
                 }
@@ -90,7 +94,8 @@ fun TasksColumnPreview() {
                 Task(id = 2, text = "Попрыгать"),
                 Task(id = 3, text = "Полежать")
             ),
-            onTaskCompletionChange = { _, _ -> }
+            onTaskCompletionChange = { _, _ -> },
+            onTaskDelete = { }
         )
 
         TasksColumn(
@@ -100,7 +105,8 @@ fun TasksColumnPreview() {
                 Task(id = 2, text = "Попрыгать", isCompleted = true),
                 Task(id = 3, text = "Полежать", isCompleted = true)
             ),
-            onTaskCompletionChange = { _, _ -> }
+            onTaskCompletionChange = { _, _ -> },
+            onTaskDelete = { }
         )
     }
 

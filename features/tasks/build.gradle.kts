@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
 
     api(project(":core:presentation"))
     api(project(":core:common"))

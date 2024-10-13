@@ -3,14 +3,19 @@ package com.github.educationissimple.tasks.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.colors.Support
 
 @Composable
 fun TaskCard(
@@ -38,7 +44,8 @@ fun TaskCard(
     text: String,
     modifier: Modifier = Modifier,
     date: String? = null,
-    onTaskCompletionChange: (Boolean) -> Unit
+    onTaskCompletionChange: (Boolean) -> Unit,
+    onTaskDelete: () -> Unit
 ) {
 
     var checkBoxFlag by remember { mutableStateOf(isCompleted) }
@@ -87,6 +94,11 @@ fun TaskCard(
                 }
             }
 
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(onClick = onTaskDelete) {
+                Icon(Icons.Default.Delete, contentDescription = null, tint = Support.Error.Dark)
+            }
         }
     }
 
@@ -100,12 +112,14 @@ fun TaskCardPreview() {
             isCompleted = false,
             text = "Go to work",
             date = "10-08",
-            onTaskCompletionChange = { })
+            onTaskCompletionChange = { },
+            onTaskDelete = { })
 
         TaskCard(
             isCompleted = true,
             text = "Task with long long long long long long long long long long long long",
-            onTaskCompletionChange = { }
+            onTaskCompletionChange = { },
+            onTaskDelete = { }
         )
     }
 }
