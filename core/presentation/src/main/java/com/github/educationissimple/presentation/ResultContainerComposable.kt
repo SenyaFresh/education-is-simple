@@ -40,7 +40,6 @@ fun ResultContainerComposable(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp)
     ) {
         when (container) {
             is ResultContainer.Done -> {
