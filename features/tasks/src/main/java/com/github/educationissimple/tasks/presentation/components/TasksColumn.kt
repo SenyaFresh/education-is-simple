@@ -34,8 +34,9 @@ fun TasksColumn(
     onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit
 ) {
+    if (tasks.isEmpty()) return
 
-    var isListVisible by rememberSaveable { mutableStateOf(tasks.isNotEmpty()) }
+    var isListVisible by rememberSaveable { mutableStateOf(true) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Top) {
         Row(
