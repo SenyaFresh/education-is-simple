@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -78,6 +80,7 @@ fun TasksContent(
     var taskText by rememberSaveable { mutableStateOf("") }
 
     val focusRequester = remember { FocusRequester() }
+    val isTextFieldFocused = remember { mutableStateOf(false) }
 
     val onTaskCompletionChange: (Long, Boolean) -> Unit = { taskId, isCompleted ->
         if (isCompleted) {
@@ -167,7 +170,11 @@ fun TasksContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .focusRequester(focusRequester),
+                    .imePadding()
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        isTextFieldFocused.value = it.isFocused
+                    },
                 trailingIcon = {
                     IconButton(
                         onClick = {
