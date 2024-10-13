@@ -17,7 +17,6 @@ import com.github.educationissimple.ui.theme.EducationIsSimpleTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             EducationIsSimpleTheme {
                 TasksScreen()
