@@ -11,7 +11,9 @@ import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import java.time.LocalDate
 import javax.inject.Inject
 
-class RoomTasksDataSource @Inject constructor(context: Context) : TasksDataSource {
+class RoomTasksDataSource @Inject constructor(
+    context: Context
+) : TasksDataSource {
 
     private val db: TasksDatabase by lazy<TasksDatabase> {
         Room.databaseBuilder(

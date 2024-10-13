@@ -4,3 +4,6 @@ import javax.inject.Scope
 
 @Scope
 annotation class Feature
+
+@Scope
+annotation class AppScope
