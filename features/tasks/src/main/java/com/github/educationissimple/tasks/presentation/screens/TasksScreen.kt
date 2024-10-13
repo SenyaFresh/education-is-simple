@@ -38,6 +38,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,6 +46,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.ResultContainerComposable
+import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
@@ -97,7 +99,7 @@ fun TasksContent(
     Column {
         ResultContainerComposable(container = previousTasks, onTryAgain = { }) {
             TasksColumn(
-                "Прошлые задачи",
+                stringResource(R.string.previous_tasks),
                 previousTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete
@@ -105,7 +107,7 @@ fun TasksContent(
         }
         ResultContainerComposable(container = todayTasks, onTryAgain = { }) {
             TasksColumn(
-                "Задачи на сегодня",
+                stringResource(R.string.today_tasks),
                 todayTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete
@@ -113,7 +115,7 @@ fun TasksContent(
         }
         ResultContainerComposable(container = futureTasks, onTryAgain = { }) {
             TasksColumn(
-                "Будущие задачи",
+                stringResource(R.string.future_tasks),
                 futureTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete
@@ -121,7 +123,7 @@ fun TasksContent(
         }
         ResultContainerComposable(container = completedTasks, onTryAgain = { }) {
             TasksColumn(
-                "Выполненные сегодня задачи",
+                stringResource(R.string.completed_tasks),
                 completedTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete
@@ -140,10 +142,11 @@ fun TasksContent(
         }
     }
 
-
-
-
     if (isAddingTask) {
+        BackHandler {
+            isAddingTask = false
+        }
+
         Surface(
             modifier = Modifier
                 .fillMaxSize()

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="previous_tasks">Прошлые задачи</string>
+    <string name="today_tasks">Задачи на сегодня</string>
+    <string name="future_tasks">Будущие задачи</string>
+    <string name="completed_tasks">Выполненные сегодня задачи</string>
+</resources>
