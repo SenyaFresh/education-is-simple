@@ -7,6 +7,6 @@ fun LocalDate.toTaskDate(): String {
     val month = if (this.monthValue < 10) "0${this.monthValue}" else this.monthValue
     val year = if (year == LocalDate.now().year) "" else this.year
 
-    return if (year == "") "$month-$year" else "$year-$month-$day"
+    return if (year == "") "$month-$day" else "$year-$month-$day"
 
 }
