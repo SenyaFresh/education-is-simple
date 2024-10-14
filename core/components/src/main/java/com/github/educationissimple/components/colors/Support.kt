@@ -33,4 +33,10 @@ sealed class Support {
         val Light = Color(0xFFFFE2E5)
 
     }
+
+    data object Dimming: Support() {
+
+        val Dark = Color(0x88000000)
+
+    }
 }
