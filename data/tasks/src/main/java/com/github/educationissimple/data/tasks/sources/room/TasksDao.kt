@@ -7,6 +7,7 @@ import androidx.room.Update
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
+import java.time.LocalDate
 
 @Dao
 interface TasksDao {
@@ -20,16 +21,16 @@ interface TasksDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     suspend fun deleteTask(id: Long)
 
-    @Query("SELECT * FROM tasks WHERE date < :date AND is_completed = 0")
-    suspend fun getTasksBeforeDate(date: String): List<TaskDataEntity>
-
-    @Query("SELECT * FROM tasks WHERE date = :date AND is_completed = 0")
-    suspend fun getTasksByDate(date: String): List<TaskDataEntity>
-
-    @Query("SELECT * FROM tasks WHERE date > :date AND is_completed = 0")
-    suspend fun getTasksAfterDate(date: String): List<TaskDataEntity>
-
-    @Query("SELECT * FROM tasks WHERE is_completed = 1")
-    suspend fun getCompletedTasks(): List<TaskDataEntity>
+    @Query("""SELECT * FROM tasks WHERE 
+            date BETWEEN :startDate AND :endDate
+            AND is_completed = :isCompleted
+            AND (category_id = :categoryId OR :categoryId IS NULL)
+            """)
+    suspend fun getTasks(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        isCompleted: Boolean,
+        categoryId: Long?
+    ): List<TaskDataEntity>
 
 }

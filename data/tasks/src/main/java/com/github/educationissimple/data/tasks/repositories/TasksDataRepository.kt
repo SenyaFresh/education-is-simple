@@ -1,6 +1,7 @@
 package com.github.educationissimple.data.tasks.repositories
 
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import kotlinx.coroutines.flow.Flow
@@ -22,5 +23,13 @@ interface TasksDataRepository {
     suspend fun addTask(newTask: NewTaskTuple)
 
     suspend fun deleteTask(id: Long)
+
+    suspend fun changeCategory(categoryId: Long?)
+
+    suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>>
+
+    suspend fun createCategory(name: String)
+
+    suspend fun deleteCategory(id: Long)
 
 }

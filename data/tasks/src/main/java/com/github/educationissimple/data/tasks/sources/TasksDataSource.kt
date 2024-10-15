@@ -1,8 +1,6 @@
 package com.github.educationissimple.data.tasks.sources
 
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
@@ -16,12 +14,18 @@ interface TasksDataSource {
 
     suspend fun deleteTask(id: Long)
 
-    suspend fun getTasksBeforeDate(date: LocalDate): List<TaskDataEntity>
+    suspend fun getTasksBeforeDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
 
-    suspend fun getTasksByDate(date: LocalDate): List<TaskDataEntity>
+    suspend fun getTasksByDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
 
-    suspend fun getTasksAfterDate(date: LocalDate): List<TaskDataEntity>
+    suspend fun getTasksAfterDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
 
-    suspend fun getCompletedTasks(): List<TaskDataEntity>
+    suspend fun getCompletedTasks(categoryId: Long? = null): List<TaskDataEntity>
+
+    suspend fun getCategories(): List<TaskCategoryDataEntity>
+
+    suspend fun createCategory(name: String)
+
+    suspend fun deleteCategory(id: Long)
 
 }

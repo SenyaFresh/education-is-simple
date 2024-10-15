@@ -15,4 +15,6 @@ abstract class TasksDatabase : RoomDatabase() {
 
     abstract fun getTasksDao(): TasksDao
 
+    abstract fun getTasksCategoryDao(): TasksCategoryDao
+
 }

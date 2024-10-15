@@ -2,6 +2,7 @@ package com.github.educationissimple.data.tasks.repositories
 
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.common.flow.LazyFlowLoaderFactory
+import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
@@ -29,6 +30,10 @@ class RoomTasksDataRepository @Inject constructor(
 
     private val completedTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getCompletedTasks()
+    }
+
+    private val categoriesLoader = lazyFlowLoaderFactory.create {
+        tasksDataSource.getCategories()
     }
 
     override suspend fun getPreviousTasks(): Flow<ResultContainer<List<TaskDataEntity>>> {
@@ -65,6 +70,44 @@ class RoomTasksDataRepository @Inject constructor(
     override suspend fun deleteTask(id: Long) {
         tasksDataSource.deleteTask(id)
         updateSources()
+    }
+
+    override suspend fun changeCategory(categoryId: Long?) {
+        previousTasksLoader.newLoad(valueLoader = {
+            tasksDataSource.getTasksBeforeDate(
+                LocalDate.now(),
+                categoryId
+            )
+        })
+        todayTasksLoader.newLoad(valueLoader = {
+            tasksDataSource.getTasksByDate(
+                LocalDate.now(),
+                categoryId
+            )
+        })
+        futureTasksLoader.newLoad(valueLoader = {
+            tasksDataSource.getTasksAfterDate(
+                LocalDate.now(),
+                categoryId
+            )
+        })
+        completedTasksLoader.newLoad(valueLoader = {
+            tasksDataSource.getCompletedTasks()
+        })
+    }
+
+    override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>> {
+        return categoriesLoader.listen()
+    }
+
+    override suspend fun createCategory(name: String) {
+        tasksDataSource.createCategory(name)
+        categoriesLoader.newAsyncLoad(silently = true)
+    }
+
+    override suspend fun deleteCategory(id: Long) {
+        tasksDataSource.deleteCategory(id)
+        categoriesLoader.newAsyncLoad(silently = true)
     }
 
     private fun updateSources() {

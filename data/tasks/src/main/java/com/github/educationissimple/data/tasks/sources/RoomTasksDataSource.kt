@@ -2,9 +2,8 @@ package com.github.educationissimple.data.tasks.sources
 
 import android.content.Context
 import androidx.room.Room
-import com.github.educationissimple.data.tasks.converters.DateConverter
+import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
-import com.github.educationissimple.data.tasks.sources.room.TasksDao
 import com.github.educationissimple.data.tasks.sources.room.TasksDatabase
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
@@ -24,7 +23,8 @@ class RoomTasksDataSource @Inject constructor(
     }
 
     private val tasksDao = db.getTasksDao()
-    private val converter = DateConverter()
+    private val tasksCategoryDao = db.getTasksCategoryDao()
+
 
     override suspend fun setTaskCompletion(taskCompletionTuple: TaskCompletionTuple) {
         tasksDao.setTaskCompletion(taskCompletionTuple)
@@ -38,26 +38,58 @@ class RoomTasksDataSource @Inject constructor(
         tasksDao.deleteTask(id)
     }
 
-    override suspend fun getTasksBeforeDate(date: LocalDate): List<TaskDataEntity> {
-        return tasksDao.getTasksBeforeDate(
-            converter.dateToTimestamp(date) ?: throw IllegalArgumentException("Incorrect date")
+    override suspend fun getTasksBeforeDate(
+        date: LocalDate,
+        categoryId: Long?
+    ): List<TaskDataEntity> {
+        return tasksDao.getTasks(
+            LocalDate.MIN,
+            date.minusDays(1),
+            false,
+            categoryId
         )
     }
 
-    override suspend fun getTasksByDate(date: LocalDate): List<TaskDataEntity> {
-        return tasksDao.getTasksByDate(
-            converter.dateToTimestamp(date) ?: throw IllegalArgumentException("Incorrect date")
+    override suspend fun getTasksByDate(date: LocalDate, categoryId: Long?): List<TaskDataEntity> {
+        return tasksDao.getTasks(
+            date,
+            date,
+            false,
+            categoryId
         )
     }
 
-    override suspend fun getTasksAfterDate(date: LocalDate): List<TaskDataEntity> {
-        return tasksDao.getTasksAfterDate(
-            converter.dateToTimestamp(date) ?: throw IllegalArgumentException("Incorrect date")
+    override suspend fun getTasksAfterDate(
+        date: LocalDate,
+        categoryId: Long?
+    ): List<TaskDataEntity> {
+        return tasksDao.getTasks(
+            date.plusDays(1),
+            LocalDate.MAX,
+            false,
+            categoryId
         )
     }
 
-    override suspend fun getCompletedTasks(): List<TaskDataEntity> {
-        return tasksDao.getCompletedTasks()
+    override suspend fun getCompletedTasks(categoryId: Long?): List<TaskDataEntity> {
+        return tasksDao.getTasks(
+            LocalDate.MIN,
+            LocalDate.MAX,
+            true,
+            categoryId
+        )
+    }
+
+    override suspend fun getCategories(): List<TaskCategoryDataEntity> {
+        return tasksCategoryDao.getCategories()
+    }
+
+    override suspend fun createCategory(name: String) {
+        return tasksCategoryDao.createCategory(name)
+    }
+
+    override suspend fun deleteCategory(id: Long) {
+        deleteCategory(id)
     }
 
 }
