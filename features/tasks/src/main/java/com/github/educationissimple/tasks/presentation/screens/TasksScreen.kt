@@ -2,12 +2,14 @@ package com.github.educationissimple.tasks.presentation.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,8 +25,10 @@ import com.github.educationissimple.components.composables.ScreenDimming
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.AddTaskFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.AllTasksColumn
+import com.github.educationissimple.tasks.presentation.components.CategoriesRow
 import com.github.educationissimple.tasks.presentation.components.PopUpTextField
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
@@ -40,6 +44,7 @@ fun TasksScreen(
         todayTasks = viewModel.todayTasks.collectAsState().value,
         futureTasks = viewModel.futureTasks.collectAsState().value,
         completedTasks = viewModel.completedTasks.collectAsState().value,
+        categories = viewModel.categories.collectAsState().value,
         onTasksEvent = viewModel::onEvent
     )
 }
@@ -50,8 +55,10 @@ fun TasksContent(
     todayTasks: ResultContainer<List<Task>>,
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
+    categories: ResultContainer<List<TaskCategory>>,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
+    var activeCategoryId by rememberSaveable { mutableLongStateOf(0L) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
@@ -68,14 +75,30 @@ fun TasksContent(
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
-    AllTasksColumn(
-        previousTasks = previousTasks,
-        todayTasks = todayTasks,
-        futureTasks = futureTasks,
-        completedTasks = completedTasks,
-        onTaskDelete = onTaskDelete,
-        onTaskCompletionChange = onTaskCompletionChange
-    )
+    LaunchedEffect(activeCategoryId) {
+        onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != 0L) activeCategoryId else null))
+    }
+
+    Column {
+        CategoriesRow(
+            categories = categories,
+            activeCategory = activeCategoryId,
+            modifier = Modifier.padding(12.dp),
+            onCategoryClick = {
+                onTasksEvent(TasksEvent.ChangeCategory(it))
+                activeCategoryId = it
+            }
+        )
+
+        AllTasksColumn(
+            previousTasks = previousTasks,
+            todayTasks = todayTasks,
+            futureTasks = futureTasks,
+            completedTasks = completedTasks,
+            onTaskDelete = onTaskDelete,
+            onTaskCompletionChange = onTaskCompletionChange
+        )
+    }
 
     if (!isAddingTask) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -133,6 +156,12 @@ fun TasksContentPreview() {
                 Task(id = 6, text = "Побегать", isCompleted = true, date = "10-08"),
                 Task(id = 7, text = "Попрыгать", isCompleted = true),
                 Task(id = 8, text = "Полежать", isCompleted = true)
+            )
+        ),
+        ResultContainer.Done(
+            listOf(
+                TaskCategory(id = 1, name = "Work"),
+                TaskCategory(id = 2, name = "Home")
             )
         )
     ) {

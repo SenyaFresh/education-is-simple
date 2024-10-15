@@ -3,6 +3,7 @@ package com.github.educationissimple.data.tasks.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
@@ -15,7 +16,8 @@ import java.time.LocalDate
             childColumns = ["category_id"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["category_id"])]
 )
 data class TaskDataEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,

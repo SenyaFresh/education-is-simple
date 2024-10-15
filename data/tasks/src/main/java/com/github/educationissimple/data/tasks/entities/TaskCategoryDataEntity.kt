@@ -1,5 +1,6 @@
 package com.github.educationissimple.data.tasks.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -10,7 +11,7 @@ import androidx.room.PrimaryKey
         Index("name", unique = true)
     ]
 )
-class TaskCategoryDataEntity {
-    @PrimaryKey(autoGenerate = true) val id: Long = 0
-    val name: String? = null
-}
+data class TaskCategoryDataEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(collate = ColumnInfo.NOCASE) val name: String
+)

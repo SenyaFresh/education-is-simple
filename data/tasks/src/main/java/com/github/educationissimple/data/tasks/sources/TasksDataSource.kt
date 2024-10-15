@@ -2,6 +2,7 @@ package com.github.educationissimple.data.tasks.sources
 
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
+import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import java.time.LocalDate
@@ -24,7 +25,7 @@ interface TasksDataSource {
 
     suspend fun getCategories(): List<TaskCategoryDataEntity>
 
-    suspend fun createCategory(name: String)
+    suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple)
 
     suspend fun deleteCategory(id: Long)
 

@@ -4,11 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.github.educationissimple.data.tasks.converters.DateConverter
+import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 
 @Database(
     version = 1,
-    entities = [TaskDataEntity::class]
+    entities = [TaskDataEntity::class, TaskCategoryDataEntity::class]
 )
 @TypeConverters(DateConverter::class)
 abstract class TasksDatabase : RoomDatabase() {

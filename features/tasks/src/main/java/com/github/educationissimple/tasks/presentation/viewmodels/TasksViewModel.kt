@@ -5,10 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.BaseViewModel
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.usecases.AddCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.AddTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.CancelTaskUseCase
+import com.github.educationissimple.tasks.domain.usecases.ChangeCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.CompleteTaskUseCase
+import com.github.educationissimple.tasks.domain.usecases.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
+import com.github.educationissimple.tasks.domain.usecases.GetCategoriesUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetTasksUseCase
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +26,11 @@ class TasksViewModel @Inject constructor(
     private val cancelTaskUseCase: CancelTaskUseCase,
     private val completeTaskUseCase: CompleteTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val getTasksUseCase: GetTasksUseCase
+    private val getTasksUseCase: GetTasksUseCase,
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val changeCategoryUseCase: ChangeCategoryUseCase,
+    private val addCategoryUseCase: AddCategoryUseCase,
+    private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : BaseViewModel() {
 
     private val _previousTasks =
@@ -31,17 +40,24 @@ class TasksViewModel @Inject constructor(
     private val _todayTasks = MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
     val todayTasks = _todayTasks.asStateFlow()
 
-    private val _futureTasks = MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
+    private val _futureTasks =
+        MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
     val futureTasks = _futureTasks.asStateFlow()
 
-    private val _completedTasks = MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
+    private val _completedTasks =
+        MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
     val completedTasks = _completedTasks.asStateFlow()
+
+    private val _categories =
+        MutableStateFlow<ResultContainer<List<TaskCategory>>>(ResultContainer.Loading)
+    val categories = _categories.asStateFlow()
 
     init {
         collectPreviousTasks()
         collectTodayTasks()
         collectFutureTasks()
         collectCompletedTasks()
+        collectCategories()
     }
 
     fun onEvent(event: TasksEvent) = debounce {
@@ -50,6 +66,9 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.CancelTaskCompletion -> cancelTask(event.taskId)
             is TasksEvent.CompleteTask -> completeTask(event.taskId)
             is TasksEvent.DeleteTask -> deleteTask(event.taskId)
+            is TasksEvent.ChangeCategory -> changeCategory(event.categoryId)
+            is TasksEvent.AddCategory -> addCategory(event.name)
+            is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
         }
     }
 
@@ -109,6 +128,31 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    private fun collectCategories() {
+        viewModelScope.launch {
+            getCategoriesUseCase.getCategories().collect {
+                _categories.value = it
+            }
+        }
+    }
+
+    private fun changeCategory(categoryId: Long?) {
+        viewModelScope.launch {
+            changeCategoryUseCase.changeCategory(categoryId)
+        }
+    }
+
+    private fun addCategory(name: String) {
+        viewModelScope.launch {
+            addCategoryUseCase.addCategory(name)
+        }
+    }
+
+    private fun deleteCategory(categoryId: Long) {
+        viewModelScope.launch {
+            deleteCategoryUseCase.deleteCategory(categoryId)
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     class Factory @Inject constructor(
@@ -116,7 +160,11 @@ class TasksViewModel @Inject constructor(
         private val cancelTaskUseCase: CancelTaskUseCase,
         private val completeTaskUseCase: CompleteTaskUseCase,
         private val deleteTaskUseCase: DeleteTaskUseCase,
-        private val getTasksUseCase: GetTasksUseCase
+        private val getTasksUseCase: GetTasksUseCase,
+        private val getCategoriesUseCase: GetCategoriesUseCase,
+        private val changeCategoryUseCase: ChangeCategoryUseCase,
+        private val addCategoryUseCase: AddCategoryUseCase,
+        private val deleteCategoryUseCase: DeleteCategoryUseCase
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == TasksViewModel::class.java)
@@ -125,9 +173,12 @@ class TasksViewModel @Inject constructor(
                 cancelTaskUseCase,
                 completeTaskUseCase,
                 deleteTaskUseCase,
-                getTasksUseCase
+                getTasksUseCase,
+                getCategoriesUseCase,
+                changeCategoryUseCase,
+                addCategoryUseCase,
+                deleteCategoryUseCase
             ) as T
         }
     }
-
 }

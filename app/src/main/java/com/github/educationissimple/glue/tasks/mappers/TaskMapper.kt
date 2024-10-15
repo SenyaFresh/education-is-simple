@@ -7,8 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 fun TaskDataEntity.mapToTask(): Task {
-
-    return Task(id, text, isCompleted, date.toTaskDate())
+    return Task(
+        id = id,
+        text = text,
+        isCompleted = isCompleted,
+        categoryId = categoryId,
+        date = date.toTaskDate()
+    )
 }
 
 fun Flow<ResultContainer<List<TaskDataEntity>>>.mapToTask(): Flow<ResultContainer<List<Task>>> {

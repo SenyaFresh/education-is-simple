@@ -2,9 +2,12 @@ package com.github.educationissimple.glue.tasks.repositories
 
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.data.tasks.repositories.TasksDataRepository
+import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.glue.tasks.mappers.mapToTask
+import com.github.educationissimple.glue.tasks.mappers.mapToTaskCategory
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -44,5 +47,20 @@ class AdapterTasksRepository @Inject constructor(
         tasksDataRepository.deleteTask(taskId)
     }
 
+    override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategory>>> {
+        return tasksDataRepository.getCategories().mapToTaskCategory()
+    }
+
+    override suspend fun createCategory(name: String) {
+        tasksDataRepository.createCategory(NewTaskCategoryTuple(name))
+    }
+
+    override suspend fun deleteCategory(categoryId: Long) {
+        tasksDataRepository.deleteCategory(categoryId)
+    }
+
+    override suspend fun changeCategory(categoryId: Long?) {
+        tasksDataRepository.changeCategory(categoryId)
+    }
 
 }

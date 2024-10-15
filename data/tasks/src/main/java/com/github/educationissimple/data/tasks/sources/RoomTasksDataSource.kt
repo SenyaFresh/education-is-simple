@@ -5,8 +5,11 @@ import androidx.room.Room
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.room.TasksDatabase
+import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
+import com.github.educationissimple.data.tasks.utils.getMaxDate
+import com.github.educationissimple.data.tasks.utils.getMinDate
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -19,7 +22,9 @@ class RoomTasksDataSource @Inject constructor(
             context,
             TasksDatabase::class.java,
             "tasks.db"
-        ).build()
+        )
+            .createFromAsset("initial_tasks_database.db")
+            .build()
     }
 
     private val tasksDao = db.getTasksDao()
@@ -43,7 +48,7 @@ class RoomTasksDataSource @Inject constructor(
         categoryId: Long?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            LocalDate.MIN,
+            getMinDate(),
             date.minusDays(1),
             false,
             categoryId
@@ -65,27 +70,29 @@ class RoomTasksDataSource @Inject constructor(
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
             date.plusDays(1),
-            LocalDate.MAX,
+            getMaxDate(),
             false,
             categoryId
         )
     }
 
     override suspend fun getCompletedTasks(categoryId: Long?): List<TaskDataEntity> {
-        return tasksDao.getTasks(
-            LocalDate.MIN,
-            LocalDate.MAX,
+        val a =  tasksDao.getTasks(
+            getMinDate(),
+            getMaxDate(),
             true,
             categoryId
         )
+
+        return a
     }
 
     override suspend fun getCategories(): List<TaskCategoryDataEntity> {
         return tasksCategoryDao.getCategories()
     }
 
-    override suspend fun createCategory(name: String) {
-        return tasksCategoryDao.createCategory(name)
+    override suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple) {
+        return tasksCategoryDao.createCategory(newTaskCategoryTuple)
     }
 
     override suspend fun deleteCategory(id: Long) {

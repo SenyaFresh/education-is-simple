@@ -5,6 +5,7 @@ import com.github.educationissimple.common.flow.LazyFlowLoaderFactory
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
+import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import kotlinx.coroutines.flow.Flow
@@ -73,26 +74,28 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeCategory(categoryId: Long?) {
-        previousTasksLoader.newLoad(valueLoader = {
+        previousTasksLoader.newAsyncLoad(valueLoader = {
             tasksDataSource.getTasksBeforeDate(
                 LocalDate.now(),
                 categoryId
             )
         })
-        todayTasksLoader.newLoad(valueLoader = {
+        todayTasksLoader.newAsyncLoad(valueLoader = {
             tasksDataSource.getTasksByDate(
                 LocalDate.now(),
                 categoryId
             )
         })
-        futureTasksLoader.newLoad(valueLoader = {
+        futureTasksLoader.newAsyncLoad(valueLoader = {
             tasksDataSource.getTasksAfterDate(
                 LocalDate.now(),
                 categoryId
             )
         })
-        completedTasksLoader.newLoad(valueLoader = {
-            tasksDataSource.getCompletedTasks()
+        completedTasksLoader.newAsyncLoad(valueLoader = {
+            tasksDataSource.getCompletedTasks(
+                categoryId
+            )
         })
     }
 
@@ -100,8 +103,8 @@ class RoomTasksDataRepository @Inject constructor(
         return categoriesLoader.listen()
     }
 
-    override suspend fun createCategory(name: String) {
-        tasksDataSource.createCategory(name)
+    override suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple) {
+        tasksDataSource.createCategory(newTaskCategoryTuple)
         categoriesLoader.newAsyncLoad(silently = true)
     }
 
