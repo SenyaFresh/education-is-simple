@@ -30,6 +30,7 @@ import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.AddTaskFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.AllTasksColumn
 import com.github.educationissimple.tasks.presentation.components.CategoriesRow
@@ -62,7 +63,7 @@ fun TasksContent(
     categories: ResultContainer<List<TaskCategory>>,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
-    var activeCategoryId by rememberSaveable { mutableLongStateOf(0L) }
+    var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
@@ -80,7 +81,7 @@ fun TasksContent(
     }
 
     LaunchedEffect(activeCategoryId) {
-        onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != 0L) activeCategoryId else null))
+        onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != NO_CATEGORY_ID) activeCategoryId else null))
     }
 
     Column {
@@ -91,7 +92,7 @@ fun TasksContent(
                 onTasksEvent(TasksEvent.ChangeCategory(it))
                 activeCategoryId = it
             },
-            firstItemLabel = stringResource(R.string.all),
+            firstCategoryLabel = stringResource(R.string.all),
             maxLines = 1,
             modifier = Modifier
                 .padding(12.dp)
@@ -136,7 +137,7 @@ fun TasksContent(
                     TasksEvent.AddTask(
                         Task(
                             text = taskText,
-                            categoryId = if (selectedCategoryId == 0L) null else selectedCategoryId
+                            categoryId = if (selectedCategoryId == NO_CATEGORY_ID) null else selectedCategoryId
                         )
                     )
                 )

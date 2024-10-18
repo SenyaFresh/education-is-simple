@@ -18,11 +18,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,11 +45,10 @@ fun TaskCard(
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit
 ) {
-
-    var checkBoxFlag by remember { mutableStateOf(isCompleted) }
+    var isTaskCompleted by remember { mutableStateOf(isCompleted) }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = if (checkBoxFlag) Highlight.Lightest else Neutral.Light.Lightest),
+        colors = CardDefaults.cardColors(containerColor = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
             .fillMaxWidth()
@@ -64,10 +61,10 @@ fun TaskCard(
                 .padding(end = 12.dp)
         ) {
             Checkbox(
-                checked = checkBoxFlag,
-                onCheckedChange = {
-                    checkBoxFlag = it
-                    onTaskCompletionChange(it)
+                checked = isTaskCompleted,
+                onCheckedChange = { isChecked ->
+                    isTaskCompleted = isChecked
+                    onTaskCompletionChange(isChecked)
                 },
                 colors = CheckboxDefaults.colors(
                     uncheckedColor = Neutral.Light.Darkest,
@@ -97,11 +94,14 @@ fun TaskCard(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(onClick = onTaskDelete) {
-                Icon(Icons.Default.Delete, contentDescription = null, tint = Support.Error.Dark)
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Delete task",
+                    tint = Support.Error.Dark
+                )
             }
         }
     }
-
 }
 
 @Preview(showSystemUi = true)

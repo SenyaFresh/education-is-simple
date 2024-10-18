@@ -32,32 +32,27 @@ fun LazyListScope.tasksSubcolumn(
 
     if (tasksContainer == ResultContainer.Loading ||
         tasksContainer is ResultContainer.Error ||
-        tasksContainer.unwrap().isEmpty()) {
+        tasksContainer.unwrap().isEmpty()
+    ) {
         return
     }
 
+    // Subcolumn title.
     item {
         Row(
             Modifier
                 .padding(start = 12.dp, top = 8.dp, end = 12.dp)
                 .clickable { onExpandChange(!isExpanded) }) {
             Text(text = title, fontWeight = FontWeight.Bold)
-            if (isExpanded) {
-                Icon(
-                    Icons.Filled.KeyboardArrowUp,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            } else {
-                Icon(
-                    Icons.Filled.KeyboardArrowDown,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
+            Icon(
+                if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                contentDescription = if (isExpanded) "Collapse" else "Expand",
+                modifier = Modifier.size(16.dp)
+            )
         }
     }
 
+    // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer.unwrap(), key = { task -> task.id }) { task ->
             TaskCard(isCompleted = task.isCompleted,

@@ -27,8 +27,7 @@ fun TaskCategoryCard(
     modifier: Modifier = Modifier,
     isActive: Boolean = false,
 ) {
-
-    val textColor by remember {
+    val textColor by remember(isActive) {
         derivedStateOf {
             if (isActive) Neutral.Light.Lightest else Highlight.Darkest
         }
@@ -44,7 +43,7 @@ fun TaskCategoryCard(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(18.dp),
         onClick = { onCategoryClick(category.id) },
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = category.name.uppercase(),

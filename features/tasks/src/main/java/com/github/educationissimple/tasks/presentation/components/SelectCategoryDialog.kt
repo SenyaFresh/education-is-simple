@@ -41,6 +41,7 @@ import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +51,7 @@ fun SelectCategoryDialog(
     onCancel: () -> Unit,
     onAddNewCategory: (String) -> Unit,
     modifier: Modifier = Modifier,
-    initialActiveCategoryId: Long = 0
+    initialActiveCategoryId: Long = NO_CATEGORY_ID
 ) {
     var newCategoryText by remember { mutableStateOf("") }
     var activeCategoryId by remember { mutableLongStateOf(initialActiveCategoryId) }
@@ -74,33 +75,39 @@ fun SelectCategoryDialog(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = modifier.padding(12.dp)
                 ) {
+                    // Categories list.
                     CategoriesRow(
                         categories = categories,
                         onCategoryClick = { activeCategoryId = it },
                         activeCategoryId = activeCategoryId,
-                        firstItemLabel = stringResource(R.string.no_category),
+                        firstCategoryLabel = stringResource(R.string.no_category),
                         modifier = Modifier
                             .heightIn(max = 160.dp)
                             .verticalScroll(rememberScrollState())
                     )
 
+                    // New category input.
                     DefaultTextField(
                         text = newCategoryText,
                         onValueChange = { newCategoryText = it },
                         label = { Text(stringResource(R.string.input_new_category_here)) },
                         trailingIcon = {
                             DefaultIconButton(onClick = {
-                                onAddNewCategory(newCategoryText)
+                                if (newCategoryText.isNotBlank()) {
+                                    onAddNewCategory(newCategoryText)
+                                    newCategoryText = ""
+                                }
                             }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.Send,
-                                    contentDescription = null,
+                                    contentDescription = "Add new category",
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
                         }
                     )
 
+                    // Cancel and Confirm buttons.
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -117,8 +124,7 @@ fun SelectCategoryDialog(
                             label = stringResource(R.string.confirm),
                             onClick = {
                                 onConfirm(
-                                    categories.unwrap().firstOrNull { it.id == activeCategoryId } ?:
-                                    TaskCategory(0, Core.resources.getString(R.string.no_category))
+                                    getSelectedCategory(categories.unwrap(), activeCategoryId)
                                 )
                             },
                             modifier = Modifier
@@ -130,6 +136,13 @@ fun SelectCategoryDialog(
             }
         }
     }
+}
+
+private fun getSelectedCategory(categories: List<TaskCategory>, id: Long): TaskCategory {
+    return categories.firstOrNull { it.id == id } ?: TaskCategory(
+        NO_CATEGORY_ID,
+        Core.resources.getString(R.string.no_category)
+    )
 }
 
 @Preview(showSystemUi = true)

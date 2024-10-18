@@ -35,6 +35,7 @@ import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.components.composables.ScreenDimming
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 
 @Composable
 fun PopUpTextField(
@@ -75,7 +76,7 @@ fun PopUpTextField(
                 var selectedCategory by remember {
                     mutableStateOf(
                         TaskCategory(
-                            0,
+                            NO_CATEGORY_ID,
                             Core.resources.getString(R.string.no_category)
                         )
                     )
