@@ -73,7 +73,7 @@ fun LazyListScope.tasksSubcolumn(
 @Preview(showSystemUi = true)
 @Composable
 fun TasksColumnPreview() {
-    LazyColumn() {
+    LazyColumn {
         tasksSubcolumn(
             "Задачи на сегодня",
             ResultContainer.Done(
