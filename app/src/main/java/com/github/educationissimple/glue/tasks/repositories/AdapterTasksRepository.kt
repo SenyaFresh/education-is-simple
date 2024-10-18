@@ -40,7 +40,13 @@ class AdapterTasksRepository @Inject constructor(
     }
 
     override suspend fun addTask(task: Task) {
-        tasksDataRepository.addTask(NewTaskTuple(task.id, task.text))
+        tasksDataRepository.addTask(
+            NewTaskTuple(
+                id = task.id,
+                text = task.text,
+                categoryId = task.categoryId
+            )
+        )
     }
 
     override suspend fun deleteTask(taskId: Long) {

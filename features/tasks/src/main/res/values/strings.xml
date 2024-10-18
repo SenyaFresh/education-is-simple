@@ -4,4 +4,9 @@
     <string name="today_tasks">Задачи на сегодня</string>
     <string name="future_tasks">Будущие задачи</string>
     <string name="completed_tasks">Выполненные задачи</string>
+    <string name="no_category">Без категории</string>
+    <string name="all">Все</string>
+    <string name="input_new_category_here">Введите сюда новую категорию</string>
+    <string name="cancel">Отменить</string>
+    <string name="confirm">Подтвердить</string>
 </resources>

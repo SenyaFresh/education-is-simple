@@ -69,7 +69,8 @@ fun LazyListScope.tasksSubcolumn(
                 },
                 onTaskDelete = {
                     onTaskDelete(task.id)
-                })
+                }
+            )
         }
     }
 }

@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation)
 
     api(project(":core:presentation"))
     api(project(":core:common"))

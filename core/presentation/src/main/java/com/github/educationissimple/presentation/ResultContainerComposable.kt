@@ -34,11 +34,12 @@ import com.github.educationissimple.common.ResultContainer
 fun ResultContainerComposable(
     container: ResultContainer<*>,
     onTryAgain: () -> Unit,
+    modifier: Modifier = Modifier,
     onSuccess: @Composable () -> Unit
 ) {
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         when (container) {
