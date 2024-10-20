@@ -132,9 +132,6 @@ fun PopUpTextField(
 @Preview(showSystemUi = true)
 @Composable
 fun PopUpTextFieldPreview() {
-
-    ScreenDimming { }
-
     PopUpTextField(
         text = "text",
         onValueChange = {},
