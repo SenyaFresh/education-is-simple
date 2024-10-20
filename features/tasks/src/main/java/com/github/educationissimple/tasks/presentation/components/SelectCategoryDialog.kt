@@ -72,8 +72,8 @@ fun SelectCategoryDialog(
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = modifier.padding(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                    modifier = modifier.padding(18.dp)
                 ) {
                     // Categories list.
                     CategoriesRow(
