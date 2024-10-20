@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 
@@ -27,46 +28,56 @@ fun AllTasksColumn(
     var isFutureTasksExpanded by remember { mutableStateOf(true) }
     var isCompletedTasksExpanded by remember { mutableStateOf(true) }
 
-    LazyColumn(contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 8.dp)) {
-        tasksSubcolumn(
-            Core.resources.getString(R.string.previous_tasks),
+    ResultContainerComposable(
+        container = ResultContainer.wrap(
             previousTasks,
-            onTaskCompletionChange = onTaskCompletionChange,
-            onTaskDelete = onTaskDelete,
-            isExpanded = isPreviousTasksExpanded,
-            onExpandChange = {
-                isPreviousTasksExpanded = it
-            }
-        )
-        tasksSubcolumn(
-            Core.resources.getString(R.string.today_tasks),
             todayTasks,
-            onTaskCompletionChange = onTaskCompletionChange,
-            onTaskDelete = onTaskDelete,
-            isExpanded = isTodayTasksExpanded,
-            onExpandChange = {
-                isTodayTasksExpanded = it
-            }
-        )
-        tasksSubcolumn(
-            Core.resources.getString(R.string.future_tasks),
             futureTasks,
-            onTaskCompletionChange = onTaskCompletionChange,
-            onTaskDelete = onTaskDelete,
-            isExpanded = isFutureTasksExpanded,
-            onExpandChange = {
-                isFutureTasksExpanded = it
-            }
-        )
-        tasksSubcolumn(
-            Core.resources.getString(R.string.completed_tasks),
-            completedTasks,
-            onTaskCompletionChange = onTaskCompletionChange,
-            onTaskDelete = onTaskDelete,
-            isExpanded = isCompletedTasksExpanded,
-            onExpandChange = {
-                isCompletedTasksExpanded = it
-            }
-        )
+            completedTasks
+        ),
+        onTryAgain = { }
+    ) {
+        LazyColumn(contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 8.dp)) {
+            tasksSubcolumn(
+                Core.resources.getString(R.string.previous_tasks),
+                previousTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange,
+                onTaskDelete = onTaskDelete,
+                isExpanded = isPreviousTasksExpanded,
+                onExpandChange = {
+                    isPreviousTasksExpanded = it
+                }
+            )
+            tasksSubcolumn(
+                Core.resources.getString(R.string.today_tasks),
+                todayTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange,
+                onTaskDelete = onTaskDelete,
+                isExpanded = isTodayTasksExpanded,
+                onExpandChange = {
+                    isTodayTasksExpanded = it
+                }
+            )
+            tasksSubcolumn(
+                Core.resources.getString(R.string.future_tasks),
+                futureTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange,
+                onTaskDelete = onTaskDelete,
+                isExpanded = isFutureTasksExpanded,
+                onExpandChange = {
+                    isFutureTasksExpanded = it
+                }
+            )
+            tasksSubcolumn(
+                Core.resources.getString(R.string.completed_tasks),
+                completedTasks.unwrap(),
+                onTaskCompletionChange = onTaskCompletionChange,
+                onTaskDelete = onTaskDelete,
+                isExpanded = isCompletedTasksExpanded,
+                onExpandChange = {
+                    isCompletedTasksExpanded = it
+                }
+            )
+        }
     }
 }

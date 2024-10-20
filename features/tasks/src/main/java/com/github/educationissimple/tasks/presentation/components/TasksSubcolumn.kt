@@ -17,25 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.tasks.domain.entities.Task
 
 
 fun LazyListScope.tasksSubcolumn(
     title: String,
-    tasksContainer: ResultContainer<List<Task>>,
+    tasksContainer: List<Task>,
     onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
 
-    if (tasksContainer == ResultContainer.Loading ||
-        tasksContainer is ResultContainer.Error ||
-        tasksContainer.unwrap().isEmpty()
-    ) {
-        return
-    }
+    if (tasksContainer.isEmpty()) return
 
     // Subcolumn title.
     item {
@@ -54,7 +48,7 @@ fun LazyListScope.tasksSubcolumn(
 
     // Subcolumn content.
     if (isExpanded) {
-        items(items = tasksContainer.unwrap(), key = { task -> task.id }) { task ->
+        items(items = tasksContainer, key = { task -> task.id }) { task ->
             TaskCard(isCompleted = task.isCompleted,
                 text = task.text,
                 date = task.date,
@@ -76,24 +70,20 @@ fun TasksColumnPreview() {
     LazyColumn {
         tasksSubcolumn(
             "Задачи на сегодня",
-            ResultContainer.Done(
-                listOf(
-                    Task(id = 1, text = "Побегать"),
-                    Task(id = 2, text = "Попрыгать"),
-                    Task(id = 3, text = "Полежать")
-                )
+            listOf(
+                Task(id = 1, text = "Побегать"),
+                Task(id = 2, text = "Попрыгать"),
+                Task(id = 3, text = "Полежать")
             ),
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { }
         )
         tasksSubcolumn(
             "Выполненные сегодня задачи",
-            ResultContainer.Done(
-                listOf(
-                    Task(id = 4, text = "Побегать", isCompleted = true, date = "10-08"),
-                    Task(id = 5, text = "Попрыгать", isCompleted = true),
-                    Task(id = 6, text = "Полежать", isCompleted = true)
-                )
+            listOf(
+                Task(id = 4, text = "Побегать", isCompleted = true, date = "10-08"),
+                Task(id = 5, text = "Попрыгать", isCompleted = true),
+                Task(id = 6, text = "Полежать", isCompleted = true)
             ),
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { }

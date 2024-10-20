@@ -30,6 +30,21 @@ sealed class ResultContainer<out T> {
         }
     }
 
+    companion object {
+        /**
+         * Wrap specified containers into one.
+         */
+        fun wrap(vararg values: ResultContainer<Any>): ResultContainer<Unit> {
+            return values.fold(ResultContainer.Done(Unit) as ResultContainer<Unit>) { acc, value ->
+                when (value) {
+                    is ResultContainer.Loading -> ResultContainer.Loading
+                    is ResultContainer.Error -> ResultContainer.Error(value.exception)
+                    else -> acc
+                }
+            }
+        }
+    }
+
     /**
      * Convert ResultContainer type to another type using specified suspend [mapper].
      */

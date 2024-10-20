@@ -117,7 +117,7 @@ fun TasksContent(
             )
         }
     } else {
-        LaunchedEffect(isAddingTask) {
+        LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
 
