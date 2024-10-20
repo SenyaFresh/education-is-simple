@@ -1,10 +1,9 @@
 package com.github.educationissimple.tasks.presentation.components
 
-import androidx.compose.foundation.layout.Box
+import android.view.Gravity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -25,8 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
@@ -45,8 +48,15 @@ fun PopUpTextField(
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-) = Box(modifier = Modifier.fillMaxSize()) {
+) = Dialog(
+    onDismissRequest = onDismiss,
+    properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnBackPress = true)
+) {
+    val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+    dialogWindowProvider.window.setGravity(Gravity.BOTTOM)
+
     Card(
         colors = CardDefaults.cardColors(containerColor = Neutral.Light.Lightest),
         shape = RoundedCornerShape(
@@ -55,7 +65,7 @@ fun PopUpTextField(
             bottomEnd = 0.dp,
             bottomStart = 0.dp
         ),
-        modifier = modifier.align(Alignment.BottomCenter)
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
@@ -131,6 +141,7 @@ fun PopUpTextFieldPreview() {
         onAddClick = {},
         onAddNewCategory = {},
         focusRequester = FocusRequester(),
+        onDismiss = { },
         categories = ResultContainer.Done(listOf())
     )
 }

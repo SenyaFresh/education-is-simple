@@ -1,6 +1,5 @@
 package com.github.educationissimple.tasks.presentation.screens
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.ScreenDimming
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
@@ -119,15 +117,9 @@ fun TasksContent(
             )
         }
     } else {
-        BackHandler {
-            isAddingTask = false
-        }
-
         LaunchedEffect(isAddingTask) {
             focusRequester.requestFocus()
         }
-
-        ScreenDimming { isAddingTask = false }
 
         PopUpTextField(
             text = taskText,
@@ -147,6 +139,7 @@ fun TasksContent(
                 onTasksEvent(TasksEvent.AddCategory(categoryName))
             },
             focusRequester = focusRequester,
+            onDismiss = { isAddingTask = false },
             categories = categories
         )
     }
