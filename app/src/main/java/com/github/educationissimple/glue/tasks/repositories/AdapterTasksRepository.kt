@@ -1,6 +1,10 @@
 package com.github.educationissimple.glue.tasks.repositories
 
+import android.database.sqlite.SQLiteConstraintException
+import com.github.educationissimple.R
+import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.common.UserFriendlyException
 import com.github.educationissimple.data.tasks.repositories.TasksDataRepository
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
@@ -58,7 +62,18 @@ class AdapterTasksRepository @Inject constructor(
     }
 
     override suspend fun createCategory(name: String) {
-        tasksDataRepository.createCategory(NewTaskCategoryTuple(name))
+        try {
+            tasksDataRepository.createCategory(
+                NewTaskCategoryTuple(
+                    name.lowercase().trim()
+                )
+            )
+        } catch (exception: SQLiteConstraintException) {
+            throw UserFriendlyException(
+                userFriendlyMessage = Core.resources.getString(R.string.category_constraint_exception),
+                cause = exception
+            )
+        }
     }
 
     override suspend fun deleteCategory(categoryId: Long) {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Education is simple</string>
+    <string name="category_constraint_exception">Категория с таким именем уже существует.</string>
 </resources>
