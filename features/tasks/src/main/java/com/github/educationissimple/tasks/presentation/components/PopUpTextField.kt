@@ -117,6 +117,7 @@ fun PopUpTextField(
 
                 DefaultIconButton(
                     onClick = { onAddClick(selectedCategory.id) },
+                    enabled = text.isNotBlank()
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Send,

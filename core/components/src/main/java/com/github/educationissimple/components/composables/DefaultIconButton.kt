@@ -11,13 +11,17 @@ import com.github.educationissimple.components.colors.Neutral
 fun DefaultIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable () -> Unit
 ) = IconButton(
     onClick = onClick,
     colors = IconButtonDefaults.iconButtonColors(
         contentColor = Neutral.Light.Light,
-        containerColor = Highlight.Darkest
+        containerColor = Highlight.Darkest,
+        disabledContentColor = Neutral.Light.Light,
+        disabledContainerColor = Highlight.Medium
     ),
+    enabled = enabled,
     modifier = modifier
 ) {
     content()
