@@ -35,7 +35,6 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultTextField
-import com.github.educationissimple.components.composables.ScreenDimming
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
