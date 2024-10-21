@@ -61,7 +61,6 @@ fun TasksContent(
     categories: ResultContainer<List<TaskCategory>>,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
-    var isFirstComposition by rememberSaveable { mutableStateOf(true) }
     var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
@@ -83,20 +82,13 @@ fun TasksContent(
         onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
     }
 
-    LaunchedEffect(activeCategoryId) {
-        if (isFirstComposition) {
-            isFirstComposition = false
-            return@LaunchedEffect
-        }
-        onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != NO_CATEGORY_ID) activeCategoryId else null))
-    }
-
     Column {
         CategoriesRow(
             categories = categories,
             activeCategoryId = activeCategoryId,
             onCategoryClick = {
                 activeCategoryId = it
+                onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != NO_CATEGORY_ID) activeCategoryId else null))
             },
             firstCategoryLabel = stringResource(R.string.all),
             maxLines = 1,
