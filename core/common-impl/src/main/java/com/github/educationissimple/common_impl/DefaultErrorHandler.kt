@@ -1,10 +1,10 @@
 package com.github.educationissimple.common_impl
 
+import com.github.educationissimple.common.ErrorHandler
 import com.github.educationissimple.common.Logger
 import com.github.educationissimple.common.Resources
 import com.github.educationissimple.common.Toaster
 import com.github.educationissimple.common.UserFriendlyException
-import com.github.educationissimple.common.ErrorHandler
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 

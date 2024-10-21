@@ -1,7 +1,6 @@
 package com.github.educationissimple.components.composables
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
