@@ -12,17 +12,17 @@ data class Task(
 
     sealed class Priority(val value: Int) {
 
-        data object TopPriority : Priority(1)
+        data object TopPriority : Priority(2)
 
-        data object SecondaryPriority : Priority(2)
+        data object SecondaryPriority : Priority(1)
 
-        data object NoPriority : Priority(3)
+        data object NoPriority : Priority(0)
 
         companion object {
             fun fromValue(value: Int): Priority {
                 return when (value) {
-                    1 -> TopPriority
-                    2 -> SecondaryPriority
+                    2 -> TopPriority
+                    1 -> SecondaryPriority
                     else -> NoPriority
                 }
             }

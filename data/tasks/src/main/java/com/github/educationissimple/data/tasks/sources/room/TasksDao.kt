@@ -24,7 +24,7 @@ interface TasksDao {
             date BETWEEN :startDate AND :endDate
             AND is_completed = :isCompleted
             AND (category_id = :categoryId OR :categoryId IS NULL)
-            """)
+            ORDER BY priority DESC, date ASC""")
     suspend fun getTasks(
         startDate: LocalDate,
         endDate: LocalDate,
