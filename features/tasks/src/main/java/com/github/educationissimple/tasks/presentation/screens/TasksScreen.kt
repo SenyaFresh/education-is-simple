@@ -79,8 +79,8 @@ fun TasksContent(
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
-    val onTaskPriorityChange: (Task, Task.Priority) -> Unit = { task, priority ->
-        onTasksEvent(TasksEvent.UpdateTask(task.copy(priority = priority)))
+    val onTaskPriorityChange: (Long, Task.Priority) -> Unit = { taskId, priority ->
+        onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
     }
 
     LaunchedEffect(activeCategoryId) {

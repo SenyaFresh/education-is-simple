@@ -17,10 +17,6 @@ interface TasksDataRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<TaskDataEntity>>>
 
-    suspend fun completeTask(id: Long)
-
-    suspend fun cancelTaskCompletion(id: Long)
-
     suspend fun addTask(newTask: NewTaskTuple)
 
     suspend fun updateTask(updatedTask: TaskDataEntity)

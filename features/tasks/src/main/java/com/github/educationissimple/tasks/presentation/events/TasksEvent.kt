@@ -8,9 +8,9 @@ sealed class TasksEvent {
 
     data class CancelTaskCompletion(val taskId: Long): TasksEvent()
 
-    data class AddTask(val task: Task): TasksEvent()
+    data class ChangeTaskPriority(val taskId: Long, val priority: Task.Priority): TasksEvent()
 
-    data class UpdateTask(val task: Task): TasksEvent()
+    data class AddTask(val task: Task): TasksEvent()
 
     data class DeleteTask(val taskId: Long): TasksEvent()
 

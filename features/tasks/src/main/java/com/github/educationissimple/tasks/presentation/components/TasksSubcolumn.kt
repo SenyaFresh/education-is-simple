@@ -25,7 +25,7 @@ fun LazyListScope.tasksSubcolumn(
     tasksContainer: List<Task>,
     onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit,
-    onTaskPriorityChange: (Task, Task.Priority) -> Unit,
+    onTaskPriorityChange: (Long, Task.Priority) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -59,7 +59,7 @@ fun LazyListScope.tasksSubcolumn(
                     onTaskDelete(task.id)
                 },
                 onPriorityChange = { priority ->
-                    onTaskPriorityChange(task, priority)
+                    onTaskPriorityChange(task.id, priority)
                 }
             )
         }

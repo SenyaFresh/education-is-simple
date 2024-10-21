@@ -21,7 +21,7 @@ fun AllTasksColumn(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     onTaskDelete: (Long) -> Unit,
-    onTaskPriorityChange: (Task, Task.Priority) -> Unit,
+    onTaskPriorityChange: (Long, Task.Priority) -> Unit,
     onTaskCompletionChange: (Long, Boolean) -> Unit
 ) {
     var isPreviousTasksExpanded by remember { mutableStateOf(true) }

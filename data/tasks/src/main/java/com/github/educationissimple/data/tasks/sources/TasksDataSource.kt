@@ -4,12 +4,9 @@ import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
-import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import java.time.LocalDate
 
 interface TasksDataSource {
-
-    suspend fun setTaskCompletion(taskCompletionTuple: TaskCompletionTuple)
 
     suspend fun createTask(newTaskTuple: NewTaskTuple)
 

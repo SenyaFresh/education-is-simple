@@ -36,14 +36,6 @@ class AdapterTasksRepository @Inject constructor(
         return tasksDataRepository.getCompletedTasks().mapToTask()
     }
 
-    override suspend fun completeTask(taskId: Long) {
-        tasksDataRepository.completeTask(taskId)
-    }
-
-    override suspend fun cancelTask(taskId: Long) {
-        tasksDataRepository.cancelTaskCompletion(taskId)
-    }
-
     override suspend fun addTask(task: Task) {
         tasksDataRepository.addTask(
             NewTaskTuple(

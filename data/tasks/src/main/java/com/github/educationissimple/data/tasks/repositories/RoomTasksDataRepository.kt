@@ -7,7 +7,6 @@ import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
-import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
@@ -51,16 +50,6 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun getCompletedTasks(): Flow<ResultContainer<List<TaskDataEntity>>> {
         return completedTasksLoader.listen()
-    }
-
-    override suspend fun completeTask(id: Long) {
-        tasksDataSource.setTaskCompletion(TaskCompletionTuple(id, true))
-        updateSources()
-    }
-
-    override suspend fun cancelTaskCompletion(id: Long) {
-        tasksDataSource.setTaskCompletion(TaskCompletionTuple(id, false))
-        updateSources()
     }
 
     override suspend fun addTask(newTask: NewTaskTuple) {

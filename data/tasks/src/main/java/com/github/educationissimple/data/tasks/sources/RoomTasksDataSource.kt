@@ -7,10 +7,8 @@ import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.room.TasksDatabase
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
-import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import com.github.educationissimple.data.tasks.utils.getMaxDate
 import com.github.educationissimple.data.tasks.utils.getMinDate
-import kotlinx.coroutines.delay
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -30,12 +28,6 @@ class RoomTasksDataSource @Inject constructor(
 
     private val tasksDao = db.getTasksDao()
     private val tasksCategoryDao = db.getTasksCategoryDao()
-
-
-    override suspend fun setTaskCompletion(taskCompletionTuple: TaskCompletionTuple) {
-        delay(200)
-        tasksDao.setTaskCompletion(taskCompletionTuple)
-    }
 
     override suspend fun createTask(newTaskTuple: NewTaskTuple) {
         tasksDao.createTask(newTaskTuple)

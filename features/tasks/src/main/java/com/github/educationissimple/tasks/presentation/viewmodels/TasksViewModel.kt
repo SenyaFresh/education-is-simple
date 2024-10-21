@@ -8,9 +8,7 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.usecases.AddCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.AddTaskUseCase
-import com.github.educationissimple.tasks.domain.usecases.CancelTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.ChangeCategoryUseCase
-import com.github.educationissimple.tasks.domain.usecases.CompleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetCategoriesUseCase
@@ -25,8 +23,6 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
-    private val cancelTaskUseCase: CancelTaskUseCase,
-    private val completeTaskUseCase: CompleteTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val getTasksUseCase: GetTasksUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
@@ -65,8 +61,8 @@ class TasksViewModel @Inject constructor(
     fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
-            is TasksEvent.UpdateTask -> updateTask(event.task,)
-            is TasksEvent.CancelTaskCompletion -> cancelTask(event.taskId)
+            is TasksEvent.ChangeTaskPriority -> changeTaskPriority(event.taskId, event.priority)
+            is TasksEvent.CancelTaskCompletion -> cancelTaskCompletion(event.taskId)
             is TasksEvent.CompleteTask -> completeTask(event.taskId)
             is TasksEvent.DeleteTask -> deleteTask(event.taskId)
             is TasksEvent.ChangeCategory -> changeCategory(event.categoryId)
@@ -81,21 +77,31 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private fun updateTask(task: Task) {
+    private fun changeTaskPriority(taskId: Long, priority: Task.Priority) {
         viewModelScope.launch {
-            updateTaskUseCase.updateTask(task)
+            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
+            todayTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
+            futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
+            completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+
+            updateTaskUseCase.updateTask(task.copy(priority = priority))
         }
     }
 
-    private fun cancelTask(taskId: Long) {
+    private fun cancelTaskCompletion(taskId: Long) {
         viewModelScope.launch {
-            cancelTaskUseCase.cancelTask(taskId)
+            val task = completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+            updateTaskUseCase.updateTask(task.copy(isCompleted = false))
         }
     }
 
     private fun completeTask(taskId: Long) {
         viewModelScope.launch {
-            completeTaskUseCase.completeTask(taskId)
+            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
+                todayTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
+                futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+
+            updateTaskUseCase.updateTask(task.copy(isCompleted = true))
         }
     }
 
@@ -167,8 +173,6 @@ class TasksViewModel @Inject constructor(
     class Factory @Inject constructor(
         private val addTaskUseCase: AddTaskUseCase,
         private val updateTaskUseCase: UpdateTaskUseCase,
-        private val cancelTaskUseCase: CancelTaskUseCase,
-        private val completeTaskUseCase: CompleteTaskUseCase,
         private val deleteTaskUseCase: DeleteTaskUseCase,
         private val getTasksUseCase: GetTasksUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
@@ -181,8 +185,6 @@ class TasksViewModel @Inject constructor(
             return TasksViewModel(
                 addTaskUseCase,
                 updateTaskUseCase,
-                cancelTaskUseCase,
-                completeTaskUseCase,
                 deleteTaskUseCase,
                 getTasksUseCase,
                 getCategoriesUseCase,

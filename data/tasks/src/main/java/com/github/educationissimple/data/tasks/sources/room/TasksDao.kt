@@ -6,14 +6,10 @@ import androidx.room.Query
 import androidx.room.Update
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
-import com.github.educationissimple.data.tasks.tuples.TaskCompletionTuple
 import java.time.LocalDate
 
 @Dao
 interface TasksDao {
-
-    @Update(entity = TaskDataEntity::class)
-    suspend fun setTaskCompletion(taskCompletionTuple: TaskCompletionTuple)
 
     @Insert(entity = TaskDataEntity::class)
     suspend fun createTask(newTaskTuple: NewTaskTuple)
