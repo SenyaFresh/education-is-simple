@@ -1,12 +1,16 @@
 package com.github.educationissimple.tasks.presentation.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -14,27 +18,34 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun TaskCard(
@@ -42,63 +53,126 @@ fun TaskCard(
     text: String,
     modifier: Modifier = Modifier,
     date: String? = null,
+    isActionsRevealed: Boolean = false,
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit
 ) {
     var isTaskCompleted by remember { mutableStateOf(isCompleted) }
 
+    var contextMenuWidth by remember {
+        mutableFloatStateOf(0f)
+    }
+
+    val offset = remember {
+        Animatable(0f)
+    }
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = isActionsRevealed, contextMenuWidth) {
+        if (isActionsRevealed) {
+            offset.animateTo(-contextMenuWidth)
+        } else {
+            offset.animateTo(0f)
+        }
+    }
+
     Card(
-        colors = CardDefaults.cardColors(containerColor = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
-            .fillMaxWidth()
-            .height(if (date != null) 70.dp else 60.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(end = 12.dp)
+                .fillMaxWidth()
+                .height(if (date != null) 70.dp else 60.dp)
         ) {
-            Checkbox(
-                checked = isTaskCompleted,
-                onCheckedChange = { isChecked ->
-                    isTaskCompleted = isChecked
-                    onTaskCompletionChange(isChecked)
-                },
-                colors = CheckboxDefaults.colors(
-                    uncheckedColor = Neutral.Light.Darkest,
-                    checkedColor = Highlight.Darkest
-                ),
-                modifier = Modifier.scale(0.9f)
-            )
-
-            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
-                Text(
-                    text = text,
-                    maxLines = 1,
-                    fontWeight = FontWeight.Medium,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(textDecoration = if (isCompleted) TextDecoration.LineThrough else null),
+            // Delete action.
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .onSizeChanged {
+                        contextMenuWidth = it.width.toFloat()
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TaskActionIcon(
+                    imageVector = Icons.Default.Delete,
+                    text = "Удалить",
+                    contentColor = Neutral.Light.Lightest,
+                    containerColor = Support.Error.Dark,
+                    modifier = Modifier.fillMaxHeight(),
+                    onClick = onTaskDelete
                 )
-
-                if (date != null) {
-                    Text(
-                        text = date,
-                        fontSize = 12.sp,
-                        color = Neutral.Dark.Light
-                    )
-                }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            // Task content.
+            Surface(
+                color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
+                modifier = Modifier
+                    .offset { IntOffset(offset.value.roundToInt(), 0) }
+                    .pointerInput(contextMenuWidth) {
+                        detectHorizontalDragGestures(
+                            onHorizontalDrag = { _, dragAmount ->
+                                scope.launch {
+                                    val newOffset = (offset.value + dragAmount)
+                                        .coerceIn(-contextMenuWidth, 0f)
+                                    offset.snapTo(newOffset)
+                                }
+                            },
+                            onDragEnd = {
+                                when {
+                                    offset.value <= -contextMenuWidth / 2f -> {
+                                        scope.launch {
+                                            offset.animateTo(-contextMenuWidth)
+                                        }
+                                    }
 
-            IconButton(onClick = onTaskDelete) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete task",
-                    tint = Support.Error.Dark
-                )
+                                    else -> {
+                                        scope.launch {
+                                            offset.animateTo(0f)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Checkbox(
+                        checked = isTaskCompleted,
+                        onCheckedChange = { isChecked ->
+                            isTaskCompleted = isChecked
+                            onTaskCompletionChange(isChecked)
+                        },
+                        colors = CheckboxDefaults.colors(
+                            uncheckedColor = Neutral.Light.Darkest,
+                            checkedColor = Highlight.Darkest
+                        ),
+                        modifier = Modifier.scale(0.9f)
+                    )
+
+                    Column(modifier = Modifier.align(Alignment.CenterVertically)) {
+                        Text(
+                            text = text,
+                            maxLines = 1,
+                            fontWeight = FontWeight.Medium,
+                            overflow = TextOverflow.Ellipsis,
+                            style = TextStyle(textDecoration = if (isCompleted) TextDecoration.LineThrough else null),
+                        )
+
+                        if (date != null) {
+                            Text(
+                                text = date,
+                                fontSize = 12.sp,
+                                color = Neutral.Dark.Light
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -113,13 +187,16 @@ fun TaskCardPreview() {
             text = "Go to work",
             date = "10-08",
             onTaskCompletionChange = { },
-            onTaskDelete = { })
+            onTaskDelete = { },
+            isActionsRevealed = true
+        )
 
         TaskCard(
             isCompleted = true,
             text = "Task with long long long long long long long long long long long long",
             onTaskCompletionChange = { },
-            onTaskDelete = { }
+            onTaskDelete = { },
+            isActionsRevealed = false
         )
     }
 }
