@@ -97,7 +97,6 @@ fun TasksContent(
             activeCategoryId = activeCategoryId,
             onCategoryClick = {
                 activeCategoryId = it
-                onTasksEvent(TasksEvent.ChangeCategory(it))
             },
             firstCategoryLabel = stringResource(R.string.all),
             maxLines = 1,
