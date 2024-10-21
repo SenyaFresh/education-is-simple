@@ -18,6 +18,9 @@ interface TasksDao {
     @Insert(entity = TaskDataEntity::class)
     suspend fun createTask(newTaskTuple: NewTaskTuple)
 
+    @Update(entity = TaskDataEntity::class)
+    suspend fun updateTask(taskDataEntity: TaskDataEntity)
+
     @Query("DELETE FROM tasks WHERE id = :id")
     suspend fun deleteTask(id: Long)
 

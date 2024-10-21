@@ -10,6 +10,8 @@ sealed class TasksEvent {
 
     data class AddTask(val task: Task): TasksEvent()
 
+    data class UpdateTask(val task: Task): TasksEvent()
+
     data class DeleteTask(val taskId: Long): TasksEvent()
 
     data class ChangeCategory(val categoryId: Long?): TasksEvent()

@@ -21,6 +21,7 @@ fun AllTasksColumn(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     onTaskDelete: (Long) -> Unit,
+    onTaskPriorityChange: (Task, Task.Priority) -> Unit,
     onTaskCompletionChange: (Long, Boolean) -> Unit
 ) {
     var isPreviousTasksExpanded by remember { mutableStateOf(true) }
@@ -43,6 +44,7 @@ fun AllTasksColumn(
                 previousTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete,
+                onTaskPriorityChange = onTaskPriorityChange,
                 isExpanded = isPreviousTasksExpanded,
                 onExpandChange = {
                     isPreviousTasksExpanded = it
@@ -53,6 +55,7 @@ fun AllTasksColumn(
                 todayTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete,
+                onTaskPriorityChange = onTaskPriorityChange,
                 isExpanded = isTodayTasksExpanded,
                 onExpandChange = {
                     isTodayTasksExpanded = it
@@ -63,6 +66,7 @@ fun AllTasksColumn(
                 futureTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete,
+                onTaskPriorityChange = onTaskPriorityChange,
                 isExpanded = isFutureTasksExpanded,
                 onExpandChange = {
                     isFutureTasksExpanded = it
@@ -73,6 +77,7 @@ fun AllTasksColumn(
                 completedTasks.unwrap(),
                 onTaskCompletionChange = onTaskCompletionChange,
                 onTaskDelete = onTaskDelete,
+                onTaskPriorityChange = onTaskPriorityChange,
                 isExpanded = isCompletedTasksExpanded,
                 onExpandChange = {
                     isCompletedTasksExpanded = it

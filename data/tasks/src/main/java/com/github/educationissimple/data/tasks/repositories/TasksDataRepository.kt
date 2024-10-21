@@ -23,6 +23,8 @@ interface TasksDataRepository {
 
     suspend fun addTask(newTask: NewTaskTuple)
 
+    suspend fun updateTask(updatedTask: TaskDataEntity)
+
     suspend fun deleteTask(id: Long)
 
     suspend fun changeCategory(categoryId: Long?)

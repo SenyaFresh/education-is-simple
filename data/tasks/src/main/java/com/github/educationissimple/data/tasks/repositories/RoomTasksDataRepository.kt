@@ -68,6 +68,11 @@ class RoomTasksDataRepository @Inject constructor(
         updateSources()
     }
 
+    override suspend fun updateTask(updatedTask: TaskDataEntity) {
+        tasksDataSource.updateTask(updatedTask)
+        updateSources()
+    }
+
     override suspend fun deleteTask(id: Long) {
         tasksDataSource.deleteTask(id)
         updateSources()

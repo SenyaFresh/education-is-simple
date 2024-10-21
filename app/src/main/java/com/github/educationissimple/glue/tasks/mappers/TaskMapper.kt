@@ -12,7 +12,19 @@ fun TaskDataEntity.mapToTask(): Task {
         text = text,
         isCompleted = isCompleted,
         categoryId = categoryId,
+        priority = Task.Priority.fromValue(priority),
         date = date.toTaskDate()
+    )
+}
+
+fun Task.mapToTaskDataEntity(): TaskDataEntity {
+    return TaskDataEntity(
+        id = id,
+        text = text,
+        isCompleted = isCompleted,
+        categoryId = categoryId,
+        priority = priority.value,
+        date = parseTaskDate(date)
     )
 }
 

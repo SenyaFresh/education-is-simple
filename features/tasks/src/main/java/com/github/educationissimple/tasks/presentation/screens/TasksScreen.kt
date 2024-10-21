@@ -61,6 +61,7 @@ fun TasksContent(
     categories: ResultContainer<List<TaskCategory>>,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
+    var isFirstComposition by rememberSaveable { mutableStateOf(true) }
     var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
@@ -78,7 +79,15 @@ fun TasksContent(
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
+    val onTaskPriorityChange: (Task, Task.Priority) -> Unit = { task, priority ->
+        onTasksEvent(TasksEvent.UpdateTask(task.copy(priority = priority)))
+    }
+
     LaunchedEffect(activeCategoryId) {
+        if (isFirstComposition) {
+            isFirstComposition = false
+            return@LaunchedEffect
+        }
         onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != NO_CATEGORY_ID) activeCategoryId else null))
     }
 
@@ -87,8 +96,8 @@ fun TasksContent(
             categories = categories,
             activeCategoryId = activeCategoryId,
             onCategoryClick = {
-                onTasksEvent(TasksEvent.ChangeCategory(it))
                 activeCategoryId = it
+                onTasksEvent(TasksEvent.ChangeCategory(it))
             },
             firstCategoryLabel = stringResource(R.string.all),
             maxLines = 1,
@@ -103,6 +112,7 @@ fun TasksContent(
             futureTasks = futureTasks,
             completedTasks = completedTasks,
             onTaskDelete = onTaskDelete,
+            onTaskPriorityChange = onTaskPriorityChange,
             onTaskCompletionChange = onTaskCompletionChange
         )
     }

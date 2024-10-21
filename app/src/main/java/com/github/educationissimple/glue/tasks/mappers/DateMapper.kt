@@ -14,3 +14,17 @@ fun LocalDate.toTaskDate(): String? {
     return if (year == "") "$month-$day" else "$year-$month-$day"
 
 }
+
+fun parseTaskDate(date: String?): LocalDate {
+    if (date == null) {
+        return LocalDate.now()
+    }
+
+    val dateParts = date.split("-")
+
+    if (dateParts.size == 2) {
+        return LocalDate.of(LocalDate.now().year, dateParts[0].toInt(), dateParts[1].toInt())
+    }
+
+    return LocalDate.of(dateParts[0].toInt(), dateParts[1].toInt(), dateParts[2].toInt())
+}

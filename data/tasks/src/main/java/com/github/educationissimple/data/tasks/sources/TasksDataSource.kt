@@ -13,6 +13,8 @@ interface TasksDataSource {
 
     suspend fun createTask(newTaskTuple: NewTaskTuple)
 
+    suspend fun updateTask(taskDataEntity: TaskDataEntity)
+
     suspend fun deleteTask(id: Long)
 
     suspend fun getTasksBeforeDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>

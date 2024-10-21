@@ -25,6 +25,7 @@ fun LazyListScope.tasksSubcolumn(
     tasksContainer: List<Task>,
     onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit,
+    onTaskPriorityChange: (Task, Task.Priority) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -49,15 +50,16 @@ fun LazyListScope.tasksSubcolumn(
     // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer, key = { task -> task.id }) { task ->
-            TaskCard(isCompleted = task.isCompleted,
-                text = task.text,
-                date = task.date,
+            TaskCard(task = task,
                 modifier = Modifier.padding(top = 8.dp),
-                onTaskCompletionChange = {
-                    onTaskCompletionChange(task.id, it)
+                onTaskCompletionChange = { isCompleted ->
+                    onTaskCompletionChange(task.id, isCompleted)
                 },
                 onTaskDelete = {
                     onTaskDelete(task.id)
+                },
+                onPriorityChange = { priority ->
+                    onTaskPriorityChange(task, priority)
                 }
             )
         }
@@ -76,7 +78,8 @@ fun TasksColumnPreview() {
                 Task(id = 3, text = "Полежать")
             ),
             onTaskCompletionChange = { _, _ -> },
-            onTaskDelete = { }
+            onTaskDelete = { },
+            onTaskPriorityChange = { _, _ -> }
         )
         tasksSubcolumn(
             "Выполненные сегодня задачи",
@@ -86,7 +89,8 @@ fun TasksColumnPreview() {
                 Task(id = 6, text = "Полежать", isCompleted = true)
             ),
             onTaskCompletionChange = { _, _ -> },
-            onTaskDelete = { }
+            onTaskDelete = { },
+            onTaskPriorityChange = { _, _ -> }
         )
     }
 }

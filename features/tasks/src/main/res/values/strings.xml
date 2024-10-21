@@ -9,4 +9,6 @@
     <string name="input_new_category_here">Введите сюда новую категорию</string>
     <string name="cancel">Отменить</string>
     <string name="confirm">Подтвердить</string>
+    <string name="delete">Удалить</string>
+    <string name="priority">Приоритет</string>
 </resources>

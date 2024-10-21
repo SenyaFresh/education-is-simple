@@ -15,6 +15,7 @@ import com.github.educationissimple.tasks.domain.usecases.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetCategoriesUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetTasksUseCase
+import com.github.educationissimple.tasks.domain.usecases.UpdateTaskUseCase
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 class TasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
     private val cancelTaskUseCase: CancelTaskUseCase,
     private val completeTaskUseCase: CompleteTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
@@ -63,6 +65,7 @@ class TasksViewModel @Inject constructor(
     fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
+            is TasksEvent.UpdateTask -> updateTask(event.task,)
             is TasksEvent.CancelTaskCompletion -> cancelTask(event.taskId)
             is TasksEvent.CompleteTask -> completeTask(event.taskId)
             is TasksEvent.DeleteTask -> deleteTask(event.taskId)
@@ -75,6 +78,12 @@ class TasksViewModel @Inject constructor(
     private fun addTask(task: Task) {
         viewModelScope.launch {
             addTaskUseCase.addTask(task)
+        }
+    }
+
+    private fun updateTask(task: Task) {
+        viewModelScope.launch {
+            updateTaskUseCase.updateTask(task)
         }
     }
 
@@ -157,6 +166,7 @@ class TasksViewModel @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     class Factory @Inject constructor(
         private val addTaskUseCase: AddTaskUseCase,
+        private val updateTaskUseCase: UpdateTaskUseCase,
         private val cancelTaskUseCase: CancelTaskUseCase,
         private val completeTaskUseCase: CompleteTaskUseCase,
         private val deleteTaskUseCase: DeleteTaskUseCase,
@@ -170,6 +180,7 @@ class TasksViewModel @Inject constructor(
             require(modelClass == TasksViewModel::class.java)
             return TasksViewModel(
                 addTaskUseCase,
+                updateTaskUseCase,
                 cancelTaskUseCase,
                 completeTaskUseCase,
                 deleteTaskUseCase,

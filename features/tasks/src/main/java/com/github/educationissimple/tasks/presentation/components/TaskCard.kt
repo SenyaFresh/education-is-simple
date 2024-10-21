@@ -1,19 +1,23 @@
 package com.github.educationissimple.tasks.presentation.components
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -33,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -44,20 +49,28 @@ import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
+import com.github.educationissimple.tasks.R
+import com.github.educationissimple.tasks.domain.entities.Task
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
 fun TaskCard(
-    isCompleted: Boolean,
-    text: String,
-    modifier: Modifier = Modifier,
-    date: String? = null,
-    isActionsRevealed: Boolean = false,
+    task: Task,
     onTaskCompletionChange: (Boolean) -> Unit,
-    onTaskDelete: () -> Unit
+    onTaskDelete: () -> Unit,
+    onPriorityChange: (Task.Priority) -> Unit,
+    modifier: Modifier = Modifier,
+    isActionsRevealed: Boolean = false
 ) {
-    var isTaskCompleted by remember { mutableStateOf(isCompleted) }
+    var isTaskCompleted by remember { mutableStateOf(task.isCompleted) }
+    var showTaskPriorityDialog by remember { mutableStateOf(false) }
+
+    val priorityColor = when (task.priority) {
+        Task.Priority.TopPriority -> Support.Warning.Dark
+        Task.Priority.SecondaryPriority -> Support.Warning.Medium
+        Task.Priority.NoPriority -> Neutral.Dark.Lightest
+    }
 
     var contextMenuWidth by remember {
         mutableFloatStateOf(0f)
@@ -77,6 +90,14 @@ fun TaskCard(
         }
     }
 
+    if (showTaskPriorityDialog) {
+        TaskPriorityDialog(
+            onDismiss = { showTaskPriorityDialog = false },
+            onPriorityChange = onPriorityChange,
+            priority = task.priority
+        )
+    }
+
     Card(
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = modifier
@@ -84,9 +105,9 @@ fun TaskCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(if (date != null) 70.dp else 60.dp)
+                .height(if (task.date != null) 70.dp else 60.dp)
         ) {
-            // Delete action.
+            // Task actions.
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -95,9 +116,20 @@ fun TaskCard(
                     },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                // Change task priority action.
+                TaskActionIcon(
+                    imageVector = Icons.Default.Star,
+                    text = stringResource(R.string.priority),
+                    contentColor = Neutral.Light.Lightest,
+                    containerColor = priorityColor,
+                    modifier = Modifier.fillMaxHeight(),
+                    onClick = { showTaskPriorityDialog = true }
+                )
+
+                // Delete task action.
                 TaskActionIcon(
                     imageVector = Icons.Default.Delete,
-                    text = "Удалить",
+                    text = stringResource(R.string.delete),
                     contentColor = Neutral.Light.Lightest,
                     containerColor = Support.Error.Dark,
                     modifier = Modifier.fillMaxHeight(),
@@ -142,6 +174,13 @@ fun TaskCard(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(8.dp)
+                            .background(color = priorityColor)
+                    )
+
                     Checkbox(
                         checked = isTaskCompleted,
                         onCheckedChange = { isChecked ->
@@ -157,16 +196,15 @@ fun TaskCard(
 
                     Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                         Text(
-                            text = text,
+                            text = task.text,
                             maxLines = 1,
                             fontWeight = FontWeight.Medium,
                             overflow = TextOverflow.Ellipsis,
-                            style = TextStyle(textDecoration = if (isCompleted) TextDecoration.LineThrough else null),
+                            style = TextStyle(textDecoration = if (isTaskCompleted) TextDecoration.LineThrough else null),
                         )
-
-                        if (date != null) {
+                        task.date?.let {
                             Text(
-                                text = date,
+                                text = task.date,
                                 fontSize = 12.sp,
                                 color = Neutral.Dark.Light
                             )
@@ -182,21 +220,23 @@ fun TaskCard(
 @Composable
 fun TaskCardPreview() {
     Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
         TaskCard(
-            isCompleted = false,
-            text = "Go to work",
-            date = "10-08",
-            onTaskCompletionChange = { },
+            Task(id = 1, text = "Go to work", isCompleted = true, date = "10-08", priority = Task.Priority.TopPriority),
+            onTaskCompletionChange = { _ -> },
             onTaskDelete = { },
-            isActionsRevealed = true
+            onPriorityChange = { _ -> },
         )
 
         TaskCard(
-            isCompleted = true,
-            text = "Task with long long long long long long long long long long long long",
-            onTaskCompletionChange = { },
+            Task(
+                id = 2,
+                text = "Task with long long long long long long long long long long long long",
+                date = "10-08"
+            ),
+            onTaskCompletionChange = { _ -> },
             onTaskDelete = { },
-            isActionsRevealed = false
+            onPriorityChange = { _ -> },
         )
     }
 }
