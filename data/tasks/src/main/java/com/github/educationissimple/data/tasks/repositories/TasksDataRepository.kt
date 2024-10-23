@@ -31,4 +31,6 @@ interface TasksDataRepository {
 
     suspend fun deleteCategory(id: Long)
 
+    suspend fun changeSortingType(sortType: String?)
+
 }

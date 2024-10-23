@@ -43,46 +43,54 @@ class RoomTasksDataSource @Inject constructor(
 
     override suspend fun getTasksBeforeDate(
         date: LocalDate,
-        categoryId: Long?
+        categoryId: Long?,
+        sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
             getMinDate(),
             date.minusDays(1),
             false,
-            categoryId
+            categoryId,
+            sortType
         )
     }
 
-    override suspend fun getTasksByDate(date: LocalDate, categoryId: Long?): List<TaskDataEntity> {
+    override suspend fun getTasksByDate(
+        date: LocalDate,
+        categoryId: Long?,
+        sortType: String?
+    ): List<TaskDataEntity> {
         return tasksDao.getTasks(
             date,
             date,
             false,
-            categoryId
+            categoryId,
+            sortType
         )
     }
 
     override suspend fun getTasksAfterDate(
         date: LocalDate,
-        categoryId: Long?
+        categoryId: Long?,
+        sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
             date.plusDays(1),
             getMaxDate(),
             false,
-            categoryId
+            categoryId,
+            sortType
         )
     }
 
-    override suspend fun getCompletedTasks(categoryId: Long?): List<TaskDataEntity> {
-        val a =  tasksDao.getTasks(
+    override suspend fun getCompletedTasks(categoryId: Long?, sortType: String?): List<TaskDataEntity> {
+        return tasksDao.getTasks(
             getMinDate(),
             getMaxDate(),
             true,
-            categoryId
+            categoryId,
+            sortType
         )
-
-        return a
     }
 
     override suspend fun getCategories(): List<TaskCategoryDataEntity> {

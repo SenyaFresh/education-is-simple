@@ -11,6 +11,7 @@ import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import com.github.educationissimple.glue.tasks.mappers.mapToTask
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskCategory
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskDataEntity
+import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
@@ -79,6 +80,10 @@ class AdapterTasksRepository @Inject constructor(
 
     override suspend fun changeCategory(categoryId: Long?) {
         tasksDataRepository.changeCategory(categoryId)
+    }
+
+    override suspend fun changeSortType(sortType: SortType?) {
+        tasksDataRepository.changeSortingType(sortType?.value)
     }
 
 }

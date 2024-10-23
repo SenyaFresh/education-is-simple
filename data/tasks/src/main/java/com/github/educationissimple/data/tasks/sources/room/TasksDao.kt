@@ -23,13 +23,19 @@ interface TasksDao {
     @Query("""SELECT * FROM tasks WHERE 
             date BETWEEN :startDate AND :endDate
             AND is_completed = :isCompleted
-            AND (category_id = :categoryId OR :categoryId IS NULL)
-            ORDER BY priority DESC, date ASC""")
+            AND (:categoryId IS NULL OR category_id = :categoryId)
+            ORDER BY 
+            CASE 
+                WHEN :sortType = 'priority' THEN priority
+                WHEN :sortType = 'date' THEN date
+                WHEN :sortType = 'text' THEN text
+                ELSE id END DESC""")
     suspend fun getTasks(
         startDate: LocalDate,
         endDate: LocalDate,
         isCompleted: Boolean,
-        categoryId: Long?
+        categoryId: Long?,
+        sortType: String? = null
     ): List<TaskDataEntity>
 
 }

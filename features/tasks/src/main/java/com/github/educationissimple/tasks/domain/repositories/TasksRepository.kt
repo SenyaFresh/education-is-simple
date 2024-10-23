@@ -1,6 +1,7 @@
 package com.github.educationissimple.tasks.domain.repositories
 
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import kotlinx.coroutines.flow.Flow
@@ -28,5 +29,7 @@ interface TasksRepository {
     suspend fun deleteCategory(categoryId: Long)
 
     suspend fun changeCategory(categoryId: Long?)
+
+    suspend fun changeSortType(sortType: SortType?)
 
 }

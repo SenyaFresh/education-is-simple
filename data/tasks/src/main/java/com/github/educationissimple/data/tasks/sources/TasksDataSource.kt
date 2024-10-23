@@ -14,13 +14,13 @@ interface TasksDataSource {
 
     suspend fun deleteTask(id: Long)
 
-    suspend fun getTasksBeforeDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
+    suspend fun getTasksBeforeDate(date: LocalDate, categoryId: Long? = null, sortType: String? = null): List<TaskDataEntity>
 
-    suspend fun getTasksByDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
+    suspend fun getTasksByDate(date: LocalDate, categoryId: Long? = null, sortType: String? = null): List<TaskDataEntity>
 
-    suspend fun getTasksAfterDate(date: LocalDate, categoryId: Long? = null): List<TaskDataEntity>
+    suspend fun getTasksAfterDate(date: LocalDate, categoryId: Long? = null, sortType: String? = null): List<TaskDataEntity>
 
-    suspend fun getCompletedTasks(categoryId: Long? = null): List<TaskDataEntity>
+    suspend fun getCompletedTasks(categoryId: Long? = null, sortType: String? = null): List<TaskDataEntity>
 
     suspend fun getCategories(): List<TaskCategoryDataEntity>
 

@@ -1,5 +1,6 @@
 package com.github.educationissimple.tasks.presentation.events
 
+import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 
 sealed class TasksEvent {
@@ -9,6 +10,8 @@ sealed class TasksEvent {
     data class CancelTaskCompletion(val taskId: Long): TasksEvent()
 
     data class ChangeTaskPriority(val taskId: Long, val priority: Task.Priority): TasksEvent()
+
+    data class ChangeSortType(val sortType: SortType): TasksEvent()
 
     data class AddTask(val task: Task): TasksEvent()
 

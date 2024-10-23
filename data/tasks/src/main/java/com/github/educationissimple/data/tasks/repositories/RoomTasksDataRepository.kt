@@ -16,6 +16,9 @@ class RoomTasksDataRepository @Inject constructor(
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
 
+    private var currentCategoryId: Long? = null
+    private var currentSortType: String? = null
+
     private val previousTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getTasksBeforeDate(LocalDate.now())
     }
@@ -68,29 +71,8 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeCategory(categoryId: Long?) {
-        previousTasksLoader.newAsyncLoad(valueLoader = {
-            tasksDataSource.getTasksBeforeDate(
-                LocalDate.now(),
-                categoryId
-            )
-        })
-        todayTasksLoader.newAsyncLoad(valueLoader = {
-            tasksDataSource.getTasksByDate(
-                LocalDate.now(),
-                categoryId
-            )
-        })
-        futureTasksLoader.newAsyncLoad(valueLoader = {
-            tasksDataSource.getTasksAfterDate(
-                LocalDate.now(),
-                categoryId
-            )
-        })
-        completedTasksLoader.newAsyncLoad(valueLoader = {
-            tasksDataSource.getCompletedTasks(
-                categoryId
-            )
-        })
+        currentCategoryId = categoryId
+        updateSources(silently = false)
     }
 
     override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>> {
@@ -107,11 +89,50 @@ class RoomTasksDataRepository @Inject constructor(
         categoriesLoader.newAsyncLoad(silently = true)
     }
 
-    private fun updateSources() {
-        previousTasksLoader.newAsyncLoad(silently = true)
-        todayTasksLoader.newAsyncLoad(silently = true)
-        futureTasksLoader.newAsyncLoad(silently = true)
-        completedTasksLoader.newAsyncLoad(silently = true)
+    override suspend fun changeSortingType(sortType: String?) {
+        currentSortType = sortType
+        updateSources(silently = false)
     }
 
+    private fun updateSources(silently: Boolean = true) {
+        previousTasksLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getTasksBeforeDate(
+                    LocalDate.now(),
+                    currentCategoryId,
+                    currentSortType
+                )
+            },
+            silently = silently
+        )
+        todayTasksLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getTasksByDate(
+                    LocalDate.now(),
+                    currentCategoryId,
+                    currentSortType
+                )
+            },
+            silently = silently
+        )
+        futureTasksLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getTasksAfterDate(
+                    LocalDate.now(),
+                    currentCategoryId,
+                    currentSortType
+                )
+            },
+            silently = silently
+        )
+        completedTasksLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getCompletedTasks(
+                    currentCategoryId,
+                    currentSortType
+                )
+            },
+            silently = silently
+        )
+    }
 }

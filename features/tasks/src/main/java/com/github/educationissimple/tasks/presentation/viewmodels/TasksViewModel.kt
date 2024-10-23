@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.BaseViewModel
+import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.usecases.AddCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.AddTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.ChangeCategoryUseCase
+import com.github.educationissimple.tasks.domain.usecases.ChangeSortTypeUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetCategoriesUseCase
@@ -27,6 +29,7 @@ class TasksViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val changeCategoryUseCase: ChangeCategoryUseCase,
+    private val changeSortTypeUseCase: ChangeSortTypeUseCase,
     private val addCategoryUseCase: AddCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : BaseViewModel() {
@@ -62,12 +65,19 @@ class TasksViewModel @Inject constructor(
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
             is TasksEvent.ChangeTaskPriority -> changeTaskPriority(event.taskId, event.priority)
+            is TasksEvent.ChangeSortType -> changeSortType(event.sortType)
             is TasksEvent.CancelTaskCompletion -> cancelTaskCompletion(event.taskId)
             is TasksEvent.CompleteTask -> completeTask(event.taskId)
             is TasksEvent.DeleteTask -> deleteTask(event.taskId)
             is TasksEvent.ChangeCategory -> changeCategory(event.categoryId)
             is TasksEvent.AddCategory -> addCategory(event.name)
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
+        }
+    }
+
+    private fun changeSortType(sortType: SortType?) {
+        viewModelScope.launch {
+            changeSortTypeUseCase.changeSortType(sortType)
         }
     }
 
@@ -177,6 +187,7 @@ class TasksViewModel @Inject constructor(
         private val getTasksUseCase: GetTasksUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
         private val changeCategoryUseCase: ChangeCategoryUseCase,
+        private val changeSortTypeUseCase: ChangeSortTypeUseCase,
         private val addCategoryUseCase: AddCategoryUseCase,
         private val deleteCategoryUseCase: DeleteCategoryUseCase
     ) : ViewModelProvider.Factory {
@@ -189,6 +200,7 @@ class TasksViewModel @Inject constructor(
                 getTasksUseCase,
                 getCategoriesUseCase,
                 changeCategoryUseCase,
+                changeSortTypeUseCase,
                 addCategoryUseCase,
                 deleteCategoryUseCase
             ) as T
