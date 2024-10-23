@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.presentation.components.items.TaskCard
 
 
 fun LazyListScope.tasksSubcolumn(

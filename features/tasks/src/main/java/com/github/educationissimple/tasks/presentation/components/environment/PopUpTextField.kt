@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.environment
 
 import android.view.Gravity
 import androidx.compose.foundation.layout.Column
@@ -38,6 +38,8 @@ import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryCard
+import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 
 @Composable
 fun PopUpTextField(

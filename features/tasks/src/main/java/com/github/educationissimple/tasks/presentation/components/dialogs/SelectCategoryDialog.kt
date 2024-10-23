@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,8 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
@@ -42,6 +44,7 @@ import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +78,12 @@ fun SelectCategoryDialog(
                     verticalArrangement = Arrangement.spacedBy(18.dp),
                     modifier = modifier.padding(18.dp)
                 ) {
+                    Text(
+                        text = stringResource(R.string.select_task_category),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+
                     // Categories list.
                     CategoriesRow(
                         categories = categories,

@@ -1,6 +1,5 @@
 package com.github.educationissimple.tasks.presentation.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,17 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,11 +25,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
@@ -47,11 +35,12 @@ import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
-import com.github.educationissimple.tasks.presentation.components.AddTaskFloatingActionButton
-import com.github.educationissimple.tasks.presentation.components.AllTasksColumn
-import com.github.educationissimple.tasks.presentation.components.CategoriesRow
-import com.github.educationissimple.tasks.presentation.components.PopUpTextField
-import com.github.educationissimple.tasks.presentation.components.TasksSortDialog
+import com.github.educationissimple.tasks.presentation.components.environment.AddTaskFloatingActionButton
+import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
+import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
+import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
+import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
+import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 
@@ -83,7 +72,6 @@ fun TasksContent(
     var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
     var currentSortType: SortType? by rememberSaveable { mutableStateOf(null) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
-    var showDropdownMenu by remember { mutableStateOf(false) }
     var showSortTypeDialog by remember { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
@@ -137,39 +125,10 @@ fun TasksContent(
                 maxLines = 1
             )
 
-            Box {
-                IconButton(
-                    onClick = { showDropdownMenu = true },
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Light),
-                    modifier = Modifier
-                        .size(buttonSize.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
-                }
-                DropdownMenu(
-                    expanded = showDropdownMenu,
-                    onDismissRequest = { showDropdownMenu = false },
-                    offset = DpOffset((-buttonSize / 2).dp, 0.dp),
-                    modifier = Modifier.background(color = Neutral.Light.Light)
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Редактировать категории") },
-                        onClick = { }
-                    )
-
-                    DropdownMenuItem(
-                        text = { Text("Найти") },
-                        onClick = { }
-                    )
-
-                    DropdownMenuItem(
-                        text = { Text("Выбрать сортировку") },
-                        onClick = { showSortTypeDialog = true }
-                    )
-                }
-
-
-            }
+            TasksListActionsDropdownMenu(
+                buttonSize = buttonSize,
+                onSortTypeItemClick = { showSortTypeDialog = true }
+            )
         }
 
         AllTasksColumn(

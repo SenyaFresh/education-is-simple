@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.dialogs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,20 +19,23 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.tasks.domain.entities.SortType
+import com.github.educationissimple.components.colors.Support
+import com.github.educationissimple.tasks.R
+import com.github.educationissimple.tasks.domain.entities.Task
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TasksSortDialog(
+fun TaskPriorityDialog(
     onDismiss: () -> Unit,
-    onSortTypeChange: (SortType) -> Unit,
-    sortType: SortType?,
+    onPriorityChange: (Task.Priority) -> Unit,
+    priority: Task.Priority,
     modifier: Modifier = Modifier
 ) {
     BasicAlertDialog(
@@ -47,59 +50,74 @@ fun TasksSortDialog(
         ) {
             Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(12.dp)) {
                 Text(
-                    text = "Выберите тип сортировки",
+                    text = stringResource(R.string.select_tast_priority),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(14.dp)
+                    modifier = Modifier
+                        .padding(14.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onSortTypeChange(SortType.Priority) }
+                    modifier = Modifier.clickable { onPriorityChange(Task.Priority.TopPriority) }
                 ) {
                     RadioButton(
-                        selected = sortType is SortType.Priority,
+                        selected = priority == Task.Priority.TopPriority,
                         colors = RadioButtonDefaults.colors(
-                            unselectedColor = Neutral.Dark.Darkest,
-                            selectedColor = Highlight.Darkest
+                            unselectedColor = Support.Warning.Dark,
+                            selectedColor = Support.Warning.Dark
                         ),
-                        onClick = { onSortTypeChange(SortType.Priority) }
+                        onClick = { onPriorityChange(Task.Priority.TopPriority) }
                     )
-                    Text(text = "По приоритету", color = Neutral.Dark.Darkest)
+                    Text(
+                        text = stringResource(R.string.highest_priority),
+                        color = Support.Warning.Dark
+                    )
                 }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onSortTypeChange(SortType.Date) }
+                    modifier = Modifier.clickable { onPriorityChange(Task.Priority.SecondaryPriority) }
                 ) {
                     RadioButton(
-                        selected = sortType is SortType.Date,
+                        selected = priority == Task.Priority.SecondaryPriority,
                         colors = RadioButtonDefaults.colors(
-                            unselectedColor = Neutral.Dark.Darkest,
-                            selectedColor = Highlight.Darkest
+                            unselectedColor = Support.Warning.Medium,
+                            selectedColor = Support.Warning.Medium
                         ),
-                        onClick = { onSortTypeChange(SortType.Date) }
+                        onClick = { onPriorityChange(Task.Priority.SecondaryPriority) }
                     )
-                    Text(text = "По дате", color = Neutral.Dark.Darkest)
+                    Text(
+                        text = stringResource(R.string.medium_priority),
+                        color = Support.Warning.Medium
+                    )
                 }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onSortTypeChange(SortType.Text) }
+                    modifier = Modifier.clickable { onPriorityChange(Task.Priority.NoPriority) }
                 ) {
                     RadioButton(
-                        selected = sortType is SortType.Text,
+                        selected = priority == Task.Priority.NoPriority,
                         colors = RadioButtonDefaults.colors(
-                            unselectedColor = Neutral.Dark.Darkest,
-                            selectedColor = Highlight.Darkest
+                            unselectedColor = Neutral.Dark.Lightest,
+                            selectedColor = Neutral.Dark.Lightest
                         ),
-                        onClick = { onSortTypeChange(SortType.Text) }
+                        onClick = { onPriorityChange(Task.Priority.NoPriority) }
                     )
-                    Text(text = "По алфавиту", color = Neutral.Dark.Darkest)
+                    Text(
+                        text = stringResource(R.string.low_priority),
+                        color = Neutral.Dark.Lightest
+                    )
                 }
 
                 TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
-                    Text(text = "Ок", color = Highlight.Darkest, fontSize = 16.sp)
+                    Text(
+                        text = stringResource(R.string.ok),
+                        color = Highlight.Darkest,
+                        fontSize = 16.sp
+                    )
                 }
             }
         }
@@ -108,13 +126,12 @@ fun TasksSortDialog(
 
 @Preview(showSystemUi = true)
 @Composable
-fun TasksSortDialogPreview() {
+fun TaskPriorityDialogPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
-        TasksSortDialog(
+        TaskPriorityDialog(
             onDismiss = { },
-            onSortTypeChange = { },
-            sortType = SortType.Priority,
-            modifier = Modifier
+            onPriorityChange = { },
+            priority = Task.Priority.TopPriority
         )
     }
 }

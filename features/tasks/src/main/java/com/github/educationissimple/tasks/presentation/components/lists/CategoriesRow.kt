@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryCard
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

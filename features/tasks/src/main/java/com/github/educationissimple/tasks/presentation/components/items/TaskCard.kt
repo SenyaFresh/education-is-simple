@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.items
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
@@ -51,6 +51,7 @@ import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 

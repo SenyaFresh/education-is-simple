@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
