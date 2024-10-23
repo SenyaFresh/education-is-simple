@@ -9,8 +9,6 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.usecases.AddCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.AddTaskUseCase
-import com.github.educationissimple.tasks.domain.usecases.ChangeCategoryUseCase
-import com.github.educationissimple.tasks.domain.usecases.ChangeSortTypeUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.GetCategoriesUseCase
@@ -28,8 +26,6 @@ class TasksViewModel @Inject constructor(
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val getTasksUseCase: GetTasksUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val changeCategoryUseCase: ChangeCategoryUseCase,
-    private val changeSortTypeUseCase: ChangeSortTypeUseCase,
     private val addCategoryUseCase: AddCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : BaseViewModel() {
@@ -77,7 +73,7 @@ class TasksViewModel @Inject constructor(
 
     private fun changeSortType(sortType: SortType?) {
         viewModelScope.launch {
-            changeSortTypeUseCase.changeSortType(sortType)
+            getTasksUseCase.changeSortType(sortType)
         }
     }
 
@@ -163,7 +159,7 @@ class TasksViewModel @Inject constructor(
 
     private fun changeCategory(categoryId: Long?) {
         viewModelScope.launch {
-            changeCategoryUseCase.changeCategory(categoryId)
+            getTasksUseCase.changeCategory(categoryId)
         }
     }
 
@@ -186,8 +182,6 @@ class TasksViewModel @Inject constructor(
         private val deleteTaskUseCase: DeleteTaskUseCase,
         private val getTasksUseCase: GetTasksUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
-        private val changeCategoryUseCase: ChangeCategoryUseCase,
-        private val changeSortTypeUseCase: ChangeSortTypeUseCase,
         private val addCategoryUseCase: AddCategoryUseCase,
         private val deleteCategoryUseCase: DeleteCategoryUseCase
     ) : ViewModelProvider.Factory {
@@ -199,8 +193,6 @@ class TasksViewModel @Inject constructor(
                 deleteTaskUseCase,
                 getTasksUseCase,
                 getCategoriesUseCase,
-                changeCategoryUseCase,
-                changeSortTypeUseCase,
                 addCategoryUseCase,
                 deleteCategoryUseCase
             ) as T

@@ -1,6 +1,7 @@
 package com.github.educationissimple.tasks.domain.usecases
 
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,5 +20,13 @@ class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepo
 
     suspend fun getCompletedTasks(): Flow<ResultContainer<List<Task>>> =
         tasksRepository.getCompletedTasks()
+
+    suspend fun changeSortType(sortType: SortType?) {
+        tasksRepository.changeSortType(sortType)
+    }
+
+    suspend fun changeCategory(categoryId: Long?) {
+        tasksRepository.changeCategory(categoryId)
+    }
 
 }
