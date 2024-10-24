@@ -56,7 +56,10 @@ fun TasksListActionsDropdownMenu(
 
         DropdownMenuItem(
             text = { Text(stringResource(R.string.to_select_sort_type)) },
-            onClick = onSortTypeItemClick
+            onClick =  {
+                onSortTypeItemClick()
+                showDropdownMenu = false
+            }
         )
     }
 }

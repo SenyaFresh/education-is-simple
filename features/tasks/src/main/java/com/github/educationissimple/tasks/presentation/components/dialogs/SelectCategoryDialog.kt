@@ -10,15 +10,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,24 +24,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.DefaultDialog
 import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultPrimaryButton
 import com.github.educationissimple.components.composables.DefaultSecondaryButton
 import com.github.educationissimple.components.composables.DefaultTextField
-import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectCategoryDialog(
     categories: ResultContainer<List<TaskCategory>>,
@@ -59,89 +50,74 @@ fun SelectCategoryDialog(
     var newCategoryText by remember { mutableStateOf("") }
     var activeCategoryId by remember { mutableLongStateOf(initialActiveCategoryId) }
 
-    BasicAlertDialog(
-        onDismissRequest = onCancel,
-        modifier = modifier,
+    DefaultDialog(
+        onDismiss = onCancel,
+        title = stringResource(R.string.select_task_category),
+        modifier = modifier
     ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            shape = RoundedCornerShape(12.dp),
-            color = Neutral.Light.Lightest
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            modifier = modifier
+                .padding(4.dp)
+                .fillMaxWidth()
         ) {
-            ResultContainerComposable(
-                container = categories,
-                onTryAgain = { }
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(18.dp),
-                    modifier = modifier.padding(18.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.select_task_category),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
+            // Categories list.
+            CategoriesRow(
+                categories = categories,
+                onCategoryClick = { activeCategoryId = it },
+                activeCategoryId = activeCategoryId,
+                firstCategoryLabel = stringResource(R.string.no_category),
+                modifier = Modifier
+                    .heightIn(max = 160.dp)
+                    .verticalScroll(rememberScrollState())
+            )
 
-                    // Categories list.
-                    CategoriesRow(
-                        categories = categories,
-                        onCategoryClick = { activeCategoryId = it },
-                        activeCategoryId = activeCategoryId,
-                        firstCategoryLabel = stringResource(R.string.no_category),
-                        modifier = Modifier
-                            .heightIn(max = 160.dp)
-                            .verticalScroll(rememberScrollState())
-                    )
-
-                    // New category input.
-                    DefaultTextField(
-                        text = newCategoryText,
-                        onValueChange = { newCategoryText = it },
-                        label = { Text(stringResource(R.string.input_new_category_here)) },
-                        trailingIcon = {
-                            DefaultIconButton(onClick = {
-                                if (newCategoryText.isNotBlank()) {
-                                    onAddNewCategory(newCategoryText)
-                                    newCategoryText = ""
-                                }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.Send,
-                                    contentDescription = "Add new category",
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
+            // New category input.
+            DefaultTextField(
+                text = newCategoryText,
+                onValueChange = { newCategoryText = it },
+                label = { Text(stringResource(R.string.input_new_category_here)) },
+                trailingIcon = {
+                    DefaultIconButton(onClick = {
+                        if (newCategoryText.isNotBlank()) {
+                            onAddNewCategory(newCategoryText)
+                            newCategoryText = ""
                         }
-                    )
-
-                    // Cancel and Confirm buttons.
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        DefaultSecondaryButton(
-                            label = stringResource(R.string.cancel),
-                            onClick = onCancel,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        )
-                        DefaultPrimaryButton(
-                            label = stringResource(R.string.confirm),
-                            onClick = {
-                                onConfirm(
-                                    getSelectedCategory(categories.unwrap(), activeCategoryId)
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Send,
+                            contentDescription = "Add new category",
+                            modifier = Modifier.size(18.dp)
                         )
                     }
                 }
+            )
+
+            // Cancel and Confirm buttons.
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                DefaultSecondaryButton(
+                    label = stringResource(R.string.cancel),
+                    onClick = onCancel,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+                DefaultPrimaryButton(
+                    label = stringResource(R.string.confirm),
+                    onClick = {
+                        onConfirm(
+                            getSelectedCategory(categories.unwrap(), activeCategoryId)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
             }
         }
     }

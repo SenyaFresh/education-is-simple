@@ -60,72 +60,89 @@ fun PopUpTextField(
 
     Card(
         colors = CardDefaults.cardColors(containerColor = Neutral.Light.Lightest),
-        shape = RoundedCornerShape(
-            topStart = 12.dp,
-            topEnd = 12.dp,
-            bottomEnd = 0.dp,
-            bottomStart = 0.dp
-        ),
+        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         modifier = modifier
     ) {
-        Column(
+        PopUpTextFieldContent(
+            text = text,
+            onValueChange = onValueChange,
+            onAddClick = onAddClick,
+            onAddNewCategory = onAddNewCategory,
+            categories = categories,
+            focusRequester = focusRequester
+        )
+    }
+}
+
+@Composable
+fun PopUpTextFieldContent(
+    text: String,
+    onValueChange: (String) -> Unit,
+    onAddClick: (Long) -> Unit,
+    onAddNewCategory: (String) -> Unit,
+    categories: ResultContainer<List<TaskCategory>>,
+    focusRequester: FocusRequester
+) {
+    var selectedCategory by remember {
+        mutableStateOf(
+            TaskCategory(
+                NO_CATEGORY_ID,
+                Core.resources.getString(R.string.no_category)
+            )
+        )
+    }
+    var showCategoriesDialog by remember { mutableStateOf(false) }
+
+    if (showCategoriesDialog) {
+        SelectCategoryDialog(
+            categories = categories,
+            onConfirm = {
+                showCategoriesDialog = false
+                selectedCategory = it
+            },
+            onCancel = {
+                showCategoriesDialog = false
+            },
+            onAddNewCategory = onAddNewCategory,
+            initialActiveCategoryId = selectedCategory.id
+        )
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Task text field.
+        DefaultTextField(
+            text = text,
+            onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            DefaultTextField(
-                text = text,
-                onValueChange = onValueChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .imePadding()
-                    .focusRequester(focusRequester)
+                .imePadding()
+                .focusRequester(focusRequester)
+        )
+        Row {
+            // Category selection.
+            TaskCategoryCard(
+                category = selectedCategory,
+                onCategoryClick = { showCategoriesDialog = true },
+                modifier = Modifier.sizeIn(maxWidth = 150.dp)
             )
-            Row {
-                var selectedCategory by remember {
-                    mutableStateOf(
-                        TaskCategory(
-                            NO_CATEGORY_ID,
-                            Core.resources.getString(R.string.no_category)
-                        )
-                    )
-                }
-                var showCategoriesDialog by remember { mutableStateOf(false) }
 
-                if (showCategoriesDialog) {
-                    SelectCategoryDialog(
-                        categories = categories,
-                        onConfirm = {
-                            showCategoriesDialog = false
-                            selectedCategory = it
-                        },
-                        onCancel = {
-                            showCategoriesDialog = false
-                        },
-                        onAddNewCategory = onAddNewCategory,
-                        initialActiveCategoryId = selectedCategory.id
-                    )
-                }
-                TaskCategoryCard(
-                    category = selectedCategory,
-                    onCategoryClick = { showCategoriesDialog = true },
-                    modifier = Modifier.sizeIn(maxWidth = 150.dp)
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Add button.
+            DefaultIconButton(
+                onClick = { onAddClick(selectedCategory.id) },
+                enabled = text.isNotBlank()
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Send,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                DefaultIconButton(
-                    onClick = { onAddClick(selectedCategory.id) },
-                    enabled = text.isNotBlank()
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
             }
         }
     }

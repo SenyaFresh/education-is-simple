@@ -2,11 +2,7 @@ package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
@@ -24,10 +20,7 @@ fun AllTasksColumn(
     onTaskPriorityChange: (Long, Task.Priority) -> Unit,
     onTaskCompletionChange: (Long, Boolean) -> Unit
 ) {
-    var isPreviousTasksExpanded by remember { mutableStateOf(true) }
-    var isTodayTasksExpanded by remember { mutableStateOf(true) }
-    var isFutureTasksExpanded by remember { mutableStateOf(true) }
-    var isCompletedTasksExpanded by remember { mutableStateOf(true) }
+    var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
 
     ResultContainerComposable(
         container = ResultContainer.wrap(
@@ -39,50 +32,56 @@ fun AllTasksColumn(
         onTryAgain = { }
     ) {
         LazyColumn(contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 8.dp)) {
-            tasksSubcolumn(
-                Core.resources.getString(R.string.previous_tasks),
-                previousTasks.unwrap(),
-                onTaskCompletionChange = onTaskCompletionChange,
-                onTaskDelete = onTaskDelete,
-                onTaskPriorityChange = onTaskPriorityChange,
-                isExpanded = isPreviousTasksExpanded,
-                onExpandChange = {
-                    isPreviousTasksExpanded = it
-                }
-            )
-            tasksSubcolumn(
-                Core.resources.getString(R.string.today_tasks),
-                todayTasks.unwrap(),
-                onTaskCompletionChange = onTaskCompletionChange,
-                onTaskDelete = onTaskDelete,
-                onTaskPriorityChange = onTaskPriorityChange,
-                isExpanded = isTodayTasksExpanded,
-                onExpandChange = {
-                    isTodayTasksExpanded = it
-                }
-            )
-            tasksSubcolumn(
-                Core.resources.getString(R.string.future_tasks),
-                futureTasks.unwrap(),
-                onTaskCompletionChange = onTaskCompletionChange,
-                onTaskDelete = onTaskDelete,
-                onTaskPriorityChange = onTaskPriorityChange,
-                isExpanded = isFutureTasksExpanded,
-                onExpandChange = {
-                    isFutureTasksExpanded = it
-                }
-            )
-            tasksSubcolumn(
-                Core.resources.getString(R.string.completed_tasks),
-                completedTasks.unwrap(),
-                onTaskCompletionChange = onTaskCompletionChange,
-                onTaskDelete = onTaskDelete,
-                onTaskPriorityChange = onTaskPriorityChange,
-                isExpanded = isCompletedTasksExpanded,
-                onExpandChange = {
-                    isCompletedTasksExpanded = it
-                }
-            )
+            listOf(
+                TaskSection(
+                    title = Core.resources.getString(R.string.previous_tasks),
+                    tasks = previousTasks.unwrap(),
+                    isExpanded = taskExpansionStates.isPreviousTasksExpanded,
+                    onExpandChange = { taskExpansionStates = taskExpansionStates.copy(isPreviousTasksExpanded = it) }
+                ),
+                TaskSection(
+                    title = Core.resources.getString(R.string.today_tasks),
+                    tasks = todayTasks.unwrap(),
+                    isExpanded = taskExpansionStates.isTodayTasksExpanded,
+                    onExpandChange = { taskExpansionStates = taskExpansionStates.copy(isTodayTasksExpanded = it) }
+                ),
+                TaskSection(
+                    title = Core.resources.getString(R.string.future_tasks),
+                    tasks = futureTasks.unwrap(),
+                    isExpanded = taskExpansionStates.isFutureTasksExpanded,
+                    onExpandChange = { taskExpansionStates = taskExpansionStates.copy(isFutureTasksExpanded = it) }
+                ),
+                TaskSection(
+                    title = Core.resources.getString(R.string.completed_tasks),
+                    tasks = completedTasks.unwrap(),
+                    isExpanded = taskExpansionStates.isCompletedTasksExpanded,
+                    onExpandChange = { taskExpansionStates = taskExpansionStates.copy(isCompletedTasksExpanded = it) }
+                )
+            ).forEach { section ->
+                tasksSubcolumn(
+                    section.title,
+                    section.tasks,
+                    onTaskCompletionChange = onTaskCompletionChange,
+                    onTaskDelete = onTaskDelete,
+                    onTaskPriorityChange = onTaskPriorityChange,
+                    isExpanded = section.isExpanded,
+                    onExpandChange = section.onExpandChange
+                )
+            }
         }
     }
 }
+
+data class TaskExpansionStates(
+    val isPreviousTasksExpanded: Boolean = true,
+    val isTodayTasksExpanded: Boolean = true,
+    val isFutureTasksExpanded: Boolean = true,
+    val isCompletedTasksExpanded: Boolean = true
+)
+
+data class TaskSection(
+    val title: String,
+    val tasks: List<Task>,
+    val isExpanded: Boolean,
+    val onExpandChange: (Boolean) -> Unit
+)
