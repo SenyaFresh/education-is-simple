@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.tasks.domain.entities.Task
-import com.github.educationissimple.tasks.presentation.components.items.TaskCard
+import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
 
 
 fun LazyListScope.tasksSubcolumn(
@@ -51,7 +51,7 @@ fun LazyListScope.tasksSubcolumn(
     // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer, key = { task -> task.id }) { task ->
-            TaskCard(task = task,
+            TaskListItem(task = task,
                 modifier = Modifier.padding(top = 8.dp),
                 onTaskCompletionChange = { isCompleted ->
                     onTaskCompletionChange(task.id, isCompleted)

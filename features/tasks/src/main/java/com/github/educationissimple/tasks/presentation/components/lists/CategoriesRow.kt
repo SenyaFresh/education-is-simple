@@ -18,7 +18,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
-import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryCard
+import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -47,7 +47,7 @@ fun CategoriesRow(
         ) { index ->
             val category = displayedCategories[index]
             key(category.id, activeCategoryId) {
-                TaskCategoryCard(
+                TaskCategoryListItem(
                     category = category,
                     isActive = category.id == activeCategoryId,
                     onCategoryClick = onCategoryClick

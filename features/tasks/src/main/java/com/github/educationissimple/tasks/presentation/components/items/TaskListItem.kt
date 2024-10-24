@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun TaskCard(
+fun TaskListItem(
     task: Task,
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit,
@@ -247,7 +247,7 @@ private fun TaskContent(
 fun TaskCardPreview() {
     Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-        TaskCard(
+        TaskListItem(
             Task(
                 id = 1,
                 text = "Go to work",
@@ -260,7 +260,7 @@ fun TaskCardPreview() {
             onPriorityChange = { _ -> },
         )
 
-        TaskCard(
+        TaskListItem(
             Task(
                 id = 2,
                 text = "Task with long long long long long long long long long long long long",

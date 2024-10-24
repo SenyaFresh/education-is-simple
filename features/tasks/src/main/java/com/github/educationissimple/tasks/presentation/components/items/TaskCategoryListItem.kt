@@ -21,7 +21,7 @@ import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 
 @Composable
-fun TaskCategoryCard(
+fun TaskCategoryListItem(
     category: TaskCategory,
     onCategoryClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -63,12 +63,12 @@ fun TaskCategoryCardPreview() {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
     ) {
-        TaskCategoryCard(
+        TaskCategoryListItem(
             category = TaskCategory(0, "Work"),
             isActive = true,
             onCategoryClick = { }
         )
-        TaskCategoryCard(
+        TaskCategoryListItem(
             category = TaskCategory(1, "Home"),
             isActive = false,
             onCategoryClick = { }
