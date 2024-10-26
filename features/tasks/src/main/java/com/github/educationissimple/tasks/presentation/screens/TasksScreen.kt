@@ -35,12 +35,12 @@ import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
 import com.github.educationissimple.tasks.presentation.components.environment.AddTaskFloatingActionButton
-import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
-import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
-import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
+import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
+import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 
@@ -125,10 +125,12 @@ fun TasksContent(
                 maxLines = 1
             )
 
-            TasksListActionsDropdownMenu(
-                buttonSize = buttonSize,
-                onSortTypeItemClick = { showSortTypeDialog = true }
-            )
+            if (categories is ResultContainer.Done) {
+                TasksListActionsDropdownMenu(
+                    buttonSize = buttonSize,
+                    onSortTypeItemClick = { showSortTypeDialog = true }
+                )
+            }
         }
 
         AllTasksColumn(
