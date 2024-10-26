@@ -13,9 +13,9 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.ResultContainerComposable
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
@@ -42,8 +42,8 @@ fun CategoriesRow(
         ContextualFlowRow(
             itemCount = displayedCategories.size,
             maxLines = maxLines,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
         ) { index ->
             val category = displayedCategories[index]
             key(category.id, activeCategoryId) {
@@ -64,13 +64,7 @@ fun CategoriesRowPreview() {
         Row(verticalAlignment = Alignment.CenterVertically) {
             CategoriesRow(
                 ResultContainer.Done(
-                    listOf(
-                        TaskCategory(1, "Category"),
-                        TaskCategory(2, "Category"),
-                        TaskCategory(3, "Category"),
-                        TaskCategory(4, "Category"),
-                        TaskCategory(5, "Category")
-                    )
+                    (1..5).map { TaskCategory(it.toLong(), "Category $it") }
                 ),
                 { },
                 firstCategoryLabel = "All",

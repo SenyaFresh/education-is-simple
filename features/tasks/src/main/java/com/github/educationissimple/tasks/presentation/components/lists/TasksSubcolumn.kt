@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
 
@@ -37,7 +38,11 @@ fun LazyListScope.tasksSubcolumn(
     item {
         Row(
             Modifier
-                .padding(start = 12.dp, top = 8.dp, end = 12.dp)
+                .padding(
+                    start = LocalSpacing.current.medium,
+                    top = LocalSpacing.current.semiMedium,
+                    end = LocalSpacing.current.medium
+                )
                 .clickable { onExpandChange(!isExpanded) }
                 .animateItem()
         ) {
@@ -78,22 +83,29 @@ fun TasksColumnPreview() {
     LazyColumn {
         tasksSubcolumn(
             "Задачи на сегодня",
-            listOf(
-                Task(id = 1, text = "Побегать"),
-                Task(id = 2, text = "Попрыгать"),
-                Task(id = 3, text = "Полежать")
-            ),
+            (1..4).map {
+                Task(
+                    id = it.toLong(),
+                    text = "Задача $it",
+                    date = listOf("10-08", null).random(),
+                    priority = Task.Priority.fromValue(it)
+                )
+            },
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { },
             onTaskPriorityChange = { _, _ -> }
         )
         tasksSubcolumn(
             "Выполненные сегодня задачи",
-            listOf(
-                Task(id = 4, text = "Побегать", isCompleted = true, date = "10-08"),
-                Task(id = 5, text = "Попрыгать", isCompleted = true),
-                Task(id = 6, text = "Полежать", isCompleted = true)
-            ),
+            (5..8).map {
+                Task(
+                    id = it.toLong(),
+                    text = "Задача $it",
+                    isCompleted = true,
+                    date = listOf("10-08", null).random(),
+                    priority = Task.Priority.fromValue(it - 5)
+                )
+            },
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { },
             onTaskPriorityChange = { _, _ -> }

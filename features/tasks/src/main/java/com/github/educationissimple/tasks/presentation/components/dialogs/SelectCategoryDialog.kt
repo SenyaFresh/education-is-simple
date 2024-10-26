@@ -33,6 +33,7 @@ import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultPrimaryButton
 import com.github.educationissimple.components.composables.DefaultSecondaryButton
 import com.github.educationissimple.components.composables.DefaultTextField
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
@@ -57,7 +58,7 @@ fun SelectCategoryDialog(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(18.dp),
+            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
             modifier = modifier
                 .padding(4.dp)
                 .fillMaxWidth()
@@ -98,7 +99,7 @@ fun SelectCategoryDialog(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
                 DefaultSecondaryButton(
                     label = stringResource(R.string.cancel),
@@ -136,17 +137,9 @@ fun SelectCategoryDialogPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         SelectCategoryDialog(
             categories = ResultContainer.Done(
-                listOf(
-                    TaskCategory(id = 1, name = "Работа"),
-                    TaskCategory(id = 2, name = "Дом"),
-                    TaskCategory(id = 3, name = "Личное"),
-                    TaskCategory(id = 4, name = "Праздники"),
-                    TaskCategory(id = 5, name = "Работа"),
-                    TaskCategory(id = 6, name = "Дом"),
-                    TaskCategory(id = 7, name = "Личное"),
-                    TaskCategory(id = 8, name = "Праздники"),
-                    TaskCategory(id = 9, name = "Работа"),
-                )
+                (1..10).map {
+                    TaskCategory(id = it.toLong(), name = "Category $it")
+                }
             ),
             onConfirm = { },
             onCancel = { },

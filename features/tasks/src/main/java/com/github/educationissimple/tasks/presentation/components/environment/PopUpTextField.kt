@@ -35,6 +35,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultTextField
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
@@ -111,7 +112,12 @@ fun PopUpTextFieldContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 4.dp),
+            .padding(
+                start = LocalSpacing.current.semiMedium,
+                end = LocalSpacing.current.semiMedium,
+                top = LocalSpacing.current.semiMedium,
+                bottom = LocalSpacing.current.extraSmall
+            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Task text field.

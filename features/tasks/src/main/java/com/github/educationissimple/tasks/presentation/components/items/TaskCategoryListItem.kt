@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 
 @Composable
@@ -51,7 +52,10 @@ fun TaskCategoryListItem(
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+            modifier = Modifier.padding(
+                horizontal = LocalSpacing.current.medium,
+                vertical = LocalSpacing.current.small
+            )
         )
     }
 }
