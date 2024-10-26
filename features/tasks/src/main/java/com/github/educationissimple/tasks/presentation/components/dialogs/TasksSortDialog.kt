@@ -30,33 +30,28 @@ fun TasksSortDialog(
     title = stringResource(R.string.select_sort_type),
     modifier = modifier
 ) {
+    val labelsByPriority = mapOf(
+        SortType.DateAscending to stringResource(R.string.by_date_asc),
+        SortType.DateDescending to stringResource(R.string.by_date_desc),
+        SortType.Priority to stringResource(R.string.by_priority),
+        SortType.TextAscending to stringResource(R.string.by_abc_asc),
+        SortType.TextDescending to stringResource(R.string.by_abc_desc)
+    )
+
     Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
-        DefaultRadioItem(
-            text = stringResource(R.string.by_priority),
-            selected = sortType is SortType.Priority,
-            onClick = { onSortTypeChange(SortType.Priority) },
-            textColor = Neutral.Dark.Darkest,
-            selectedColor = Highlight.Darkest,
-            unselectedColor = Neutral.Dark.Darkest
-        )
 
-        DefaultRadioItem(
-            text = stringResource(R.string.by_date),
-            selected = sortType is SortType.Date,
-            onClick = { onSortTypeChange(SortType.Date) },
-            textColor = Neutral.Dark.Darkest,
-            selectedColor = Highlight.Darkest,
-            unselectedColor = Neutral.Dark.Darkest
-        )
-
-        DefaultRadioItem(
-            text = stringResource(R.string.by_abc),
-            selected = sortType is SortType.Text,
-            onClick = { onSortTypeChange(SortType.Text) },
-            textColor = Neutral.Dark.Darkest,
-            selectedColor = Highlight.Darkest,
-            unselectedColor = Neutral.Dark.Darkest
-        )
+        labelsByPriority.forEach { entry ->
+            DefaultRadioItem(
+                text = entry.value,
+                selected = sortType == entry.key,
+                onClick = {
+                    onSortTypeChange(entry.key)
+                },
+                textColor = Neutral.Dark.Darkest,
+                selectedColor = Highlight.Darkest,
+                unselectedColor = Neutral.Dark.Darkest
+            )
+        }
 
         TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
             Text(

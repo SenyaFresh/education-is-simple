@@ -28,7 +28,7 @@ fun TaskPriorityDialog(
     modifier: Modifier = Modifier
 ) = DefaultDialog(
     onDismiss = onDismiss,
-    title = stringResource(R.string.select_tast_priority),
+    title = stringResource(R.string.select_task_priority),
     modifier = modifier
 ) {
     Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
