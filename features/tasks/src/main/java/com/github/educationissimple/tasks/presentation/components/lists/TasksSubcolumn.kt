@@ -38,7 +38,9 @@ fun LazyListScope.tasksSubcolumn(
         Row(
             Modifier
                 .padding(start = 12.dp, top = 8.dp, end = 12.dp)
-                .clickable { onExpandChange(!isExpanded) }) {
+                .clickable { onExpandChange(!isExpanded) }
+                .animateItem()
+        ) {
             Text(text = title, fontWeight = FontWeight.Bold)
             Icon(
                 if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
@@ -51,8 +53,8 @@ fun LazyListScope.tasksSubcolumn(
     // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer, key = { task -> task.id }) { task ->
-            TaskListItem(task = task,
-                modifier = Modifier.padding(top = 8.dp),
+            TaskListItem(
+                task = task,
                 onTaskCompletionChange = { isCompleted ->
                     onTaskCompletionChange(task.id, isCompleted)
                 },
@@ -61,7 +63,10 @@ fun LazyListScope.tasksSubcolumn(
                 },
                 onPriorityChange = { priority ->
                     onTaskPriorityChange(task.id, priority)
-                }
+                },
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .animateItem()
             )
         }
     }

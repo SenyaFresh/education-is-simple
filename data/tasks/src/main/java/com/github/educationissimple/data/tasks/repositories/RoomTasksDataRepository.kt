@@ -91,7 +91,7 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun changeSortingType(sortType: String?) {
         currentSortType = sortType
-        updateSources(silently = false)
+        updateSources()
     }
 
     private fun updateSources(silently: Boolean = true) {
