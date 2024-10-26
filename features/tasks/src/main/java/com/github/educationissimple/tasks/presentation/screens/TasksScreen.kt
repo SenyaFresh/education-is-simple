@@ -70,7 +70,7 @@ fun TasksContent(
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
     var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
-    var currentSortType: SortType? by rememberSaveable { mutableStateOf(null) }
+    var currentSortType: SortType? by remember { mutableStateOf(null) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var showSortTypeDialog by remember { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
