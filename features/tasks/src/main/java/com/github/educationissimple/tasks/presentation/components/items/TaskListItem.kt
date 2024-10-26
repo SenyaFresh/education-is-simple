@@ -91,7 +91,11 @@ fun TaskListItem(
     }
 
     Card(
-        modifier = modifier.border(width = 1.dp, color = Neutral.Dark.Lightest, shape = CardDefaults.shape)
+        modifier = modifier.border(
+            width = 1.dp,
+            color = getColorByPriority(task.priority),
+            shape = CardDefaults.shape
+        )
     ) {
         TaskCardContent(
             task = task,
@@ -196,11 +200,7 @@ private fun TaskContent(
     contextMenuWidth: Float,
     scope: CoroutineScope
 ) {
-    val priorityColor = when (task.priority) {
-        Task.Priority.TopPriority -> Support.Warning.Dark
-        Task.Priority.SecondaryPriority -> Support.Warning.Medium
-        Task.Priority.NoPriority -> Neutral.Dark.Lightest
-    }
+    val priorityColor = getColorByPriority(task.priority)
 
     Surface(
         color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
@@ -266,6 +266,12 @@ private fun TaskContent(
             }
         }
     }
+}
+
+private fun getColorByPriority(priority: Task.Priority) = when (priority) {
+    Task.Priority.TopPriority -> Support.Warning.Dark
+    Task.Priority.SecondaryPriority -> Support.Warning.Medium
+    Task.Priority.NoPriority -> Neutral.Dark.Lightest
 }
 
 
