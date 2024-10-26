@@ -60,7 +60,7 @@ fun SelectCategoryDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
             modifier = modifier
-                .padding(4.dp)
+                .padding(LocalSpacing.current.extraSmall)
                 .fillMaxWidth()
         ) {
             // Categories list.

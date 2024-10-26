@@ -1,7 +1,6 @@
 package com.github.educationissimple.tasks.presentation.screens
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
@@ -105,8 +105,7 @@ fun TasksContent(
 
     Column {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(0.dp)
+            verticalAlignment = Alignment.CenterVertically
         ) {
             val buttonSize by remember { mutableFloatStateOf(52.dp.value) }
 
@@ -119,7 +118,7 @@ fun TasksContent(
                 },
                 firstCategoryLabel = stringResource(R.string.all),
                 modifier = Modifier
-                    .padding(start = 12.dp)
+                    .padding(start = LocalSpacing.current.semiMedium)
                     .width(LocalConfiguration.current.screenWidthDp.dp - buttonSize.dp)
                     .horizontalScroll(rememberScrollState()),
                 maxLines = 1
@@ -150,7 +149,7 @@ fun TasksContent(
                 onClick = { isAddingTask = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(20.dp)
+                    .padding(LocalSpacing.current.medium)
             )
         }
     } else {
