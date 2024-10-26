@@ -6,7 +6,7 @@ import com.github.educationissimple.data.tasks.repositories.TasksDataRepository
 import dagger.Binds
 import dagger.Module
 
-@Module(includes = [TasksDataSourceModule::class])
+@Module(includes = [TasksDataSourceModule::class, PreferencesDataSourceModule::class])
 interface TasksDataRepositoryModule {
 
     @Binds

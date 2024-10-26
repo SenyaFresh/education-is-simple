@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,6 +23,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -51,11 +50,14 @@ fun TasksScreen(
     viewModel: TasksViewModel = viewModel(factory = diContainer.viewModelFactory)
 ) {
     TasksContent(
-        previousTasks = viewModel.previousTasks.collectAsState().value,
-        todayTasks = viewModel.todayTasks.collectAsState().value,
-        futureTasks = viewModel.futureTasks.collectAsState().value,
-        completedTasks = viewModel.completedTasks.collectAsState().value,
-        categories = viewModel.categories.collectAsState().value,
+        previousTasks = viewModel.previousTasks.collectAsStateWithLifecycle().value,
+        todayTasks = viewModel.todayTasks.collectAsStateWithLifecycle().value,
+        futureTasks = viewModel.futureTasks.collectAsStateWithLifecycle().value,
+        completedTasks = viewModel.completedTasks.collectAsStateWithLifecycle().value,
+        categories = viewModel.categories.collectAsStateWithLifecycle().value,
+        currentSortType = viewModel.sortType.collectAsStateWithLifecycle().value.unwrapOrNull(),
+        activeCategoryId = viewModel.activeCategoryId.collectAsStateWithLifecycle().value.unwrapOrNull()
+            ?: NO_CATEGORY_ID,
         onTasksEvent = viewModel::onEvent
     )
 }
@@ -67,10 +69,10 @@ fun TasksContent(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
+    currentSortType: SortType? = null,
+    activeCategoryId: Long = NO_CATEGORY_ID,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
-    var activeCategoryId by rememberSaveable { mutableLongStateOf(NO_CATEGORY_ID) }
-    var currentSortType: SortType? by remember { mutableStateOf(null) }
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var showSortTypeDialog by remember { mutableStateOf(false) }
     var taskText by rememberSaveable { mutableStateOf("") }
@@ -96,7 +98,6 @@ fun TasksContent(
         TasksSortDialog(
             onDismiss = { showSortTypeDialog = false },
             onSortTypeChange = {
-                currentSortType = it
                 onTasksEvent(TasksEvent.ChangeSortType(it))
             },
             sortType = currentSortType
@@ -113,8 +114,7 @@ fun TasksContent(
                 categories = categories,
                 activeCategoryId = activeCategoryId,
                 onCategoryClick = {
-                    activeCategoryId = it
-                    onTasksEvent(TasksEvent.ChangeCategory(if (activeCategoryId != NO_CATEGORY_ID) activeCategoryId else null))
+                    onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
                 },
                 firstCategoryLabel = stringResource(R.string.all),
                 modifier = Modifier

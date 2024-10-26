@@ -8,6 +8,7 @@ import com.github.educationissimple.common.UserFriendlyException
 import com.github.educationissimple.data.tasks.repositories.TasksDataRepository
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
+import com.github.educationissimple.glue.tasks.mappers.mapToSortType
 import com.github.educationissimple.glue.tasks.mappers.mapToTask
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskCategory
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskDataEntity
@@ -37,6 +38,10 @@ class AdapterTasksRepository @Inject constructor(
         return tasksDataRepository.getCompletedTasks().mapToTask()
     }
 
+    override suspend fun getSelectedSortType(): Flow<ResultContainer<SortType?>> {
+        return tasksDataRepository.getSelectedSortType().mapToSortType()
+    }
+
     override suspend fun addTask(task: Task) {
         tasksDataRepository.addTask(
             NewTaskTuple(
@@ -57,6 +62,10 @@ class AdapterTasksRepository @Inject constructor(
 
     override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategory>>> {
         return tasksDataRepository.getCategories().mapToTaskCategory()
+    }
+
+    override suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
+        return tasksDataRepository.getSelectedCategoryId()
     }
 
     override suspend fun createCategory(name: String) {

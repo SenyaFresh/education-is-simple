@@ -29,4 +29,8 @@ class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepo
         tasksRepository.changeCategory(categoryId)
     }
 
+    suspend fun getSelectedSortType(): Flow<ResultContainer<SortType?>> {
+        return tasksRepository.getSelectedSortType()
+    }
+
 }

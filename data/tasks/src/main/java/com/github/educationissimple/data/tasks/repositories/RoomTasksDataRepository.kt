@@ -4,6 +4,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.common.flow.LazyFlowLoaderFactory
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
+import com.github.educationissimple.data.tasks.sources.PreferencesDataSource
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
@@ -13,26 +14,63 @@ import javax.inject.Inject
 
 class RoomTasksDataRepository @Inject constructor(
     private val tasksDataSource: TasksDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
 
-    private var currentCategoryId: Long? = null
-    private var currentSortType: String? = null
+    private var currentCategoryId: Long?
+        get() = preferencesDataSource.getSelectedCategoryId()
+        set(value) = preferencesDataSource.saveSelectedCategoryId(value)
+
+    private var currentSortType: String?
+        get() = preferencesDataSource.getSortType()
+        set(value) = preferencesDataSource.saveSortType(value)
+
+    private val selectedCategoryIdLoader = lazyFlowLoaderFactory.create {
+        currentCategoryId
+    }
+
+    override suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
+        return selectedCategoryIdLoader.listen()
+    }
+
+    private val selectedSortTypeLoader = lazyFlowLoaderFactory.create {
+        currentSortType
+    }
+
+    override suspend fun getSelectedSortType(): Flow<ResultContainer<String?>> {
+        return selectedSortTypeLoader.listen()
+    }
 
     private val previousTasksLoader = lazyFlowLoaderFactory.create {
-        tasksDataSource.getTasksBeforeDate(LocalDate.now())
+        tasksDataSource.getTasksBeforeDate(
+            LocalDate.now(),
+            currentCategoryId,
+            currentSortType
+        )
     }
 
     private val todayTasksLoader = lazyFlowLoaderFactory.create {
-        tasksDataSource.getTasksByDate(LocalDate.now())
+        tasksDataSource.getTasksByDate(
+            LocalDate.now(),
+            currentCategoryId,
+            currentSortType
+        )
     }
 
     private val futureTasksLoader = lazyFlowLoaderFactory.create {
-        tasksDataSource.getTasksAfterDate(LocalDate.now())
+        tasksDataSource.getTasksAfterDate(
+            LocalDate.now(),
+            currentCategoryId,
+            currentSortType
+        )
     }
 
     private val completedTasksLoader = lazyFlowLoaderFactory.create {
-        tasksDataSource.getCompletedTasks()
+        tasksDataSource.getCompletedTasks(
+            currentCategoryId,
+            currentSortType
+        )
     }
 
     private val categoriesLoader = lazyFlowLoaderFactory.create {
@@ -71,7 +109,9 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeCategory(categoryId: Long?) {
+        preferencesDataSource.saveSelectedCategoryId(categoryId)
         currentCategoryId = categoryId
+        selectedCategoryIdLoader.newAsyncLoad(silently = true)
         updateSources(silently = false)
     }
 
@@ -90,7 +130,9 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeSortingType(sortType: String?) {
+        preferencesDataSource.saveSortType(sortType)
         currentSortType = sortType
+        selectedSortTypeLoader.newAsyncLoad(silently = true)
         updateSources()
     }
 

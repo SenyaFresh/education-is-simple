@@ -12,4 +12,8 @@ class GetCategoriesUseCase @Inject constructor(private val tasksRepository: Task
         return tasksRepository.getCategories()
     }
 
+    suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
+        return tasksRepository.getSelectedCategoryId()
+    }
+
 }

@@ -17,6 +17,8 @@ interface TasksDataRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<TaskDataEntity>>>
 
+    suspend fun getSelectedSortType() : Flow<ResultContainer<String?>>
+
     suspend fun addTask(newTask: NewTaskTuple)
 
     suspend fun updateTask(updatedTask: TaskDataEntity)
@@ -26,6 +28,8 @@ interface TasksDataRepository {
     suspend fun changeCategory(categoryId: Long?)
 
     suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>>
+
+    suspend fun getSelectedCategoryId() : Flow<ResultContainer<Long?>>
 
     suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple)
 

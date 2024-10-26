@@ -2,6 +2,7 @@ package com.github.educationissimple.components.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
@@ -21,7 +22,9 @@ fun DefaultRadioItem(
     modifier: Modifier = Modifier
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
-    modifier = modifier.clickable { onClick() }
+    modifier = modifier
+        .fillMaxWidth()
+        .clickable { onClick() }
 ) {
     RadioButton(
         selected = selected,

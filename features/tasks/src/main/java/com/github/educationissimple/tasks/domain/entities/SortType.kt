@@ -12,4 +12,17 @@ sealed class SortType(val value: String) {
 
     data object TextDescending: SortType(value = "text_desc")
 
+    companion object {
+        fun fromString(value: String?): SortType? {
+            return when (value) {
+                "date_asc" -> DateAscending
+                "date_desc" -> DateDescending
+                "priority" -> Priority
+                "text_asc" -> TextAscending
+                "text_desc" -> TextDescending
+                else -> null
+            }
+        }
+    }
+
 }

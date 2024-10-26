@@ -16,6 +16,8 @@ interface TasksRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<Task>>>
 
+    suspend fun getSelectedSortType() : Flow<ResultContainer<SortType?>>
+
     suspend fun changeSortType(sortType: SortType?)
 
     suspend fun addTask(task: Task)
@@ -25,6 +27,8 @@ interface TasksRepository {
     suspend fun deleteTask(taskId: Long)
 
     suspend fun getCategories(): Flow<ResultContainer<List<TaskCategory>>>
+
+    suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>>
 
     suspend fun createCategory(name: String)
 

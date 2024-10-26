@@ -30,6 +30,12 @@ class TasksViewModel @Inject constructor(
     private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : BaseViewModel() {
 
+    private val _sortType = MutableStateFlow<ResultContainer<SortType?>>(ResultContainer.Loading)
+    val sortType = _sortType.asStateFlow()
+
+    private val _activeCategoryId = MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
+    val activeCategoryId = _activeCategoryId.asStateFlow()
+
     private val _previousTasks =
         MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
     val previousTasks = _previousTasks.asStateFlow()
@@ -55,6 +61,8 @@ class TasksViewModel @Inject constructor(
         collectFutureTasks()
         collectCompletedTasks()
         collectCategories()
+        collectSelectedSortType()
+        collectSelectedCategoryId()
     }
 
     fun onEvent(event: TasksEvent) = debounce {
@@ -85,10 +93,10 @@ class TasksViewModel @Inject constructor(
 
     private fun changeTaskPriority(taskId: Long, priority: Task.Priority) {
         viewModelScope.launch {
-            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
-            todayTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
-            futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
-            completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
+                ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
+                ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId }
+                ?: completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
 
             updateTaskUseCase.updateTask(task.copy(priority = priority))
         }
@@ -96,16 +104,17 @@ class TasksViewModel @Inject constructor(
 
     private fun cancelTaskCompletion(taskId: Long) {
         viewModelScope.launch {
-            val task = completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+            val task =
+                completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
             updateTaskUseCase.updateTask(task.copy(isCompleted = false))
         }
     }
 
     private fun completeTask(taskId: Long) {
         viewModelScope.launch {
-            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
-                todayTasks.value.unwrapOrNull()?.find { it.id == taskId } ?:
-                futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
+                ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
+                ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
 
             updateTaskUseCase.updateTask(task.copy(isCompleted = true))
         }
@@ -114,6 +123,22 @@ class TasksViewModel @Inject constructor(
     private fun deleteTask(taskId: Long) {
         viewModelScope.launch {
             deleteTaskUseCase.deleteTask(taskId)
+        }
+    }
+
+    private fun collectSelectedSortType() {
+        viewModelScope.launch {
+            getTasksUseCase.getSelectedSortType().collect {
+                _sortType.value = it
+            }
+        }
+    }
+
+    private fun collectSelectedCategoryId() {
+        viewModelScope.launch {
+            getCategoriesUseCase.getSelectedCategoryId().collect {
+                _activeCategoryId.value = it
+            }
         }
     }
 
