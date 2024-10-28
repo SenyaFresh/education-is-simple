@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -86,7 +86,7 @@ fun TaskCategoryListItem(
                     text = stringResource(R.string.delete),
                     contentColor = Neutral.Light.Lightest,
                     containerColor = Support.Error.Dark,
-                    modifier = Modifier.height(50.dp),
+                    modifier = Modifier.height(60.dp),
                     onClick = onDelete
                 )
             }
@@ -109,8 +109,7 @@ fun LoadingTaskCategoryListItem(withDelete: Boolean = false) {
         if (withDelete) {
             Box(
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(60.dp)
+                    .size(60.dp)
                     .background(color = Neutral.Dark.Light)
                     .align(Alignment.CenterEnd)
             )

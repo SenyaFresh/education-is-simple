@@ -71,7 +71,8 @@ fun CategoriesContent(
             items(items = categories.unwrap(), key = { category -> category.id }) { category ->
                 TaskCategoryListItem(
                     category = category,
-                    onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) }
+                    onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) },
+                    modifier = Modifier.animateItem()
                 )
             }
         }
