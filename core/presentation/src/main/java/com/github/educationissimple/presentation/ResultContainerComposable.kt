@@ -35,9 +35,9 @@ fun ResultContainerComposable(
     container: ResultContainer<*>,
     onTryAgain: () -> Unit,
     modifier: Modifier = Modifier,
+    onLoading: @Composable () -> Unit = { OnLoadingEffect() },
     onSuccess: @Composable () -> Unit
 ) {
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -68,11 +68,15 @@ fun ResultContainerComposable(
             }
 
             is ResultContainer.Loading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Color.Black)
-                }
+                onLoading()
             }
         }
     }
+}
 
+@Composable
+fun OnLoadingEffect() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(color = Color.Black)
+    }
 }

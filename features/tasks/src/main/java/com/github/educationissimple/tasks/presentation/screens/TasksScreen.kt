@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,10 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
@@ -43,7 +39,6 @@ import com.github.educationissimple.tasks.presentation.components.lists.AllTasks
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
-
 
 @Composable
 fun TasksScreen(
@@ -127,7 +122,11 @@ fun TasksContent(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val buttonSize by remember { mutableFloatStateOf(52.dp.value) }
+                TasksListActionsDropdownMenu(
+                    enabled = categories is ResultContainer.Done,
+                    onSortTypeItemClick = { showSortTypeDialog = true },
+                    onFindItemClick = { showSearchBar = true }
+                )
 
                 CategoriesRow(
                     categories = categories,
@@ -137,19 +136,9 @@ fun TasksContent(
                     },
                     firstCategoryLabel = stringResource(R.string.all),
                     modifier = Modifier
-                        .padding(start = LocalSpacing.current.semiMedium)
-                        .width(LocalConfiguration.current.screenWidthDp.dp - buttonSize.dp)
                         .horizontalScroll(rememberScrollState()),
                     maxLines = 1
                 )
-
-                if (categories is ResultContainer.Done) {
-                    TasksListActionsDropdownMenu(
-                        buttonSize = buttonSize,
-                        onSortTypeItemClick = { showSortTypeDialog = true },
-                        onFindItemClick = { showSearchBar = true }
-                    )
-                }
             }
         }
 
@@ -214,7 +203,7 @@ fun TasksContentPreview() {
             priority = Task.Priority.fromValue(it)
         )
     }
-    
+
     TasksContent(
         previousTasks = ResultContainer.Done(tasks.subList(0, 2)),
         todayTasks = ResultContainer.Done(tasks.subList(2, 4)),
@@ -226,6 +215,19 @@ fun TasksContentPreview() {
                 TaskCategory(it.toLong(), "Category $it")
             }
         ),
+        onTasksEvent = {}
+    )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun TasksScreenPreviewLoading() {
+    TasksContent(
+        previousTasks = ResultContainer.Loading,
+        todayTasks = ResultContainer.Loading,
+        futureTasks = ResultContainer.Loading,
+        completedTasks = ResultContainer.Loading,
+        categories = ResultContainer.Loading,
         onTasksEvent = {}
     )
 }

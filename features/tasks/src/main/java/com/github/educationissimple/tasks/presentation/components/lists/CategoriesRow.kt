@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -18,6 +19,7 @@ import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskCategoryListItem
 import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -31,7 +33,21 @@ fun CategoriesRow(
     maxLines: Int = Int.MAX_VALUE
 ) {
 
-    ResultContainerComposable(container = categories, onTryAgain = { }, modifier = modifier) {
+    ResultContainerComposable(
+        container = categories,
+        onTryAgain = { },
+        onLoading = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier.padding(vertical = LocalSpacing.current.small)
+            ) {
+                repeat(5) {
+                    LoadingTaskCategoryListItem()
+                }
+            }
+        }
+    ) {
         val displayedCategories = listOf(
             TaskCategory(
                 id = NO_CATEGORY_ID,
@@ -44,6 +60,7 @@ fun CategoriesRow(
             maxLines = maxLines,
             horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
             verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+            modifier = modifier
         ) { index ->
             val category = displayedCategories[index]
             key(category.id, activeCategoryId) {

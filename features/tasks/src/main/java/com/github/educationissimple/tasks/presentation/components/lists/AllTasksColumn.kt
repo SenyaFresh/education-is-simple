@@ -1,12 +1,18 @@
 package com.github.educationissimple.tasks.presentation.components.lists
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.common.ResultContainer
@@ -14,6 +20,7 @@ import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskListItem
 
 @Composable
 fun AllTasksColumn(
@@ -26,45 +33,6 @@ fun AllTasksColumn(
     onTaskCompletionChange: (Long, Boolean) -> Unit
 ) {
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
-
-    val taskSections = listOf(
-        TaskSection(
-            title = stringResource(R.string.previous_tasks),
-            tasks = previousTasks.unwrap(),
-            isExpanded = taskExpansionStates.isPreviousTasksExpanded,
-            onExpandChange = {
-                taskExpansionStates = taskExpansionStates.copy(isPreviousTasksExpanded = it)
-            }
-        ),
-        TaskSection(
-            title = stringResource(R.string.today_tasks),
-            tasks = todayTasks.unwrap(),
-            isExpanded = taskExpansionStates.isTodayTasksExpanded,
-            onExpandChange = {
-                taskExpansionStates = taskExpansionStates.copy(isTodayTasksExpanded = it)
-            }
-        ),
-        TaskSection(
-            title = stringResource(R.string.future_tasks),
-            tasks = futureTasks.unwrap(),
-            isExpanded = taskExpansionStates.isFutureTasksExpanded,
-            onExpandChange = {
-                taskExpansionStates = taskExpansionStates.copy(isFutureTasksExpanded = it)
-            }
-        ),
-        TaskSection(
-            title = stringResource(R.string.completed_tasks),
-            tasks = completedTasks.unwrap(),
-            isExpanded = taskExpansionStates.isCompletedTasksExpanded,
-            onExpandChange = {
-                taskExpansionStates =
-                    taskExpansionStates.copy(isCompletedTasksExpanded = it)
-            }
-        )
-    )
-
-
-
     ResultContainerComposable(
         container = ResultContainer.wrap(
             previousTasks,
@@ -72,8 +40,58 @@ fun AllTasksColumn(
             futureTasks,
             completedTasks
         ),
-        onTryAgain = { }
+        onTryAgain = { },
+        onLoading = {
+            Column(
+                modifier = Modifier
+                    .padding(LocalSpacing.current.medium)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(
+                    LocalSpacing.current.small
+                )
+            ) {
+                repeat(7) {
+                    LoadingTaskListItem()
+                }
+            }
+        }
     ) {
+        val taskSections = listOf(
+            TaskSection(
+                title = stringResource(R.string.previous_tasks),
+                tasks = previousTasks.unwrap(),
+                isExpanded = taskExpansionStates.isPreviousTasksExpanded,
+                onExpandChange = {
+                    taskExpansionStates = taskExpansionStates.copy(isPreviousTasksExpanded = it)
+                }
+            ),
+            TaskSection(
+                title = stringResource(R.string.today_tasks),
+                tasks = todayTasks.unwrap(),
+                isExpanded = taskExpansionStates.isTodayTasksExpanded,
+                onExpandChange = {
+                    taskExpansionStates = taskExpansionStates.copy(isTodayTasksExpanded = it)
+                }
+            ),
+            TaskSection(
+                title = stringResource(R.string.future_tasks),
+                tasks = futureTasks.unwrap(),
+                isExpanded = taskExpansionStates.isFutureTasksExpanded,
+                onExpandChange = {
+                    taskExpansionStates = taskExpansionStates.copy(isFutureTasksExpanded = it)
+                }
+            ),
+            TaskSection(
+                title = stringResource(R.string.completed_tasks),
+                tasks = completedTasks.unwrap(),
+                isExpanded = taskExpansionStates.isCompletedTasksExpanded,
+                onExpandChange = {
+                    taskExpansionStates =
+                        taskExpansionStates.copy(isCompletedTasksExpanded = it)
+                }
+            )
+        )
+
         LazyColumn(
             contentPadding = PaddingValues(
                 start = LocalSpacing.current.semiMedium,

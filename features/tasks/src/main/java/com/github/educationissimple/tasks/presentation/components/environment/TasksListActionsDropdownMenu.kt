@@ -2,7 +2,6 @@ package com.github.educationissimple.tasks.presentation.components.environment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -22,28 +21,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 
 @Composable
 fun TasksListActionsDropdownMenu(
-    buttonSize: Float,
     onSortTypeItemClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onFindItemClick: () -> Unit = {}
 ) = Box {
     var showDropdownMenu by remember { mutableStateOf(false) }
 
     IconButton(
+        enabled = enabled,
         onClick = { showDropdownMenu = true },
         colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Light),
-        modifier = Modifier
-            .size(buttonSize.dp)
+        modifier = modifier
     ) {
         Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
     }
     DropdownMenu(
         expanded = showDropdownMenu,
         onDismissRequest = { showDropdownMenu = false },
-        offset = DpOffset((-buttonSize / 2).dp, 0.dp),
+        offset = DpOffset(LocalSpacing.current.medium, 0.dp),
         modifier = Modifier.background(color = Neutral.Light.Light)
     ) {
         DropdownMenuItem(
@@ -72,5 +73,5 @@ fun TasksListActionsDropdownMenu(
 @Preview(showBackground = true)
 @Composable
 fun TasksListActionsDropdownMenuPreview() {
-    TasksListActionsDropdownMenu(buttonSize = 24f, onSortTypeItemClick = {})
+    TasksListActionsDropdownMenu(onSortTypeItemClick = {})
 }
