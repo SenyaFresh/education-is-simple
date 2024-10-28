@@ -1,5 +1,8 @@
 package com.github.educationissimple.tasks.presentation.screens
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -110,39 +113,47 @@ fun TasksContent(
     }
 
     Column {
-        if (showSearchBar) {
-            SearchBar(
-                text = searchQuery,
-                onValueChange = { searchQuery = it },
-                onCancelClick = {
-                    showSearchBar = false
-                    searchQuery = ""
-                },
-                modifier = Modifier.padding(LocalSpacing.current.small)
-            )
-        } else {
-            // Выбор категории и меню.
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TasksListActionsDropdownMenu(
-                    enabled = categories is ResultContainer.Done,
-                    onSortTypeItemClicked = { showSortTypeDialog = true },
-                    onFindItemClicked = { showSearchBar = true },
-                    onManageTasksClicked = onManageTasksClicked
-                )
-
-                CategoriesRow(
-                    categories = categories,
-                    activeCategoryId = activeCategoryId,
-                    onCategoryClick = {
-                        onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
+        Crossfade(
+            targetState = showSearchBar,
+            label = "Show search bar",
+            animationSpec = tween(100),
+            modifier = Modifier.animateContentSize()
+        ) { state ->
+            if (state) {
+                SearchBar(
+                    text = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    onCancelClick = {
+                        showSearchBar = false
+                        searchQuery = ""
                     },
-                    firstCategoryLabel = stringResource(R.string.all),
-                    modifier = Modifier
-                        .horizontalScroll(rememberScrollState()),
-                    maxLines = 1
+                    modifier = Modifier.padding(LocalSpacing.current.small)
                 )
+            } else {
+                // Выбор категории и меню.
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TasksListActionsDropdownMenu(
+                        enabled = categories is ResultContainer.Done,
+                        onSortTypeItemClicked = { showSortTypeDialog = true },
+                        onFindItemClicked = { showSearchBar = true },
+                        onManageTasksClicked = onManageTasksClicked
+                    )
+
+                    CategoriesRow(
+                        categories = categories,
+                        activeCategoryId = activeCategoryId,
+                        onCategoryClick = {
+                            onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
+                        },
+                        firstCategoryLabel = stringResource(R.string.all),
+                        modifier = Modifier
+                            .horizontalScroll(rememberScrollState())
+                            .padding(end = LocalSpacing.current.small),
+                        maxLines = 1
+                    )
+                }
             }
         }
 
