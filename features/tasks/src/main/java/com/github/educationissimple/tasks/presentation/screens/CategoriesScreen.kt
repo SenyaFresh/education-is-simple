@@ -3,10 +3,14 @@ package com.github.educationissimple.tasks.presentation.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,16 +68,24 @@ fun CategoriesContent(
             }
         }
     ) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.semiMedium),
-            modifier = Modifier.padding(20.dp)
+        Column(
+            modifier = Modifier.padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(items = categories.unwrap(), key = { category -> category.id }) { category ->
-                TaskCategoryListItem(
-                    category = category,
-                    onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) },
-                    modifier = Modifier.animateItem()
-                )
+            Text(text = "Категории задач:", style = MaterialTheme.typography.titleLarge)
+
+            Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
+
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.semiMedium)
+            ) {
+                items(items = categories.unwrap(), key = { category -> category.id }) { category ->
+                    TaskCategoryListItem(
+                        category = category,
+                        onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) },
+                        modifier = Modifier.animateItem()
+                    )
+                }
             }
         }
 

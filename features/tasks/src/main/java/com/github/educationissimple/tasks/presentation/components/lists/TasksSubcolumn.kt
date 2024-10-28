@@ -1,5 +1,6 @@
 package com.github.educationissimple.tasks.presentation.components.lists
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -44,7 +45,11 @@ fun LazyListScope.tasksSubcolumn(
                     end = LocalSpacing.current.medium
                 )
                 .clickable { onExpandChange(!isExpanded) }
-                .animateItem()
+                .animateItem(
+                    fadeInSpec = tween(150),
+                    fadeOutSpec = tween(150),
+                    placementSpec = tween(150)
+                )
         ) {
             Text(text = title, fontWeight = FontWeight.Bold)
             Icon(
@@ -70,8 +75,12 @@ fun LazyListScope.tasksSubcolumn(
                     onTaskPriorityChange(task.id, priority)
                 },
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .animateItem()
+                    .padding(top = LocalSpacing.current.small)
+                    .animateItem(
+                        fadeInSpec = tween(150),
+                        fadeOutSpec = tween(150),
+                        placementSpec = tween(150)
+                    )
             )
         }
     }
