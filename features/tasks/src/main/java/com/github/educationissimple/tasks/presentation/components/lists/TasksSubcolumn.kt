@@ -87,7 +87,7 @@ fun TasksColumnPreview() {
                 Task(
                     id = it.toLong(),
                     text = "Задача $it",
-                    date = listOf("10-08", null).random(),
+                    date = if (it % 2 == 0) "10-08" else null,
                     priority = Task.Priority.fromValue(it)
                 )
             },
@@ -96,13 +96,13 @@ fun TasksColumnPreview() {
             onTaskPriorityChange = { _, _ -> }
         )
         tasksSubcolumn(
-            "Выполненные сегодня задачи",
+            "Выполненные задачи",
             (5..8).map {
                 Task(
                     id = it.toLong(),
                     text = "Задача $it",
                     isCompleted = true,
-                    date = listOf("10-08", null).random(),
+                    date = if (it % 2 == 0) "10-08" else null,
                     priority = Task.Priority.fromValue(it - 5)
                 )
             },

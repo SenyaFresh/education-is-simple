@@ -25,12 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
-import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.DefaultIconButton
@@ -39,8 +39,8 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
-import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
+import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 
 @Composable
 fun PopUpTextField(
@@ -84,11 +84,12 @@ fun PopUpTextFieldContent(
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester
 ) {
+    val noCategoryText = stringResource(R.string.no_category)
     var selectedCategory by remember {
         mutableStateOf(
             TaskCategory(
                 NO_CATEGORY_ID,
-                Core.resources.getString(R.string.no_category)
+                noCategoryText
             )
         )
     }
@@ -154,11 +155,11 @@ fun PopUpTextFieldContent(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun PopUpTextFieldPreview() {
     PopUpTextField(
-        text = "text",
+        text = "Задача",
         onValueChange = {},
         onAddClick = {},
         onAddNewCategory = {},

@@ -62,17 +62,16 @@ fun CategoriesRow(
 fun CategoriesRowPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            CategoriesRow(
-                ResultContainer.Done(
-                    (1..5).map { TaskCategory(it.toLong(), "Category $it") }
-                ),
-                { },
+            CategoriesRow(categories = ResultContainer.Done(
+                (1..5).map {
+                    TaskCategory(it.toLong(), "Category $it")
+                }
+            ),
+                onCategoryClick = { },
                 firstCategoryLabel = "All",
                 maxLines = 1,
                 modifier = Modifier
-                    .horizontalScroll(
-                        rememberScrollState(0)
-                    )
+                    .horizontalScroll(rememberScrollState(0))
             )
         }
     }

@@ -203,40 +203,29 @@ fun TasksContent(
     }
 }
 
-// Wont render cause Core.init isn't initialized.
 @Preview(showSystemUi = true)
 @Composable
 fun TasksContentPreview() {
-    TasksContent(
-        ResultContainer.Done(
-            listOf(
-                Task(id = 1, text = "Побегать", isCompleted = false, date = "10-08"),
-                Task(id = 2, text = "Полежать", isCompleted = false, date = "10-09")
-            )
-        ),
-        ResultContainer.Done(
-            listOf(
-                Task(id = 3, text = "Побегать"),
-                Task(id = 4, text = "Попрыгать"),
-                Task(id = 5, text = "Полежать")
-            )
-        ),
-        ResultContainer.Done(
-            listOf()
-        ),
-        ResultContainer.Done(
-            listOf(
-                Task(id = 6, text = "Побегать", isCompleted = true, date = "10-08"),
-                Task(id = 7, text = "Попрыгать", isCompleted = true),
-                Task(id = 8, text = "Полежать", isCompleted = true)
-            )
-        ),
-        ResultContainer.Done(
-            listOf(
-                TaskCategory(id = 1, name = "Work"),
-                TaskCategory(id = 2, name = "Home")
-            )
+    val tasks = (1..8).map {
+        Task(
+            id = it.toLong(),
+            text = "Задача $it",
+            date = if (it % 2 == 0) "10-08" else null,
+            priority = Task.Priority.fromValue(it)
         )
-    ) {
     }
+    
+    TasksContent(
+        previousTasks = ResultContainer.Done(tasks.subList(0, 2)),
+        todayTasks = ResultContainer.Done(tasks.subList(2, 4)),
+        futureTasks = ResultContainer.Done(tasks.subList(4, 6)),
+        completedTasks = ResultContainer.Done(
+            tasks.subList(6, 8).map { it.copy(isCompleted = true) }),
+        categories = ResultContainer.Done(
+            (1..5).map {
+                TaskCategory(it.toLong(), "Category $it")
+            }
+        ),
+        onTasksEvent = {}
+    )
 }

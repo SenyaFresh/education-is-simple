@@ -67,15 +67,12 @@ fun TaskCategoryCardPreview() {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
     ) {
-        TaskCategoryListItem(
-            category = TaskCategory(0, "Work"),
-            isActive = true,
-            onCategoryClick = { }
-        )
-        TaskCategoryListItem(
-            category = TaskCategory(1, "Home"),
-            isActive = false,
-            onCategoryClick = { }
-        )
+        (1..2).forEach {
+            TaskCategoryListItem(
+                category = TaskCategory(it.toLong(), "Category $it"),
+                isActive = it % 2 == 0,
+                onCategoryClick = { }
+            )
+        }
     }
 }

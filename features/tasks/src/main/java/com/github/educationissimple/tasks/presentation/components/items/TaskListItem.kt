@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
@@ -278,30 +281,27 @@ private fun getColorByPriority(priority: Task.Priority) = when (priority) {
 @Preview(showSystemUi = true)
 @Composable
 fun TaskCardPreview() {
-    Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
-        TaskListItem(
-            Task(
-                id = 1,
-                text = "Go to work",
-                isCompleted = true,
-                date = "10-08",
-                priority = Task.Priority.TopPriority
-            ),
-            onTaskCompletionChange = { _ -> },
-            onTaskDelete = { },
-            onPriorityChange = { _ -> },
+    Column(
+        modifier = Modifier
+            .padding(LocalSpacing.current.small)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(
+            LocalSpacing.current.small
         )
-
-        TaskListItem(
-            Task(
-                id = 2,
-                text = "Task with long long long long long long long long long long long long",
-                date = "10-08"
-            ),
-            onTaskCompletionChange = { _ -> },
-            onTaskDelete = { },
-            onPriorityChange = { _ -> },
-        )
+    ) {
+        (1..10).forEach {
+            TaskListItem(
+                Task(
+                    id = it.toLong(),
+                    text = "Task $it",
+                    isCompleted = it > 5,
+                    date = if (it % 2 == 0) "10-08" else null,
+                    priority = Task.Priority.fromValue(it % 3)
+                ),
+                onTaskCompletionChange = { _ -> },
+                onTaskDelete = { },
+                onPriorityChange = { _ -> },
+            )
+        }
     }
 }
