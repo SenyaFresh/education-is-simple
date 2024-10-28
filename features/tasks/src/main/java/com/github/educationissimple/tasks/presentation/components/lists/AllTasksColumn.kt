@@ -27,6 +27,44 @@ fun AllTasksColumn(
 ) {
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
 
+    val taskSections = listOf(
+        TaskSection(
+            title = stringResource(R.string.previous_tasks),
+            tasks = previousTasks.unwrap(),
+            isExpanded = taskExpansionStates.isPreviousTasksExpanded,
+            onExpandChange = {
+                taskExpansionStates = taskExpansionStates.copy(isPreviousTasksExpanded = it)
+            }
+        ),
+        TaskSection(
+            title = stringResource(R.string.today_tasks),
+            tasks = todayTasks.unwrap(),
+            isExpanded = taskExpansionStates.isTodayTasksExpanded,
+            onExpandChange = {
+                taskExpansionStates = taskExpansionStates.copy(isTodayTasksExpanded = it)
+            }
+        ),
+        TaskSection(
+            title = stringResource(R.string.future_tasks),
+            tasks = futureTasks.unwrap(),
+            isExpanded = taskExpansionStates.isFutureTasksExpanded,
+            onExpandChange = {
+                taskExpansionStates = taskExpansionStates.copy(isFutureTasksExpanded = it)
+            }
+        ),
+        TaskSection(
+            title = stringResource(R.string.completed_tasks),
+            tasks = completedTasks.unwrap(),
+            isExpanded = taskExpansionStates.isCompletedTasksExpanded,
+            onExpandChange = {
+                taskExpansionStates =
+                    taskExpansionStates.copy(isCompletedTasksExpanded = it)
+            }
+        )
+    )
+
+
+
     ResultContainerComposable(
         container = ResultContainer.wrap(
             previousTasks,
@@ -36,43 +74,6 @@ fun AllTasksColumn(
         ),
         onTryAgain = { }
     ) {
-        val taskSections =
-            listOf(
-                TaskSection(
-                    title = stringResource(R.string.previous_tasks),
-                    tasks = previousTasks.unwrap(),
-                    isExpanded = taskExpansionStates.isPreviousTasksExpanded,
-                    onExpandChange = {
-                        taskExpansionStates = taskExpansionStates.copy(isPreviousTasksExpanded = it)
-                    }
-                ),
-                TaskSection(
-                    title = stringResource(R.string.today_tasks),
-                    tasks = todayTasks.unwrap(),
-                    isExpanded = taskExpansionStates.isTodayTasksExpanded,
-                    onExpandChange = {
-                        taskExpansionStates = taskExpansionStates.copy(isTodayTasksExpanded = it)
-                    }
-                ),
-                TaskSection(
-                    title = stringResource(R.string.future_tasks),
-                    tasks = futureTasks.unwrap(),
-                    isExpanded = taskExpansionStates.isFutureTasksExpanded,
-                    onExpandChange = {
-                        taskExpansionStates = taskExpansionStates.copy(isFutureTasksExpanded = it)
-                    }
-                ),
-                TaskSection(
-                    title = stringResource(R.string.completed_tasks),
-                    tasks = completedTasks.unwrap(),
-                    isExpanded = taskExpansionStates.isCompletedTasksExpanded,
-                    onExpandChange = {
-                        taskExpansionStates =
-                            taskExpansionStates.copy(isCompletedTasksExpanded = it)
-                    }
-                )
-            )
-
         LazyColumn(
             contentPadding = PaddingValues(
                 start = LocalSpacing.current.semiMedium,
