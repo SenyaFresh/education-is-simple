@@ -85,7 +85,7 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun changeSearchQuery(query: String?) {
         searchQuery = query
-        updateSources()
+        updateSources(silently = false)
     }
 
     override suspend fun getPreviousTasks(): Flow<ResultContainer<List<TaskDataEntity>>> {
@@ -123,7 +123,7 @@ class RoomTasksDataRepository @Inject constructor(
         preferencesDataSource.saveSelectedCategoryId(categoryId)
         currentCategoryId = categoryId
         selectedCategoryIdLoader.newAsyncLoad(silently = true)
-        updateSources(false)
+        updateSources()
     }
 
     override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>> {
@@ -147,7 +147,7 @@ class RoomTasksDataRepository @Inject constructor(
         updateSources()
     }
 
-    private fun updateSources(silently: Boolean = true) {
+    private fun updateSources(silently: Boolean = false) {
         previousTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getTasksBeforeDate(

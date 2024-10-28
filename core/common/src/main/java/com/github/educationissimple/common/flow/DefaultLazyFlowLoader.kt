@@ -24,7 +24,8 @@ class DefaultLazyFlowLoader<T>(
     private var valueLoader: ValueLoader<T>,
     private val dispatcher: CoroutineDispatcher,
     private val globalScope: CoroutineScope,
-    private val cacheTimeoutMillis: Long
+    private val cacheTimeoutMillis: Long,
+    private val loadingStatusTimeoutMillis: Long
 ) : LazyFlowLoader<T> {
 
     private var subscribersCount = 0
@@ -158,8 +159,12 @@ class DefaultLazyFlowLoader<T>(
      */
     private suspend fun loadValue(loadValue: Value.LoadValue<T>) {
         try {
-            if (!loadValue.silently) outputFlow.value = ResultContainer.Loading
+            val job = scope?.launch {
+                delay(loadingStatusTimeoutMillis)
+                if (!loadValue.silently) outputFlow.value = ResultContainer.Loading
+            }
             val value = loadValue.loader()
+            job?.cancel()
             outputFlow.value = ResultContainer.Done(value)
             mutex.withLock {
                 loadValue.completableDeferred?.complete(value)
