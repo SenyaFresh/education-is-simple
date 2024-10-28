@@ -38,6 +38,7 @@ import com.github.educationissimple.tasks.presentation.components.dialogs.TasksS
 import com.github.educationissimple.tasks.presentation.components.environment.AddTaskFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
+import com.github.educationissimple.tasks.presentation.components.items.SearchBar
 import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
@@ -75,6 +76,8 @@ fun TasksContent(
 ) {
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var showSortTypeDialog by remember { mutableStateOf(false) }
+    var showSearchBar by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
 
@@ -104,34 +107,53 @@ fun TasksContent(
         )
     }
 
+    LaunchedEffect(searchQuery) {
+        onTasksEvent(TasksEvent.ChangeTaskSearchText(searchQuery))
+    }
+
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val buttonSize by remember { mutableFloatStateOf(52.dp.value) }
-
-            CategoriesRow(
-                categories = categories,
-                activeCategoryId = activeCategoryId,
-                onCategoryClick = {
-                    onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
+        if (showSearchBar) {
+            SearchBar(
+                text = searchQuery,
+                onValueChange = { searchQuery = it },
+                onCancelClick = {
+                    showSearchBar = false
+                    searchQuery = ""
                 },
-                firstCategoryLabel = stringResource(R.string.all),
-                modifier = Modifier
-                    .padding(start = LocalSpacing.current.semiMedium)
-                    .width(LocalConfiguration.current.screenWidthDp.dp - buttonSize.dp)
-                    .horizontalScroll(rememberScrollState()),
-                maxLines = 1
+                modifier = Modifier.padding(LocalSpacing.current.small)
             )
+        } else {
+            // Выбор категории и меню.
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val buttonSize by remember { mutableFloatStateOf(52.dp.value) }
 
-            if (categories is ResultContainer.Done) {
-                TasksListActionsDropdownMenu(
-                    buttonSize = buttonSize,
-                    onSortTypeItemClick = { showSortTypeDialog = true }
+                CategoriesRow(
+                    categories = categories,
+                    activeCategoryId = activeCategoryId,
+                    onCategoryClick = {
+                        onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
+                    },
+                    firstCategoryLabel = stringResource(R.string.all),
+                    modifier = Modifier
+                        .padding(start = LocalSpacing.current.semiMedium)
+                        .width(LocalConfiguration.current.screenWidthDp.dp - buttonSize.dp)
+                        .horizontalScroll(rememberScrollState()),
+                    maxLines = 1
                 )
+
+                if (categories is ResultContainer.Done) {
+                    TasksListActionsDropdownMenu(
+                        buttonSize = buttonSize,
+                        onSortTypeItemClick = { showSortTypeDialog = true },
+                        onFindItemClick = { showSearchBar = true }
+                    )
+                }
             }
         }
 
+        // Список задач.
         AllTasksColumn(
             previousTasks = previousTasks,
             todayTasks = todayTasks,

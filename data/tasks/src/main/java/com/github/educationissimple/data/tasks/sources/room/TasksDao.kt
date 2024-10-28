@@ -25,6 +25,7 @@ interface TasksDao {
             date BETWEEN :startDate AND :endDate
             AND is_completed = :isCompleted
             AND (:categoryId IS NULL OR category_id = :categoryId)
+            AND (:searchText IS NULL OR text LIKE '%' || :searchText || '%')
             ORDER BY 
             CASE WHEN :sortType = 'date_asc' THEN date END ASC,
             CASE WHEN :sortType = 'date_desc' THEN date END DESC,
@@ -38,6 +39,7 @@ interface TasksDao {
         endDate: LocalDate,
         isCompleted: Boolean,
         categoryId: Long?,
+        searchText: String? = null,
         sortType: String? = null
     ): List<TaskDataEntity>
 

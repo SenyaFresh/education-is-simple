@@ -33,7 +33,8 @@ class TasksViewModel @Inject constructor(
     private val _sortType = MutableStateFlow<ResultContainer<SortType?>>(ResultContainer.Loading)
     val sortType = _sortType.asStateFlow()
 
-    private val _activeCategoryId = MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
+    private val _activeCategoryId =
+        MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
 
     private val _previousTasks =
@@ -76,6 +77,7 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.ChangeCategory -> changeCategory(event.categoryId)
             is TasksEvent.AddCategory -> addCategory(event.name)
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
+            is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
         }
     }
 
@@ -123,6 +125,12 @@ class TasksViewModel @Inject constructor(
     private fun deleteTask(taskId: Long) {
         viewModelScope.launch {
             deleteTaskUseCase.deleteTask(taskId)
+        }
+    }
+
+    private fun changeTaskSearchText(text: String) {
+        viewModelScope.launch {
+            getTasksUseCase.changeTaskSearchText(text)
         }
     }
 

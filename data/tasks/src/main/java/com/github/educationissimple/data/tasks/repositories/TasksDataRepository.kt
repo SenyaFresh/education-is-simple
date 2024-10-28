@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface TasksDataRepository {
 
+    suspend fun changeSearchQuery(query: String?)
+
     suspend fun getPreviousTasks() : Flow<ResultContainer<List<TaskDataEntity>>>
 
     suspend fun getTodayTasks() : Flow<ResultContainer<List<TaskDataEntity>>>

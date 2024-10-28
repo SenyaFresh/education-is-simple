@@ -5,6 +5,8 @@ import com.github.educationissimple.tasks.domain.entities.Task
 
 sealed class TasksEvent {
 
+    data class ChangeTaskSearchText(val text: String): TasksEvent()
+
     data class CompleteTask(val taskId: Long): TasksEvent()
 
     data class CancelTaskCompletion(val taskId: Long): TasksEvent()

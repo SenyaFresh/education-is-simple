@@ -16,6 +16,8 @@ interface TasksRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<Task>>>
 
+    suspend fun changeTaskSearchText(text: String)
+
     suspend fun getSelectedSortType() : Flow<ResultContainer<SortType?>>
 
     suspend fun changeSortType(sortType: SortType?)

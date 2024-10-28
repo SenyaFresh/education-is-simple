@@ -21,6 +21,10 @@ class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepo
     suspend fun getCompletedTasks(): Flow<ResultContainer<List<Task>>> =
         tasksRepository.getCompletedTasks()
 
+    suspend fun changeTaskSearchText(text: String) {
+        tasksRepository.changeTaskSearchText(text)
+    }
+
     suspend fun changeSortType(sortType: SortType?) {
         tasksRepository.changeSortType(sortType)
     }

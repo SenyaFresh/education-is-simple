@@ -26,4 +26,5 @@
     <string name="edit_categories">Редактировать категории</string>
     <string name="find">Найти</string>
     <string name="to_select_sort_type">Выбрать сортировку</string>
+    <string name="search_task">Поиск задачи</string>
 </resources>

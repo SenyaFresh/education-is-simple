@@ -27,6 +27,7 @@ import com.github.educationissimple.tasks.R
 fun TasksListActionsDropdownMenu(
     buttonSize: Float,
     onSortTypeItemClick: () -> Unit,
+    onFindItemClick: () -> Unit = {}
 ) = Box {
     var showDropdownMenu by remember { mutableStateOf(false) }
 
@@ -51,12 +52,15 @@ fun TasksListActionsDropdownMenu(
 
         DropdownMenuItem(
             text = { Text(stringResource(R.string.find)) },
-            onClick = { }
+            onClick = {
+                onFindItemClick()
+                showDropdownMenu = false
+            }
         )
 
         DropdownMenuItem(
             text = { Text(stringResource(R.string.to_select_sort_type)) },
-            onClick =  {
+            onClick = {
                 onSortTypeItemClick()
                 showDropdownMenu = false
             }

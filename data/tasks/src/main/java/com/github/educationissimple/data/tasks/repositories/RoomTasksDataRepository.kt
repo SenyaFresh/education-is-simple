@@ -18,6 +18,8 @@ class RoomTasksDataRepository @Inject constructor(
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
 
+    private var searchQuery: String? = null
+
     private var currentCategoryId: Long?
         get() = preferencesDataSource.getSelectedCategoryId()
         set(value) = preferencesDataSource.saveSelectedCategoryId(value)
@@ -44,37 +46,46 @@ class RoomTasksDataRepository @Inject constructor(
 
     private val previousTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getTasksBeforeDate(
-            LocalDate.now(),
-            currentCategoryId,
-            currentSortType
+            date = LocalDate.now(),
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
         )
     }
 
     private val todayTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getTasksByDate(
-            LocalDate.now(),
-            currentCategoryId,
-            currentSortType
+            date = LocalDate.now(),
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
         )
     }
 
     private val futureTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getTasksAfterDate(
-            LocalDate.now(),
-            currentCategoryId,
-            currentSortType
+            date = LocalDate.now(),
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
         )
     }
 
     private val completedTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getCompletedTasks(
-            currentCategoryId,
-            currentSortType
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
         )
     }
 
     private val categoriesLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getCategories()
+    }
+
+    override suspend fun changeSearchQuery(query: String?) {
+        searchQuery = query
+        updateSources()
     }
 
     override suspend fun getPreviousTasks(): Flow<ResultContainer<List<TaskDataEntity>>> {
@@ -140,9 +151,10 @@ class RoomTasksDataRepository @Inject constructor(
         previousTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getTasksBeforeDate(
-                    LocalDate.now(),
-                    currentCategoryId,
-                    currentSortType
+                    date = LocalDate.now(),
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
                 )
             },
             silently = silently
@@ -150,9 +162,10 @@ class RoomTasksDataRepository @Inject constructor(
         todayTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getTasksByDate(
-                    LocalDate.now(),
-                    currentCategoryId,
-                    currentSortType
+                    date = LocalDate.now(),
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
                 )
             },
             silently = silently
@@ -160,9 +173,10 @@ class RoomTasksDataRepository @Inject constructor(
         futureTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getTasksAfterDate(
-                    LocalDate.now(),
-                    currentCategoryId,
-                    currentSortType
+                    date = LocalDate.now(),
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
                 )
             },
             silently = silently
@@ -170,8 +184,9 @@ class RoomTasksDataRepository @Inject constructor(
         completedTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getCompletedTasks(
-                    currentCategoryId,
-                    currentSortType
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
                 )
             },
             silently = silently

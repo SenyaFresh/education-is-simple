@@ -44,52 +44,63 @@ class RoomTasksDataSource @Inject constructor(
     override suspend fun getTasksBeforeDate(
         date: LocalDate,
         categoryId: Long?,
+        searchText: String?,
         sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            getMinDate(),
-            date.minusDays(1),
-            false,
-            categoryId,
-            sortType
+            startDate = getMinDate(),
+            endDate = date.minusDays(1),
+            isCompleted = false,
+            categoryId = categoryId,
+            searchText = searchText,
+            sortType = sortType
         )
     }
 
     override suspend fun getTasksByDate(
         date: LocalDate,
         categoryId: Long?,
+        searchText: String?,
         sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            date,
-            date,
-            false,
-            categoryId,
-            sortType
+            startDate = date,
+            endDate = date,
+            isCompleted = false,
+            categoryId = categoryId,
+            searchText = searchText,
+            sortType = sortType
         )
     }
 
     override suspend fun getTasksAfterDate(
         date: LocalDate,
         categoryId: Long?,
+        searchText: String?,
         sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            date.plusDays(1),
-            getMaxDate(),
-            false,
-            categoryId,
-            sortType
+            startDate = date.plusDays(1),
+            endDate = getMaxDate(),
+            isCompleted = false,
+            categoryId = categoryId,
+            searchText = searchText,
+            sortType = sortType
         )
     }
 
-    override suspend fun getCompletedTasks(categoryId: Long?, sortType: String?): List<TaskDataEntity> {
+    override suspend fun getCompletedTasks(
+        categoryId: Long?,
+        searchText: String?,
+        sortType: String?
+    ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            getMinDate(),
-            getMaxDate(),
-            true,
-            categoryId,
-            sortType
+            startDate = getMinDate(),
+            endDate = getMaxDate(),
+            isCompleted = true,
+            categoryId = categoryId,
+            searchText = searchText,
+            sortType = sortType
         )
     }
 
