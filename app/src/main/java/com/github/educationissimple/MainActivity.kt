@@ -3,7 +3,7 @@ package com.github.educationissimple
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.github.educationissimple.tasks.presentation.screens.TasksScreen
+import com.github.educationissimple.navigation.AppNavigation
 import com.github.educationissimple.ui.theme.EducationIsSimpleTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EducationIsSimpleTheme {
-                TasksScreen()
+                AppNavigation()
             }
         }
     }

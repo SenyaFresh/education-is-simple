@@ -27,4 +27,5 @@
     <string name="find">Найти</string>
     <string name="to_select_sort_type">Выбрать сортировку</string>
     <string name="search_task">Поиск задачи</string>
+    <string name="add_new_category">Добавить новую категорию</string>
 </resources>

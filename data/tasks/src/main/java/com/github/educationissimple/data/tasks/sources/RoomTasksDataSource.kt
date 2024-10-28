@@ -113,7 +113,7 @@ class RoomTasksDataSource @Inject constructor(
     }
 
     override suspend fun deleteCategory(id: Long) {
-        deleteCategory(id)
+        tasksCategoryDao.deleteCategory(id)
     }
 
 }

@@ -31,7 +31,7 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
-import com.github.educationissimple.tasks.presentation.components.environment.AddTaskFloatingActionButton
+import com.github.educationissimple.tasks.presentation.components.environment.AddFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
 import com.github.educationissimple.tasks.presentation.components.items.SearchBar
@@ -43,7 +43,8 @@ import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 @Composable
 fun TasksScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),
-    viewModel: TasksViewModel = viewModel(factory = diContainer.viewModelFactory)
+    viewModel: TasksViewModel = viewModel(factory = diContainer.viewModelFactory),
+    onManageTasksClicked: () -> Unit
 ) {
     TasksContent(
         previousTasks = viewModel.previousTasks.collectAsStateWithLifecycle().value,
@@ -51,6 +52,7 @@ fun TasksScreen(
         futureTasks = viewModel.futureTasks.collectAsStateWithLifecycle().value,
         completedTasks = viewModel.completedTasks.collectAsStateWithLifecycle().value,
         categories = viewModel.categories.collectAsStateWithLifecycle().value,
+        onManageTasksClicked = onManageTasksClicked,
         currentSortType = viewModel.sortType.collectAsStateWithLifecycle().value.unwrapOrNull(),
         activeCategoryId = viewModel.activeCategoryId.collectAsStateWithLifecycle().value.unwrapOrNull()
             ?: NO_CATEGORY_ID,
@@ -65,6 +67,7 @@ fun TasksContent(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
+    onManageTasksClicked: () -> Unit,
     currentSortType: SortType? = null,
     activeCategoryId: Long = NO_CATEGORY_ID,
     onTasksEvent: (TasksEvent) -> Unit,
@@ -124,8 +127,9 @@ fun TasksContent(
             ) {
                 TasksListActionsDropdownMenu(
                     enabled = categories is ResultContainer.Done,
-                    onSortTypeItemClick = { showSortTypeDialog = true },
-                    onFindItemClick = { showSearchBar = true }
+                    onSortTypeItemClicked = { showSortTypeDialog = true },
+                    onFindItemClicked = { showSearchBar = true },
+                    onManageTasksClicked = onManageTasksClicked
                 )
 
                 CategoriesRow(
@@ -155,13 +159,22 @@ fun TasksContent(
     }
 
     if (!isAddingTask) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AddTaskFloatingActionButton(
-                onClick = { isAddingTask = true },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(LocalSpacing.current.medium)
-            )
+        if (ResultContainer.wrap(
+                previousTasks,
+                todayTasks,
+                futureTasks,
+                completedTasks,
+                categories
+            ) is ResultContainer.Done
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AddFloatingActionButton(
+                    onClick = { isAddingTask = true },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(LocalSpacing.current.medium)
+                )
+            }
         }
     } else {
         LaunchedEffect(Unit) {
@@ -215,7 +228,8 @@ fun TasksContentPreview() {
                 TaskCategory(it.toLong(), "Category $it")
             }
         ),
-        onTasksEvent = {}
+        onTasksEvent = {},
+        onManageTasksClicked = {}
     )
 }
 
@@ -228,6 +242,7 @@ fun TasksScreenPreviewLoading() {
         futureTasks = ResultContainer.Loading,
         completedTasks = ResultContainer.Loading,
         categories = ResultContainer.Loading,
-        onTasksEvent = {}
+        onTasksEvent = {},
+        onManageTasksClicked = {}
     )
 }

@@ -26,10 +26,11 @@ import com.github.educationissimple.tasks.R
 
 @Composable
 fun TasksListActionsDropdownMenu(
-    onSortTypeItemClick: () -> Unit,
+    onSortTypeItemClicked: () -> Unit,
+    onFindItemClicked: () -> Unit,
+    onManageTasksClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    onFindItemClick: () -> Unit = {}
+    enabled: Boolean = true
 ) = Box {
     var showDropdownMenu by remember { mutableStateOf(false) }
 
@@ -49,13 +50,16 @@ fun TasksListActionsDropdownMenu(
     ) {
         DropdownMenuItem(
             text = { Text(stringResource(R.string.edit_categories)) },
-            onClick = { }
+            onClick = {
+                onManageTasksClicked()
+                showDropdownMenu = false
+            }
         )
 
         DropdownMenuItem(
             text = { Text(stringResource(R.string.find)) },
             onClick = {
-                onFindItemClick()
+                onFindItemClicked()
                 showDropdownMenu = false
             }
         )
@@ -63,7 +67,7 @@ fun TasksListActionsDropdownMenu(
         DropdownMenuItem(
             text = { Text(stringResource(R.string.to_select_sort_type)) },
             onClick = {
-                onSortTypeItemClick()
+                onSortTypeItemClicked()
                 showDropdownMenu = false
             }
         )
@@ -73,5 +77,9 @@ fun TasksListActionsDropdownMenu(
 @Preview(showBackground = true)
 @Composable
 fun TasksListActionsDropdownMenuPreview() {
-    TasksListActionsDropdownMenu(onSortTypeItemClick = {})
+    TasksListActionsDropdownMenu(
+        onSortTypeItemClicked = {},
+        onFindItemClicked = {},
+        onManageTasksClicked = {}
+    )
 }

@@ -10,7 +10,7 @@ import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
 @Composable
-fun AddTaskFloatingActionButton(
+fun AddFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) = FloatingActionButton(
