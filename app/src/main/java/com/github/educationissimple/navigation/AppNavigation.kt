@@ -19,10 +19,10 @@ fun AppNavigation() {
         navController = navController,
         startDestination = TasksScreen,
         enterTransition = {
-            fadeIn(animationSpec = tween(300))
+            fadeIn(animationSpec = tween(400))
         },
         exitTransition = {
-            fadeOut(animationSpec = tween(300))
+            fadeOut(animationSpec = tween(400))
         }
     ) {
         composable<TasksScreen> {

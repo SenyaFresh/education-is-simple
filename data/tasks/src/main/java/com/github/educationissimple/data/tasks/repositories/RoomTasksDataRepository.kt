@@ -123,7 +123,7 @@ class RoomTasksDataRepository @Inject constructor(
         preferencesDataSource.saveSelectedCategoryId(categoryId)
         currentCategoryId = categoryId
         selectedCategoryIdLoader.newAsyncLoad(silently = true)
-        updateSources()
+        updateSources(false)
     }
 
     override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>> {
