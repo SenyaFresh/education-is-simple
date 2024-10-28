@@ -9,9 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.ResultContainerComposable
+import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 
@@ -73,7 +73,13 @@ fun AllTasksColumn(
                 )
             )
 
-        LazyColumn(contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 8.dp)) {
+        LazyColumn(
+            contentPadding = PaddingValues(
+                start = LocalSpacing.current.semiMedium,
+                end = LocalSpacing.current.semiMedium,
+                bottom = LocalSpacing.current.small
+            )
+        ) {
             taskSections.forEach { section ->
                 tasksSubcolumn(
                     section.title,
