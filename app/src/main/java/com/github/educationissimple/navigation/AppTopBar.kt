@@ -1,6 +1,7 @@
 package com.github.educationissimple.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,9 +24,9 @@ fun AppTopBar(
     @StringRes titleRes: Int? = null,
     navigationUpAction: NavigateUpAction
 ) {
-    if (visible && titleRes != null) {
+    AnimatedVisibility (visible && titleRes != null) {
         CenterAlignedTopAppBar(
-            title = { Text(stringResource(titleRes)) },
+            title = { titleRes?.let { Text(stringResource(it)) } },
             navigationIcon = {
                 if (navigationUpAction is NavigateUpAction.Visible) {
                     IconButton(onClick = navigationUpAction.onClick) {

@@ -12,6 +12,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
+import kotlinx.coroutines.delay
 
 
 /**
@@ -68,7 +73,14 @@ fun ResultContainerComposable(
             }
 
             is ResultContainer.Loading -> {
-                onLoading()
+                var showLoading by mutableStateOf(false)
+                LaunchedEffect(Unit) {
+                    delay(50)
+                    showLoading = true
+                }
+                if (showLoading) {
+                    onLoading()
+                }
             }
         }
     }

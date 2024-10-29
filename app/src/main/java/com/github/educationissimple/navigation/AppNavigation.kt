@@ -1,9 +1,13 @@
 package com.github.educationissimple.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,7 @@ fun AppNavigation() {
             titleRes = R.string.manage_categories
             topBarVisibility = true
         }
+
         else -> {
             titleRes = null
             topBarVisibility = false
@@ -36,7 +41,6 @@ fun AppNavigation() {
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
         topBar = {
             AppTopBar(
                 visible = topBarVisibility,
@@ -58,26 +62,66 @@ fun AppNavigation() {
         NavHost(
             navController = navController,
             startDestination = TasksGraph,
-            enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(400)) },
-            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(400)) },
-            popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(400)) },
-            popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(400)) },
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start,
+                    tween(400)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start,
+                    tween(400)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End,
+                    tween(400)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End,
+                    tween(400)
+                )
+            },
             modifier = Modifier.padding(padding)
         ) {
-            navigation<TasksGraph>(startDestination = TasksGraph.TasksScreen) {
+            navigation<TasksGraph>(
+                startDestination = TasksGraph.TasksScreen,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+            ) {
                 composable<TasksGraph.TasksScreen> {
+                    ShowBackground()
                     TasksScreen(onManageTasksClicked = { navController.navigate(TasksGraph.CategoriesScreen) })
                 }
                 composable<TasksGraph.CategoriesScreen> {
+                    ShowBackground()
                     CategoriesScreen()
                 }
             }
-            navigation<CalendarGraph>(startDestination = CalendarGraph.CalendarScreen) {
+            navigation<CalendarGraph>(
+                startDestination = CalendarGraph.CalendarScreen,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                ) {
                 composable<CalendarGraph.CalendarScreen> {
+                    ShowBackground()
                     CalendarScreen()
                 }
             }
         }
     }
+}
 
+@Composable
+fun ShowBackground() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.White
+    ) {
+
+    }
 }

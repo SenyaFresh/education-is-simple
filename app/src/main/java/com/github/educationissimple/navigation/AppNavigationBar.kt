@@ -22,7 +22,6 @@ fun AppNavigationBar(
     tabs: ImmutableList<AppTab>
 ) {
     NavigationBar(
-        containerColor = Color.Transparent,
         contentColor = Highlight.Dark
     ) {
         val currentBackStackEntry = navigationController.currentBackStackEntryAsState()
@@ -62,7 +61,8 @@ fun AppNavigationBar(
                     unselectedTextColor = Neutral.Dark.Light,
                     unselectedIconColor = Neutral.Dark.Light,
                     selectedTextColor = Neutral.Dark.Darkest,
-                    selectedIconColor = Highlight.Dark
+                    selectedIconColor = Highlight.Dark,
+                    indicatorColor = Color.Transparent
                 )
             )
         }
