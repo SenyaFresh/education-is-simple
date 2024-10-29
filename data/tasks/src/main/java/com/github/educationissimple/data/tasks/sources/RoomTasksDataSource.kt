@@ -90,13 +90,14 @@ class RoomTasksDataSource @Inject constructor(
     }
 
     override suspend fun getCompletedTasks(
+        date: LocalDate?,
         categoryId: Long?,
         searchText: String?,
         sortType: String?
     ): List<TaskDataEntity> {
         return tasksDao.getTasks(
-            startDate = getMinDate(),
-            endDate = getMaxDate(),
+            startDate = date ?: getMinDate(),
+            endDate = date ?: getMaxDate(),
             isCompleted = true,
             categoryId = categoryId,
             searchText = searchText,

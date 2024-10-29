@@ -3,14 +3,10 @@ package com.github.educationissimple.tasks.presentation.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,8 +26,8 @@ import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.dialogs.AddCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.environment.AddFloatingActionButton
+import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskCategoryListItem
-import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 
@@ -68,24 +64,18 @@ fun CategoriesContent(
             }
         }
     ) {
-        Column(
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.semiMedium),
             modifier = Modifier.padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Категории задач:", style = MaterialTheme.typography.titleLarge)
-
-            Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.semiMedium)
-            ) {
-                items(items = categories.unwrap(), key = { category -> category.id }) { category ->
-                    TaskCategoryListItem(
-                        category = category,
-                        onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) },
-                        modifier = Modifier.animateItem()
-                    )
-                }
+            items(items = categories.unwrap(), key = { category -> category.id }) { category ->
+                ActionableListItem(
+                    label = category.name,
+                    onDelete = { onEvent(TasksEvent.DeleteCategory(category.id)) },
+                    modifier = Modifier.animateItem()
+                )
             }
         }
 

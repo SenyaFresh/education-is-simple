@@ -2,10 +2,13 @@ package com.github.educationissimple.tasks.presentation.events
 
 import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
+import java.time.LocalDate
 
 sealed class TasksEvent {
 
     data class ChangeTaskSearchText(val text: String): TasksEvent()
+
+    data class ChangeTaskDate(val date: LocalDate): TasksEvent()
 
     data class CompleteTask(val taskId: Long): TasksEvent()
 

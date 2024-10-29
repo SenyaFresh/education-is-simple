@@ -17,11 +17,24 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import javax.inject.Inject
 
 class AdapterTasksRepository @Inject constructor(
     private val tasksDataRepository: TasksDataRepository
 ) : TasksRepository {
+    override suspend fun changeDate(date: LocalDate) {
+        tasksDataRepository.changeDate(date)
+    }
+
+    override suspend fun getNotCompletedTasksForDate(): Flow<ResultContainer<List<Task>>> {
+        return tasksDataRepository.getNotCompletedTasksForDate().mapToTask()
+    }
+
+    override suspend fun getCompletedTasksForDate(): Flow<ResultContainer<List<Task>>> {
+        return tasksDataRepository.getCompletedTasksForDate().mapToTask()
+    }
+
     override suspend fun getPreviousTasks(): Flow<ResultContainer<List<Task>>> {
         return tasksDataRepository.getPreviousTasks().mapToTask()
     }

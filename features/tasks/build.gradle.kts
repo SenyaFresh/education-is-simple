@@ -45,6 +45,10 @@ android {
 }
 
 dependencies {
+    api(project(":core:presentation"))
+    api(project(":core:common"))
+    api(project(":core:components"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -52,11 +56,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
-
-    api(project(":core:presentation"))
-    api(project(":core:common"))
-    api(project(":core:components"))
-
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)

@@ -6,10 +6,17 @@ import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 interface TasksDataRepository {
 
     suspend fun changeSearchQuery(query: String?)
+
+    suspend fun changeDate(date: LocalDate?)
+
+    suspend fun getNotCompletedTasksForDate() : Flow<ResultContainer<List<TaskDataEntity>>>
+
+    suspend fun getCompletedTasksForDate() : Flow<ResultContainer<List<TaskDataEntity>>>
 
     suspend fun getPreviousTasks() : Flow<ResultContainer<List<TaskDataEntity>>>
 

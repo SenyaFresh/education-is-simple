@@ -5,8 +5,15 @@ import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 interface TasksRepository {
+
+    suspend fun changeDate(date: LocalDate)
+
+    suspend fun getNotCompletedTasksForDate() : Flow<ResultContainer<List<Task>>>
+
+    suspend fun getCompletedTasksForDate() : Flow<ResultContainer<List<Task>>>
 
     suspend fun getPreviousTasks() : Flow<ResultContainer<List<Task>>>
 

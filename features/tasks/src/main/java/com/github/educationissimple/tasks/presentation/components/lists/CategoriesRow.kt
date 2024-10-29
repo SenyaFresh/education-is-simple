@@ -19,8 +19,8 @@ import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskCategoryListItem
-import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -64,10 +64,10 @@ fun CategoriesRow(
         ) { index ->
             val category = displayedCategories[index]
             key(category.id, activeCategoryId) {
-                TaskCategoryListItem(
-                    category = category,
+                ActionableListItem(
+                    label = category.name,
                     isActive = category.id == activeCategoryId,
-                    onCategoryClick = onCategoryClick
+                    onClick = { onCategoryClick(category.id) }
                 )
             }
         }

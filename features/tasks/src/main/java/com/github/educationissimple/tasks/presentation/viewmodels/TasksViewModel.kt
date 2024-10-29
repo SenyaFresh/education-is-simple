@@ -18,6 +18,7 @@ import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 class TasksViewModel @Inject constructor(
@@ -36,6 +37,14 @@ class TasksViewModel @Inject constructor(
     private val _activeCategoryId =
         MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
+
+    private val _notCompletedTasksWithDate =
+        MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
+    val notCompletedTasksWithDate = _notCompletedTasksWithDate.asStateFlow()
+
+    private val _completedTasksWithDate =
+        MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
+    val completedTasksWithDate = _completedTasksWithDate.asStateFlow()
 
     private val _previousTasks =
         MutableStateFlow<ResultContainer<List<Task>>>(ResultContainer.Loading)
@@ -57,6 +66,8 @@ class TasksViewModel @Inject constructor(
     val categories = _categories.asStateFlow()
 
     init {
+        collectNotCompletedTasksWithDate()
+        collectCompletedTasksWithDate()
         collectPreviousTasks()
         collectTodayTasks()
         collectFutureTasks()
@@ -78,6 +89,13 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.AddCategory -> addCategory(event.name)
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
             is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
+            is TasksEvent.ChangeTaskDate -> changeDate(event.date)
+        }
+    }
+
+    private fun changeDate(date: LocalDate) {
+        viewModelScope.launch {
+            getTasksUseCase.changeDate(date)
         }
     }
 
@@ -131,6 +149,22 @@ class TasksViewModel @Inject constructor(
     private fun changeTaskSearchText(text: String) {
         viewModelScope.launch {
             getTasksUseCase.changeTaskSearchText(text)
+        }
+    }
+
+    private fun collectNotCompletedTasksWithDate() {
+        viewModelScope.launch {
+            getTasksUseCase.getNotCompletedTasksForDate().collect {
+                _notCompletedTasksWithDate.value = it
+            }
+        }
+    }
+
+    private fun collectCompletedTasksWithDate() {
+        viewModelScope.launch {
+            getTasksUseCase.getCompletedTasksForDate().collect {
+                _completedTasksWithDate.value = it
+            }
         }
     }
 

@@ -19,6 +19,7 @@ class RoomTasksDataRepository @Inject constructor(
 ) : TasksDataRepository {
 
     private var searchQuery: String? = null
+    private var selectedDate: LocalDate = LocalDate.now()
 
     private var currentCategoryId: Long?
         get() = preferencesDataSource.getSelectedCategoryId()
@@ -42,6 +43,24 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun getSelectedSortType(): Flow<ResultContainer<String?>> {
         return selectedSortTypeLoader.listen()
+    }
+
+    private val notCompletedTasksForDateLoader = lazyFlowLoaderFactory.create {
+        tasksDataSource.getTasksByDate(
+            date = selectedDate,
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
+        )
+    }
+
+    private val completedTasksForDateLoader = lazyFlowLoaderFactory.create {
+        tasksDataSource.getCompletedTasks(
+            date = selectedDate,
+            categoryId = currentCategoryId,
+            searchText = searchQuery,
+            sortType = currentSortType
+        )
     }
 
     private val previousTasksLoader = lazyFlowLoaderFactory.create {
@@ -85,7 +104,20 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun changeSearchQuery(query: String?) {
         searchQuery = query
-        updateSources(silently = false)
+        updateSources()
+    }
+
+    override suspend fun changeDate(date: LocalDate?) {
+        selectedDate = date ?: LocalDate.now()
+        updateSources()
+    }
+
+    override suspend fun getCompletedTasksForDate(): Flow<ResultContainer<List<TaskDataEntity>>> {
+        return completedTasksForDateLoader.listen()
+    }
+
+    override suspend fun getNotCompletedTasksForDate(): Flow<ResultContainer<List<TaskDataEntity>>> {
+        return notCompletedTasksForDateLoader.listen()
     }
 
     override suspend fun getPreviousTasks(): Flow<ResultContainer<List<TaskDataEntity>>> {
@@ -148,6 +180,28 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     private fun updateSources(silently: Boolean = false) {
+        notCompletedTasksForDateLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getTasksByDate(
+                    date = selectedDate,
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
+                )
+            },
+            silently = silently
+        )
+        completedTasksForDateLoader.newAsyncLoad(
+            valueLoader = {
+                tasksDataSource.getCompletedTasks(
+                    date = selectedDate,
+                    categoryId = currentCategoryId,
+                    searchText = searchQuery,
+                    sortType = currentSortType
+                )
+            },
+            silently = silently
+        )
         previousTasksLoader.newAsyncLoad(
             valueLoader = {
                 tasksDataSource.getTasksBeforeDate(

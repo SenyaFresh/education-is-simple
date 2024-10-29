@@ -35,13 +35,12 @@ import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.presentation.shimmerEffect
 import com.github.educationissimple.tasks.R
-import com.github.educationissimple.tasks.domain.entities.TaskCategory
 
 @Composable
-fun TaskCategoryListItem(
-    category: TaskCategory,
+fun ActionableListItem(
+    label: String,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Long) -> Unit = { },
+    onClick: () -> Unit = { },
     onDelete: (() -> Unit)? = null,
     isActive: Boolean = false,
 ) {
@@ -51,7 +50,7 @@ fun TaskCategoryListItem(
         }
     }
 
-    val backgroundColor by remember {
+    val backgroundColor by remember(isActive) {
         derivedStateOf {
             if (isActive) Highlight.Darkest else Highlight.Lightest
         }
@@ -60,7 +59,7 @@ fun TaskCategoryListItem(
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(18.dp),
-        onClick = { onCategoryClick(category.id) },
+        onClick = onClick,
         modifier = modifier,
     ) {
         Row(
@@ -68,7 +67,7 @@ fun TaskCategoryListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = category.name.uppercase(),
+                text = label.uppercase(),
                 color = textColor,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
@@ -125,10 +124,10 @@ fun TaskCategoryCardPreview() {
         modifier = Modifier.padding(20.dp)
     ) {
         (1..2).forEach {
-            TaskCategoryListItem(
-                category = TaskCategory(it.toLong(), "Category $it"),
+            ActionableListItem(
+                label = "Category $it",
                 isActive = it % 2 == 0,
-                onCategoryClick = { }
+                onClick = { }
             )
         }
     }
@@ -156,8 +155,8 @@ fun TaskCategoryCardWithDeletePreview() {
         modifier = Modifier.padding(20.dp)
     ) {
         (1..3).forEach {
-            TaskCategoryListItem(
-                category = TaskCategory(it.toLong(), "Category $it"),
+            ActionableListItem(
+                label = "Category $it",
                 onDelete = { },
             )
         }

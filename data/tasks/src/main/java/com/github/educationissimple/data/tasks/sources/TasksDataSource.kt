@@ -36,9 +36,10 @@ interface TasksDataSource {
     ): List<TaskDataEntity>
 
     suspend fun getCompletedTasks(
+        date: LocalDate? = null,
         categoryId: Long? = null,
         searchText: String? = null,
-        sortType: String? = null
+        sortType: String? = null,
     ): List<TaskDataEntity>
 
     suspend fun getCategories(): List<TaskCategoryDataEntity>

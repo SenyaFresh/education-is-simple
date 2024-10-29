@@ -40,7 +40,7 @@ import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
-import com.github.educationissimple.tasks.presentation.components.items.TaskCategoryListItem
+import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 
 @Composable
 fun PopUpTextField(
@@ -132,9 +132,9 @@ fun PopUpTextFieldContent(
         )
         Row {
             // Category selection.
-            TaskCategoryListItem(
-                category = selectedCategory,
-                onCategoryClick = { showCategoriesDialog = true },
+            ActionableListItem(
+                label = selectedCategory.name,
+                onClick = { showCategoriesDialog = true },
                 modifier = Modifier.sizeIn(maxWidth = 150.dp)
             )
 
