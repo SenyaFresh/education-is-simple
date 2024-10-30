@@ -42,6 +42,7 @@ import com.github.educationissimple.tasks.presentation.components.lists.AllTasks
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
+import java.time.LocalDate
 
 @Composable
 fun TasksScreen(
@@ -195,12 +196,13 @@ fun TasksContent(
         PopUpTextField(
             text = taskText,
             onValueChange = { taskText = it },
-            onAddClick = { selectedCategoryId ->
+            onAddClick = { selectedCategoryId, selectedDate ->
                 onTasksEvent(
                     TasksEvent.AddTask(
                         Task(
                             text = taskText,
-                            categoryId = if (selectedCategoryId == NO_CATEGORY_ID) null else selectedCategoryId
+                            categoryId = if (selectedCategoryId == NO_CATEGORY_ID) null else selectedCategoryId,
+                            date = selectedDate
                         )
                     )
                 )
@@ -223,7 +225,7 @@ fun TasksContentPreview() {
         Task(
             id = it.toLong(),
             text = "Задача $it",
-            date = if (it % 2 == 0) "10-08" else null,
+            date = if (it % 2 == 0) LocalDate.now() else null,
             priority = Task.Priority.fromValue(it)
         )
     }

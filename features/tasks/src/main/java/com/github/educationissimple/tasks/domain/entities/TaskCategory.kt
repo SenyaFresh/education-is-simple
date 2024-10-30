@@ -1,7 +1,9 @@
 package com.github.educationissimple.tasks.domain.entities
 
+typealias TaskCategoryId = Long
+
 data class TaskCategory(
-    val id: Long,
+    val id: TaskCategoryId,
     val name: String
 ) {
     companion object {

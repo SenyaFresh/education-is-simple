@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
+import java.time.LocalDate
 
 
 fun LazyListScope.tasksSubcolumn(
@@ -96,7 +97,7 @@ fun TasksColumnPreview() {
                 Task(
                     id = it.toLong(),
                     text = "Задача $it",
-                    date = if (it % 2 == 0) "10-08" else null,
+                    date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it)
                 )
             },
@@ -111,7 +112,7 @@ fun TasksColumnPreview() {
                     id = it.toLong(),
                     text = "Задача $it",
                     isCompleted = true,
-                    date = if (it % 2 == 0) "10-08" else null,
+                    date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it - 5)
                 )
             },

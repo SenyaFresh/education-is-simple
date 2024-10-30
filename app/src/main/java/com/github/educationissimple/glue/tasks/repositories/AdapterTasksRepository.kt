@@ -64,7 +64,8 @@ class AdapterTasksRepository @Inject constructor(
             NewTaskTuple(
                 id = task.id,
                 text = task.text,
-                categoryId = task.categoryId
+                categoryId = task.categoryId,
+                date = task.date ?: LocalDate.now(),
             )
         )
     }

@@ -1,13 +1,16 @@
 package com.github.educationissimple.tasks.domain.entities
 
+import java.time.LocalDate
+
+typealias TaskId = Long
 
 data class Task(
-    val id: Long = 0,
+    val id: TaskId = 0,
     val text: String,
     val isCompleted: Boolean = false,
-    val categoryId: Long? = null,
+    val categoryId: TaskCategoryId? = null,
     val priority: Priority = Priority.NoPriority,
-    val date: String? = null
+    val date: LocalDate? = null
 ) {
 
     sealed class Priority(val value: Int) {

@@ -5,6 +5,7 @@ import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.tasks.domain.entities.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 
 fun TaskDataEntity.mapToTask(): Task {
     return Task(
@@ -13,7 +14,7 @@ fun TaskDataEntity.mapToTask(): Task {
         isCompleted = isCompleted,
         categoryId = categoryId,
         priority = Task.Priority.fromValue(priority),
-        date = date.toTaskDate()
+        date = date
     )
 }
 
@@ -24,7 +25,7 @@ fun Task.mapToTaskDataEntity(): TaskDataEntity {
         isCompleted = isCompleted,
         categoryId = categoryId,
         priority = priority.value,
-        date = parseTaskDate(date)
+        date = date ?: LocalDate.now()
     )
 }
 

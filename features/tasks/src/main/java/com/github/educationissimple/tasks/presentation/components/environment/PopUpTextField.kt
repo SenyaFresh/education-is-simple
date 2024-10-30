@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +42,17 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.domain.entities.TaskCategoryId
+import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
+import java.time.LocalDate
 
 @Composable
 fun PopUpTextField(
     text: String,
     onValueChange: (String) -> Unit,
-    onAddClick: (Long) -> Unit,
+    onAddClick: (TaskCategoryId, LocalDate) -> Unit,
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester,
@@ -79,7 +85,7 @@ fun PopUpTextField(
 fun PopUpTextFieldContent(
     text: String,
     onValueChange: (String) -> Unit,
-    onAddClick: (Long) -> Unit,
+    onAddClick: (TaskCategoryId, LocalDate) -> Unit,
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester
@@ -93,7 +99,10 @@ fun PopUpTextFieldContent(
             )
         )
     }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
     var showCategoriesDialog by remember { mutableStateOf(false) }
+    var showDateDialog by remember { mutableStateOf(false) }
 
     if (showCategoriesDialog) {
         SelectCategoryDialog(
@@ -107,6 +116,18 @@ fun PopUpTextFieldContent(
             },
             onAddNewCategory = onAddNewCategory,
             initialActiveCategoryId = selectedCategory.id
+        )
+    }
+
+    if (showDateDialog) {
+        ChangeDateDialog(
+            onConfirm = {
+                selectedDate = it
+                showDateDialog = false
+            },
+            onDismiss = {
+                showDateDialog = false
+            }
         )
     }
 
@@ -125,6 +146,7 @@ fun PopUpTextFieldContent(
         DefaultTextField(
             text = text,
             onValueChange = onValueChange,
+            label = { Text(stringResource(R.string.input_task_here)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding()
@@ -138,11 +160,22 @@ fun PopUpTextFieldContent(
                 modifier = Modifier.sizeIn(maxWidth = 150.dp)
             )
 
+            Spacer(modifier = Modifier.width(LocalSpacing.current.medium))
+
+            DefaultIconButton(
+                onClick = { showDateDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = null
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
             // Add button.
             DefaultIconButton(
-                onClick = { onAddClick(selectedCategory.id) },
+                onClick = { onAddClick(selectedCategory.id, selectedDate) },
                 enabled = text.isNotBlank()
             ) {
                 Icon(
@@ -161,7 +194,7 @@ fun PopUpTextFieldPreview() {
     PopUpTextField(
         text = "Задача",
         onValueChange = {},
-        onAddClick = {},
+        onAddClick = { _, _ -> },
         onAddNewCategory = {},
         focusRequester = FocusRequester(),
         onDismiss = { },

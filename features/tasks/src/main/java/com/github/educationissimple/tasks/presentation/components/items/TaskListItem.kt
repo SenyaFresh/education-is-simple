@@ -61,9 +61,11 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.presentation.shimmerEffect
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.utils.toTaskDate
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 @Composable
@@ -263,7 +265,7 @@ private fun TaskContent(
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(textDecoration = if (isTaskCompleted) TextDecoration.LineThrough else null),
                 )
-                task.date?.let {
+                task.date?.toTaskDate()?.let {
                     Text(
                         text = it,
                         fontSize = 12.sp,
@@ -333,7 +335,7 @@ fun TaskCardPreview() {
                     id = it.toLong(),
                     text = "Task $it",
                     isCompleted = it > 5,
-                    date = if (it % 2 == 0) "10-08" else null,
+                    date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it % 3)
                 ),
                 onTaskCompletionChange = { _ -> },

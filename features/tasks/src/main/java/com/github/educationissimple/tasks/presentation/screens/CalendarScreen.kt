@@ -146,7 +146,7 @@ fun CalendarContentPreview() {
             id = it.toLong(),
             text = "Task $it",
             priority = Task.Priority.fromValue(it % 3),
-            date = "10-08"
+            date = LocalDate.now()
         )
     }
 
