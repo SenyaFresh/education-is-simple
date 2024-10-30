@@ -70,7 +70,7 @@ fun SelectCategoryDialog(
                 activeCategoryId = activeCategoryId,
                 firstCategoryLabel = stringResource(R.string.no_category),
                 modifier = Modifier
-                    .heightIn(max = 160.dp)
+                    .heightIn(max = 120.dp)
                     .verticalScroll(rememberScrollState())
             )
 
