@@ -37,7 +37,7 @@ fun TasksListActionsDropdownMenu(
     IconButton(
         enabled = enabled,
         onClick = { showDropdownMenu = true },
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Light),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Darkest),
         modifier = modifier
     ) {
         Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
