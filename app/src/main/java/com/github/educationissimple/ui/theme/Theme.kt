@@ -15,10 +15,10 @@ private val LightColorScheme = lightColorScheme(
     secondary = Highlight.Medium,
     tertiary = Highlight.Light,
     background = Neutral.Light.Lightest,
-    surface = Neutral.Light.Lightest,
     onPrimary = Neutral.Light.Lightest,
     onSecondary = Neutral.Light.Lightest,
     onTertiary = Neutral.Light.Lightest,
+//    surface = Neutral.Light.Lightest,
 
     /* Other default colors to override
     onBackground = Color(0xFF1C1B1F),

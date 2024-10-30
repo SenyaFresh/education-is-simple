@@ -22,7 +22,7 @@ fun AppNavigationBar(
     tabs: ImmutableList<AppTab>
 ) {
     NavigationBar(
-        contentColor = Highlight.Dark
+        containerColor = Neutral.Light.Lightest,
     ) {
         val currentBackStackEntry = navigationController.currentBackStackEntryAsState()
         val closestNavGraph = currentBackStackEntry

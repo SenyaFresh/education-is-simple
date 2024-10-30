@@ -1,54 +1,46 @@
 package com.github.educationissimple.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.educationissimple.R
+import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.CategoriesScreen
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
 
 @Composable
 fun AppNavigation() {
-
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
-    val titleRes: Int?
-    val topBarVisibility: Boolean
-    when (currentBackStackEntry.value.routeClass()) {
-        TasksGraph.CategoriesScreen::class -> {
-            titleRes = R.string.manage_categories
-            topBarVisibility = true
-        }
-
-        else -> {
-            titleRes = null
-            topBarVisibility = false
-        }
+    val titleRes: Int? = when (currentBackStackEntry.value.routeClass()) {
+        TasksGraph.CategoriesScreen::class -> R.string.manage_categories
+        TasksGraph.TasksScreen::class -> R.string.tasks
+        CalendarGraph.CalendarScreen::class -> R.string.calendar
+        else -> null
     }
 
     Scaffold(
         topBar = {
             AppTopBar(
-                visible = topBarVisibility,
                 titleRes = titleRes,
-                navigationUpAction = if (navController.previousBackStackEntry == null) {
-                    NavigateUpAction.None
+                leftIconAction = if (navController.previousBackStackEntry == null) {
+                    LeftIconAction.None
                 } else {
-                    NavigateUpAction.Visible { navController.popBackStack() }
+                    LeftIconAction.Visible(Icons.AutoMirrored.Filled.KeyboardArrowLeft) { navController.popBackStack() }
                 }
             )
         },
@@ -62,36 +54,14 @@ fun AppNavigation() {
         NavHost(
             navController = navController,
             startDestination = TasksGraph,
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start,
-                    tween(400)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start,
-                    tween(400)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(400)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(400)
-                )
-            },
+            enterTransition = { fadeIn(tween(200)) },
+            exitTransition = { fadeOut(tween(200)) },
+            popEnterTransition = { fadeIn(tween(200)) },
+            popExitTransition = { fadeOut(tween(200)) },
             modifier = Modifier.padding(padding)
         ) {
             navigation<TasksGraph>(
-                startDestination = TasksGraph.TasksScreen,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
+                startDestination = TasksGraph.TasksScreen
             ) {
                 composable<TasksGraph.TasksScreen> {
                     ShowBackground()
@@ -103,10 +73,8 @@ fun AppNavigation() {
                 }
             }
             navigation<CalendarGraph>(
-                startDestination = CalendarGraph.CalendarScreen,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                ) {
+                startDestination = CalendarGraph.CalendarScreen
+            ) {
                 composable<CalendarGraph.CalendarScreen> {
                     ShowBackground()
                     CalendarScreen()
@@ -120,7 +88,7 @@ fun AppNavigation() {
 fun ShowBackground() {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color.White
+        color = Neutral.Light.Lightest
     ) {
 
     }
