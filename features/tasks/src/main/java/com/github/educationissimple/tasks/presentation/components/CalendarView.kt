@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 import com.github.educationissimple.tasks.presentation.components.items.DayIcon
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Month
 
@@ -56,8 +58,6 @@ fun CalendarView(
     selectedDate: LocalDate = LocalDate.now(),
     onDaySelect: (LocalDate) -> Unit = { }
 ) {
-
-
     var calendarState by remember { mutableStateOf(CalendarState.DAY_SELECTION) }
     var selectedDay by remember { mutableStateOf(selectedDate) }
 
@@ -205,10 +205,10 @@ fun CalendarDaySelection(date: LocalDate, onDaySelect: (LocalDate) -> Unit) {
 fun CalendarMonthSelection(
     selectedMonth: Month, onMonthSelect: (Month) -> Unit, modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
     val pagerState =
         rememberPagerState(initialPage = (Int.MAX_VALUE / 2 - Int.MAX_VALUE / 2 % 12) + selectedMonth.ordinal,
             pageCount = { Int.MAX_VALUE })
-
     var currentPage by remember { mutableIntStateOf(pagerState.currentPage) }
 
     LaunchedEffect(pagerState) {
@@ -222,12 +222,13 @@ fun CalendarMonthSelection(
         state = pagerState,
         pageSize = PageSize.Fixed(120.dp),
         snapPosition = SnapPosition.Center,
-        key = { page -> Pair(Month.entries[page % 12], selectedMonth) },
+        key = { page -> Pair(page, selectedMonth) },
         modifier = modifier
     ) { page ->
         Box(modifier = Modifier.fillMaxWidth()) {
             ActionableListItem(
                 label = Month.entries[page % 12].name,
+                onClick = { scope.launch { pagerState.scrollToPage(page) } },
                 modifier = Modifier
                     .align(Alignment.Center)
                     .scale(0.9f),
@@ -235,13 +236,13 @@ fun CalendarMonthSelection(
             )
         }
     }
-
 }
 
 @Composable
 fun CalendarYearSelection(
     selectedYear: Int, onYearSelect: (Int) -> Unit, modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = selectedYear, pageCount = { Int.MAX_VALUE })
     var currentPage by remember { mutableIntStateOf(pagerState.currentPage) }
 
@@ -262,6 +263,7 @@ fun CalendarYearSelection(
         Box(modifier = Modifier.fillMaxWidth()) {
             ActionableListItem(
                 label = page.toString(),
+                onClick = { scope.launch { pagerState.scrollToPage(page) } },
                 modifier = Modifier
                     .align(Alignment.Center)
                     .scale(0.9f),
