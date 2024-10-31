@@ -58,8 +58,9 @@ import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
+import com.github.educationissimple.components.composables.ActionIcon
+import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
-import com.github.educationissimple.presentation.shimmerEffect
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.utils.toTaskDate
@@ -191,7 +192,7 @@ private fun BoxScope.TaskActions(
             .onSizeChanged { size -> onSizeChanged(size) },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TaskActionIcon(
+        ActionIcon(
             imageVector = Icons.Default.DateRange,
             text = stringResource(R.string.date),
             contentColor = Neutral.Light.Lightest,
@@ -200,7 +201,7 @@ private fun BoxScope.TaskActions(
             onClick = onDateClick
         )
 
-        TaskActionIcon(
+        ActionIcon(
             imageVector = Icons.Default.Star,
             text = stringResource(R.string.priority),
             contentColor = Neutral.Light.Lightest,
@@ -212,7 +213,7 @@ private fun BoxScope.TaskActions(
             }
         )
 
-        TaskActionIcon(
+        ActionIcon(
             imageVector = Icons.Default.Delete,
             text = stringResource(R.string.delete),
             contentColor = Neutral.Light.Lightest,

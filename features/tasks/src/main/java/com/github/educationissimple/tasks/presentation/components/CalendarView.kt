@@ -45,8 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
-import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 import com.github.educationissimple.tasks.presentation.components.items.DayIcon
 import kotlinx.coroutines.launch
 import java.time.LocalDate

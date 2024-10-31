@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components.items
+package com.github.educationissimple.components.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TaskActionIcon(
+fun ActionIcon(
     imageVector: ImageVector,
     text: String,
     contentColor: Color,
@@ -50,8 +50,8 @@ fun TaskActionIcon(
 
 @Preview(showSystemUi = true)
 @Composable
-fun TaskActionIconPreview() {
-    TaskActionIcon(
+fun ActionIconPreview() {
+    ActionIcon(
         imageVector = Icons.Default.Delete,
         text = "Удалить",
         contentColor = Color.White,

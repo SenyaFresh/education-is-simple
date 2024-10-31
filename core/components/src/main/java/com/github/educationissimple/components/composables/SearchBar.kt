@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components.items
+package com.github.educationissimple.components.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,16 +13,15 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.tasks.R
 
 @Composable
 fun SearchBar(
     text: String,
     onValueChange: (String) -> Unit,
     onCancelClick: () -> Unit,
+    label: String,
     modifier: Modifier = Modifier
 ) {
 
@@ -41,7 +40,7 @@ fun SearchBar(
                 }
             )
         },
-        label = { Text(stringResource(R.string.search_task)) },
+        label = { Text(label) },
         shape = RoundedCornerShape(100),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Neutral.Light.Light,
@@ -57,5 +56,5 @@ fun SearchBar(
 @Preview
 @Composable
 fun SearchBarPreview() {
-    SearchBar(text = "", onValueChange = {}, onCancelClick = {})
+    SearchBar(text = "", onValueChange = {}, onCancelClick = {}, label = "Поиск")
 }

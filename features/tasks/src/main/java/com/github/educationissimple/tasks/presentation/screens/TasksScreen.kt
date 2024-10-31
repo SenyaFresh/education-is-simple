@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.composables.SearchBar
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
@@ -37,7 +38,6 @@ import com.github.educationissimple.tasks.presentation.components.dialogs.TasksS
 import com.github.educationissimple.tasks.presentation.components.environment.AddFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
-import com.github.educationissimple.tasks.presentation.components.items.SearchBar
 import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
@@ -132,6 +132,7 @@ fun TasksContent(
                         showSearchBar = false
                         searchQuery = ""
                     },
+                    label = stringResource(R.string.search_task),
                     modifier = Modifier.padding(LocalSpacing.current.small)
                 )
             } else {

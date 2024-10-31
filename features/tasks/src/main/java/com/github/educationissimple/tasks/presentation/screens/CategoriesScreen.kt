@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.composables.ActionableListItem
+import com.github.educationissimple.components.composables.LoadingTaskCategoryListItem
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.di.TasksDiContainer
@@ -26,8 +28,6 @@ import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.dialogs.AddCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.environment.AddFloatingActionButton
-import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
-import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskCategoryListItem
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 

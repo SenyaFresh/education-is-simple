@@ -38,6 +38,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.ActionableListItem
 import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -49,7 +50,6 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategoryId
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
-import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
 import com.github.educationissimple.tasks.presentation.utils.toColor
 import java.time.LocalDate
 

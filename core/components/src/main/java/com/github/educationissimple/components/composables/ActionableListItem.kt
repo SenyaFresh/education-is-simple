@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components.items
+package com.github.educationissimple.components.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,12 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.educationissimple.components.R
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
-import com.github.educationissimple.presentation.locals.LocalSpacing
-import com.github.educationissimple.presentation.shimmerEffect
-import com.github.educationissimple.tasks.R
 
 @Composable
 fun ActionableListItem(
@@ -73,14 +71,14 @@ fun ActionableListItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(
-                    horizontal = LocalSpacing.current.medium,
-                    vertical = LocalSpacing.current.small
+                    horizontal = 16.dp,
+                    vertical = 8.dp
                 )
             )
 
             onDelete?.let {
                 Spacer(modifier = Modifier.weight(1f))
-                TaskActionIcon(
+                ActionIcon(
                     imageVector = Icons.Default.Delete,
                     text = stringResource(R.string.delete),
                     contentColor = Neutral.Light.Lightest,
@@ -118,7 +116,7 @@ fun LoadingTaskCategoryListItem(withDelete: Boolean = false) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun TaskCategoryCardPreview() {
+fun ActionableListItemPreview() {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
@@ -135,7 +133,7 @@ fun TaskCategoryCardPreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun LoadingTaskCategoryCardPreview() {
+fun LoadingActionableListItemPreview() {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
@@ -149,7 +147,7 @@ fun LoadingTaskCategoryCardPreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun TaskCategoryCardWithDeletePreview() {
+fun ActionableListItemWithDeletePreview() {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
@@ -165,7 +163,7 @@ fun TaskCategoryCardWithDeletePreview() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun LoadingTaskCategoryCardWithDeletePreview() {
+fun LoadingActionableListItemWithDeletePreview() {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(20.dp)
