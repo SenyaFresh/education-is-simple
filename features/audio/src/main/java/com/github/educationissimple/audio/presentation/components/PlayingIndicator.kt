@@ -30,10 +30,9 @@ fun PlayingIndicator(isPlaying: Boolean, modifier: Modifier = Modifier) {
 
     Canvas(modifier = modifier
         .size(100.dp)
-        .scale(sizeAnimation.value), onDraw = {
+        .scale(if (isPlaying) sizeAnimation.value else 1f), onDraw = {
         drawCircle(color = Support.Warning.Medium)
     })
-
 }
 
 @Preview
