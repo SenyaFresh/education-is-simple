@@ -68,7 +68,7 @@ fun CurrentAudioFloatingItem(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                onClick = onPauseClick,
+                onClick = if (isPlaying) onPauseClick else onPlayClick,
                 colors = IconButtonDefaults.iconButtonColors(contentColor = Highlight.Darkest)
             ) {
                 if (isPlaying) {
