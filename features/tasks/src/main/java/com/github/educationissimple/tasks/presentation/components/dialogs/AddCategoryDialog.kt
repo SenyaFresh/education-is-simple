@@ -48,7 +48,7 @@ fun AddCategoryDialog(
             DefaultTextField(
                 text = newCategoryText,
                 onValueChange = { newCategoryText = it },
-                label = { Text(stringResource(R.string.input_new_category_here)) }
+                placeholder = { Text(stringResource(R.string.input_new_category_here)) }
             )
 
             // Cancel and Confirm buttons.

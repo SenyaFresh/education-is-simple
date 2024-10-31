@@ -78,7 +78,7 @@ fun SelectCategoryDialog(
             DefaultTextField(
                 text = newCategoryText,
                 onValueChange = { newCategoryText = it },
-                label = { Text(stringResource(R.string.input_new_category_here)) },
+                placeholder = { Text(stringResource(R.string.input_new_category_here)) },
                 trailingIcon = {
                     DefaultIconButton(onClick = {
                         if (newCategoryText.isNotBlank()) {

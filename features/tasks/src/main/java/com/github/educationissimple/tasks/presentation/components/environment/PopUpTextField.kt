@@ -163,7 +163,7 @@ fun PopUpTextFieldContent(
         DefaultTextField(
             text = text,
             onValueChange = onValueChange,
-            label = { Text(stringResource(R.string.input_task_here)) },
+            placeholder = { Text(stringResource(R.string.input_task_here)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding()
