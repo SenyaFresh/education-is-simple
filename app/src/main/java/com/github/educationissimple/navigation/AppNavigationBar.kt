@@ -59,7 +59,7 @@ fun AppNavigationBar(
                 },
                 colors = NavigationBarItemDefaults.colors(
                     unselectedTextColor = Neutral.Dark.Light,
-                    unselectedIconColor = Neutral.Dark.Light,
+                    unselectedIconColor = Neutral.Light.Dark,
                     selectedTextColor = Neutral.Dark.Darkest,
                     selectedIconColor = Highlight.Dark,
                     indicatorColor = Color.Transparent
