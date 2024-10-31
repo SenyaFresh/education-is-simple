@@ -7,5 +7,6 @@ data class NewTaskTuple(
     val id: Long,
     val text: String,
     @ColumnInfo(name = "category_id") val categoryId: Long? = null,
+    val priority: Int = 0,
     val date: LocalDate = LocalDate.now()
 )

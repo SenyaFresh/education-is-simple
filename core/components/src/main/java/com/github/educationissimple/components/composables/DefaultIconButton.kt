@@ -1,6 +1,7 @@
 package com.github.educationissimple.components.composables
 
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,10 +13,11 @@ fun DefaultIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: IconButtonColors? = null,
     content: @Composable () -> Unit
 ) = IconButton(
     onClick = onClick,
-    colors = IconButtonDefaults.iconButtonColors(
+    colors = colors ?: IconButtonDefaults.iconButtonColors(
         contentColor = Neutral.Light.Light,
         containerColor = Highlight.Darkest,
         disabledContentColor = Neutral.Light.Light,

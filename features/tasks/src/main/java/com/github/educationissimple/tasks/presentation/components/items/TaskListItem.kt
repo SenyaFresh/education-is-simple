@@ -63,6 +63,7 @@ import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.utils.toTaskDate
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
+import com.github.educationissimple.tasks.presentation.utils.toColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -102,7 +103,7 @@ fun TaskListItem(
     Card(
         modifier = modifier.border(
             width = 1.dp,
-            color = getColorByPriority(task.priority),
+            color = task.priority.toColor(),
             shape = CardDefaults.shape
         )
     ) {
@@ -165,12 +166,6 @@ private fun BoxScope.TaskActions(
     onPriorityClick: () -> Unit,
     taskPriority: Task.Priority
 ) {
-    val priorityColor = when (taskPriority) {
-        Task.Priority.TopPriority -> Support.Warning.Dark
-        Task.Priority.SecondaryPriority -> Support.Warning.Medium
-        Task.Priority.NoPriority -> Neutral.Dark.Lightest
-    }
-
     Row(
         modifier = Modifier
             .align(Alignment.CenterEnd)
@@ -181,7 +176,7 @@ private fun BoxScope.TaskActions(
             imageVector = Icons.Default.Star,
             text = stringResource(R.string.priority),
             contentColor = Neutral.Light.Lightest,
-            containerColor = priorityColor,
+            containerColor = taskPriority.toColor(),
             modifier = Modifier.fillMaxHeight(),
             onClick =
             {
@@ -209,7 +204,7 @@ private fun TaskContent(
     contextMenuWidth: Float,
     scope: CoroutineScope
 ) {
-    val priorityColor = getColorByPriority(task.priority)
+    val priorityColor = task.priority.toColor()
 
     Surface(
         color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
@@ -275,12 +270,6 @@ private fun TaskContent(
             }
         }
     }
-}
-
-private fun getColorByPriority(priority: Task.Priority) = when (priority) {
-    Task.Priority.TopPriority -> Support.Warning.Dark
-    Task.Priority.SecondaryPriority -> Support.Warning.Medium
-    Task.Priority.NoPriority -> Neutral.Dark.Lightest
 }
 
 @Composable

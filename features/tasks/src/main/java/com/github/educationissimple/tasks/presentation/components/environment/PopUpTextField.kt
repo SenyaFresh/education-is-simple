@@ -1,6 +1,7 @@
 package com.github.educationissimple.tasks.presentation.components.environment
 
 import android.view.Gravity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,14 +10,15 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,19 +42,22 @@ import com.github.educationissimple.components.composables.DefaultIconButton
 import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
+import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.domain.entities.TaskCategoryId
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
+import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import com.github.educationissimple.tasks.presentation.components.items.ActionableListItem
+import com.github.educationissimple.tasks.presentation.utils.toColor
 import java.time.LocalDate
 
 @Composable
 fun PopUpTextField(
     text: String,
     onValueChange: (String) -> Unit,
-    onAddClick: (TaskCategoryId, LocalDate) -> Unit,
+    onAddClick: (TaskCategoryId, LocalDate, Task.Priority) -> Unit,
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester,
@@ -85,7 +90,7 @@ fun PopUpTextField(
 fun PopUpTextFieldContent(
     text: String,
     onValueChange: (String) -> Unit,
-    onAddClick: (TaskCategoryId, LocalDate) -> Unit,
+    onAddClick: (TaskCategoryId, LocalDate, Task.Priority) -> Unit,
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester
@@ -100,9 +105,11 @@ fun PopUpTextFieldContent(
         )
     }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var selectedPriority: Task.Priority by remember { mutableStateOf(Task.Priority.NoPriority) }
 
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var showDateDialog by remember { mutableStateOf(false) }
+    var showPriorityDialog by remember { mutableStateOf(false) }
 
     if (showCategoriesDialog) {
         SelectCategoryDialog(
@@ -131,6 +138,16 @@ fun PopUpTextFieldContent(
         )
     }
 
+    if (showPriorityDialog) {
+        TaskPriorityDialog(
+            priority = selectedPriority,
+            onDismiss = { showPriorityDialog = false },
+            onPriorityChange = {
+                selectedPriority = it
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -152,15 +169,15 @@ fun PopUpTextFieldContent(
                 .imePadding()
                 .focusRequester(focusRequester)
         )
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+        ) {
             // Category selection.
             ActionableListItem(
                 label = selectedCategory.name,
                 onClick = { showCategoriesDialog = true },
                 modifier = Modifier.sizeIn(maxWidth = 150.dp)
             )
-
-            Spacer(modifier = Modifier.width(LocalSpacing.current.medium))
 
             DefaultIconButton(
                 onClick = { showDateDialog = true }
@@ -171,11 +188,24 @@ fun PopUpTextFieldContent(
                 )
             }
 
+            DefaultIconButton(
+                onClick = { showPriorityDialog = true },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = selectedPriority.toColor(),
+                    contentColor = Neutral.Light.Lightest
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
             // Add button.
             DefaultIconButton(
-                onClick = { onAddClick(selectedCategory.id, selectedDate) },
+                onClick = { onAddClick(selectedCategory.id, selectedDate, selectedPriority) },
                 enabled = text.isNotBlank()
             ) {
                 Icon(
@@ -194,7 +224,7 @@ fun PopUpTextFieldPreview() {
     PopUpTextField(
         text = "Задача",
         onValueChange = {},
-        onAddClick = { _, _ -> },
+        onAddClick = { _, _, _ -> },
         onAddNewCategory = {},
         focusRequester = FocusRequester(),
         onDismiss = { },

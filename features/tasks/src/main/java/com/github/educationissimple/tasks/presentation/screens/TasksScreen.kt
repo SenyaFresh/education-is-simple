@@ -196,13 +196,14 @@ fun TasksContent(
         PopUpTextField(
             text = taskText,
             onValueChange = { taskText = it },
-            onAddClick = { selectedCategoryId, selectedDate ->
+            onAddClick = { selectedCategoryId, selectedDate, taskPriority ->
                 onTasksEvent(
                     TasksEvent.AddTask(
                         Task(
                             text = taskText,
                             categoryId = if (selectedCategoryId == NO_CATEGORY_ID) null else selectedCategoryId,
-                            date = selectedDate
+                            date = selectedDate,
+                            priority = taskPriority
                         )
                     )
                 )

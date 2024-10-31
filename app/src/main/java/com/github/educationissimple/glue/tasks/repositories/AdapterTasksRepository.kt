@@ -66,6 +66,7 @@ class AdapterTasksRepository @Inject constructor(
                 text = task.text,
                 categoryId = task.categoryId,
                 date = task.date ?: LocalDate.now(),
+                priority = task.priority.value
             )
         )
     }
