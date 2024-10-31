@@ -12,7 +12,7 @@ interface TasksDataRepository {
 
     suspend fun changeSearchQuery(query: String?)
 
-    suspend fun changeDate(date: LocalDate?)
+    suspend fun changeSelectionDate(date: LocalDate?)
 
     suspend fun getNotCompletedTasksForDate() : Flow<ResultContainer<List<TaskDataEntity>>>
 

@@ -27,9 +27,10 @@ import java.time.LocalDate
 fun ChangeDateDialog(
     onConfirm: (LocalDate) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    initialDate: LocalDate = LocalDate.now()
 ) {
-    var date by remember { mutableStateOf(LocalDate.now()) }
+    var date by remember { mutableStateOf(initialDate) }
 
     DefaultDialog(
         onDismiss = onDismiss,

@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepository) {
 
-    suspend fun changeDate(date: LocalDate) {
-        tasksRepository.changeDate(date)
+    suspend fun changeSelectionDate(date: LocalDate) {
+        tasksRepository.changeSelectionDate(date)
     }
 
     suspend fun getNotCompletedTasksForDate(): Flow<ResultContainer<List<Task>>> {

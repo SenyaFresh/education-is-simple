@@ -30,6 +30,7 @@ fun LazyListScope.tasksSubcolumn(
     onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit,
     onTaskPriorityChange: (Long, Task.Priority) -> Unit,
+    onTaskDateChange: (Long, LocalDate) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -75,6 +76,9 @@ fun LazyListScope.tasksSubcolumn(
                 onPriorityChange = { priority ->
                     onTaskPriorityChange(task.id, priority)
                 },
+                onDateChange = { date ->
+                    onTaskDateChange(task.id, date)
+                },
                 modifier = Modifier
                     .padding(top = LocalSpacing.current.small)
                     .animateItem(
@@ -103,7 +107,8 @@ fun TasksColumnPreview() {
             },
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { },
-            onTaskPriorityChange = { _, _ -> }
+            onTaskPriorityChange = { _, _ -> },
+            onTaskDateChange = { _, _ -> }
         )
         tasksSubcolumn(
             "Выполненные задачи",
@@ -118,7 +123,8 @@ fun TasksColumnPreview() {
             },
             onTaskCompletionChange = { _, _ -> },
             onTaskDelete = { },
-            onTaskPriorityChange = { _, _ -> }
+            onTaskPriorityChange = { _, _ -> },
+            onTaskDateChange = { _, _ -> }
         )
     }
 }

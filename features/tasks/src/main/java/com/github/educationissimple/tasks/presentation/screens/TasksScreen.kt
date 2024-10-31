@@ -99,6 +99,10 @@ fun TasksContent(
         onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
     }
 
+    val onTaskDateChange: (Long, LocalDate) -> Unit = { taskId, date ->
+        onTasksEvent(TasksEvent.ChangeTaskDate(taskId, date))
+    }
+
     if (showSortTypeDialog) {
         TasksSortDialog(
             onDismiss = { showSortTypeDialog = false },
@@ -166,6 +170,7 @@ fun TasksContent(
             completedTasks = completedTasks,
             onTaskDelete = onTaskDelete,
             onTaskPriorityChange = onTaskPriorityChange,
+            onTaskDateChange = onTaskDateChange,
             onTaskCompletionChange = onTaskCompletionChange
         )
     }

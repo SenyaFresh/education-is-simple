@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 interface TasksRepository {
 
-    suspend fun changeDate(date: LocalDate)
+    suspend fun changeSelectionDate(date: LocalDate)
 
     suspend fun getNotCompletedTasksForDate() : Flow<ResultContainer<List<Task>>>
 

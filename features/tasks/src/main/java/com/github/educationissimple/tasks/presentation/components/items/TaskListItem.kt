@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
@@ -62,6 +63,7 @@ import com.github.educationissimple.presentation.shimmerEffect
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.utils.toTaskDate
+import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import com.github.educationissimple.tasks.presentation.utils.toColor
 import kotlinx.coroutines.CoroutineScope
@@ -75,11 +77,13 @@ fun TaskListItem(
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit,
     onPriorityChange: (Task.Priority) -> Unit,
+    onDateChange: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
     isActionsRevealed: Boolean = false
 ) {
     var isTaskCompleted by remember { mutableStateOf(task.isCompleted) }
     var showTaskPriorityDialog by remember { mutableStateOf(false) }
+    var showTaskDateDialog by remember { mutableStateOf(false) }
     var contextMenuWidth by remember { mutableFloatStateOf(0f) }
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
@@ -100,6 +104,17 @@ fun TaskListItem(
         )
     }
 
+    if (showTaskDateDialog) {
+        ChangeDateDialog(
+            onDismiss = { showTaskDateDialog = false },
+            onConfirm = {
+                onDateChange(it)
+                showTaskDateDialog = false
+            },
+            initialDate = task.date ?: LocalDate.now()
+        )
+    }
+
     Card(
         modifier = modifier.border(
             width = 1.dp,
@@ -116,6 +131,7 @@ fun TaskListItem(
             },
             onTaskDelete = onTaskDelete,
             onPriorityClick = { showTaskPriorityDialog = true },
+            onDateClick = { showTaskDateDialog = true },
             offset = offset,
             contextMenuWidth = contextMenuWidth,
             onSizeChanged = { contextMenuWidth = it.width.toFloat() },
@@ -131,6 +147,7 @@ private fun TaskCardContent(
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit,
     onPriorityClick: () -> Unit,
+    onDateClick: () -> Unit,
     offset: Animatable<Float, *>,
     contextMenuWidth: Float,
     onSizeChanged: (IntSize) -> Unit,
@@ -145,6 +162,7 @@ private fun TaskCardContent(
             onSizeChanged = onSizeChanged,
             onTaskDelete = onTaskDelete,
             onPriorityClick = onPriorityClick,
+            onDateClick = onDateClick,
             taskPriority = task.priority
         )
 
@@ -164,6 +182,7 @@ private fun BoxScope.TaskActions(
     onSizeChanged: (IntSize) -> Unit,
     onTaskDelete: () -> Unit,
     onPriorityClick: () -> Unit,
+    onDateClick: () -> Unit,
     taskPriority: Task.Priority
 ) {
     Row(
@@ -172,6 +191,15 @@ private fun BoxScope.TaskActions(
             .onSizeChanged { size -> onSizeChanged(size) },
         verticalAlignment = Alignment.CenterVertically
     ) {
+        TaskActionIcon(
+            imageVector = Icons.Default.DateRange,
+            text = stringResource(R.string.date),
+            contentColor = Neutral.Light.Lightest,
+            containerColor = Highlight.Darkest,
+            modifier = Modifier.fillMaxHeight(),
+            onClick = onDateClick
+        )
+
         TaskActionIcon(
             imageVector = Icons.Default.Star,
             text = stringResource(R.string.priority),
@@ -329,6 +357,7 @@ fun TaskCardPreview() {
                 ),
                 onTaskCompletionChange = { _ -> },
                 onTaskDelete = { },
+                onDateChange = { _ -> },
                 onPriorityChange = { _ -> },
             )
         }

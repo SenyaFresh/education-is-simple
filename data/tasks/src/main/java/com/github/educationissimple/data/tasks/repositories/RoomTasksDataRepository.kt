@@ -107,7 +107,7 @@ class RoomTasksDataRepository @Inject constructor(
         updateSources()
     }
 
-    override suspend fun changeDate(date: LocalDate?) {
+    override suspend fun changeSelectionDate(date: LocalDate?) {
         selectedDate = date ?: LocalDate.now()
         updateSources()
     }

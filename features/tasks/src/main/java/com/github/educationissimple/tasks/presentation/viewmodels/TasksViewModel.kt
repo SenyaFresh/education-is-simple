@@ -89,13 +89,14 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.AddCategory -> addCategory(event.name)
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
             is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
-            is TasksEvent.ChangeTaskDate -> changeDate(event.date)
+            is TasksEvent.ChangeTaskDate -> changeTaskDate(event.taskId, event.date)
+            is TasksEvent.ChangeTasksSelectionDate -> changeSelectionDate(event.date)
         }
     }
 
-    private fun changeDate(date: LocalDate) {
+    private fun changeSelectionDate(date: LocalDate) {
         viewModelScope.launch {
-            getTasksUseCase.changeDate(date)
+            getTasksUseCase.changeSelectionDate(date)
         }
     }
 
@@ -113,13 +114,25 @@ class TasksViewModel @Inject constructor(
 
     private fun changeTaskPriority(taskId: Long, priority: Task.Priority) {
         viewModelScope.launch {
-            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
-                ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
-                ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId }
-                ?: completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
+            val task = findTask(taskId) ?: return@launch
 
             updateTaskUseCase.updateTask(task.copy(priority = priority))
         }
+    }
+
+    private fun changeTaskDate(taskId: Long, date: LocalDate) {
+        viewModelScope.launch {
+            val task = findTask(taskId) ?: return@launch
+
+            updateTaskUseCase.updateTask(task.copy(date = date))
+        }
+    }
+
+    private fun findTask(taskId: Long): Task? {
+        return previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
+            ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
+            ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId }
+            ?: completedTasks.value.unwrapOrNull()?.find { it.id == taskId }
     }
 
     private fun cancelTaskCompletion(taskId: Long) {

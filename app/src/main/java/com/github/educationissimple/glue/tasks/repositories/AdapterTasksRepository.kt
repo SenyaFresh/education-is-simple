@@ -23,8 +23,8 @@ import javax.inject.Inject
 class AdapterTasksRepository @Inject constructor(
     private val tasksDataRepository: TasksDataRepository
 ) : TasksRepository {
-    override suspend fun changeDate(date: LocalDate) {
-        tasksDataRepository.changeDate(date)
+    override suspend fun changeSelectionDate(date: LocalDate) {
+        tasksDataRepository.changeSelectionDate(date)
     }
 
     override suspend fun getNotCompletedTasksForDate(): Flow<ResultContainer<List<Task>>> {

@@ -67,6 +67,10 @@ fun CalendarContent(
         onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
     }
 
+    val onTaskDateChange: (Long, LocalDate) -> Unit = { taskId, date ->
+        onTasksEvent(TasksEvent.ChangeTaskDate(taskId, date))
+    }
+
     var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
 
@@ -103,7 +107,7 @@ fun CalendarContent(
                     selectedDate = selectedDate,
                     onDaySelect = {
                         selectedDate = it
-                        onTasksEvent(TasksEvent.ChangeTaskDate(it))
+                        onTasksEvent(TasksEvent.ChangeTasksSelectionDate(it))
                     },
                     modifier = Modifier.padding(LocalSpacing.current.small).fillMaxWidth()
                 )
@@ -124,6 +128,7 @@ fun CalendarContent(
                         onTaskCompletionChange = onTaskCompletionChange,
                         onTaskDelete = onTaskDelete,
                         onTaskPriorityChange = onTaskPriorityChange,
+                        onTaskDateChange = onTaskDateChange,
                         isExpanded = section.isExpanded,
                         onExpandChange = section.onExpandChange
                     )

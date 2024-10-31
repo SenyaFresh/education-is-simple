@@ -31,4 +31,5 @@
     <string name="not_completed_tasks">Невыполненные задачи</string>
     <string name="select_task_date">Выбрать дату задачи</string>
     <string name="input_task_here">Введите сюда новую задачу</string>
+    <string name="date">Дата</string>
 </resources>
