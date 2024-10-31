@@ -1,4 +1,4 @@
-package com.github.educationissimple.audio.presentation.components
+package com.github.educationissimple.audio.presentation.components.environment
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
@@ -243,6 +243,7 @@ fun AudioSheetPreview() {
     AudioSheet(
         audio = Audio(
             id = 0,
+            categoryId = 0,
             imageRes = R.drawable.audio_image_preview,
             title = "Audio Title",
             subtitle = "Audio Subtitle",

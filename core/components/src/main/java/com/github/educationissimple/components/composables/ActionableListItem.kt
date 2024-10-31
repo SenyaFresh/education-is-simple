@@ -92,7 +92,7 @@ fun ActionableListItem(
 }
 
 @Composable
-fun LoadingTaskCategoryListItem(withDelete: Boolean = false) {
+fun LoadingActionableListItem(withDelete: Boolean = false) {
     val modifier = if (withDelete) Modifier.fillMaxWidth() else Modifier
     Box(
         modifier = modifier
@@ -139,7 +139,7 @@ fun LoadingActionableListItemPreview() {
         modifier = Modifier.padding(20.dp)
     ) {
         repeat(2) {
-            LoadingTaskCategoryListItem()
+            LoadingActionableListItem()
         }
 
     }
@@ -169,7 +169,7 @@ fun LoadingActionableListItemWithDeletePreview() {
         modifier = Modifier.padding(20.dp)
     ) {
         repeat(3) {
-            LoadingTaskCategoryListItem(withDelete = true)
+            LoadingActionableListItem(withDelete = true)
         }
     }
 }

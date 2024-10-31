@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.ActionableListItem
-import com.github.educationissimple.components.composables.LoadingTaskCategoryListItem
+import com.github.educationissimple.components.composables.LoadingActionableListItem
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.di.TasksDiContainer
@@ -59,7 +59,7 @@ fun CategoriesContent(
                 modifier = Modifier.padding(20.dp)
             ) {
                 repeat(5) {
-                    LoadingTaskCategoryListItem(withDelete = true)
+                    LoadingActionableListItem(withDelete = true)
                 }
             }
         }

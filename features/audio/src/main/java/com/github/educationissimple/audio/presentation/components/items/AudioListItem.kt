@@ -1,6 +1,7 @@
-package com.github.educationissimple.audio.presentation.components
+package com.github.educationissimple.audio.presentation.components.items
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
+import com.github.educationissimple.audio.presentation.components.PlayingIndicator
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
 @Composable
@@ -90,6 +93,64 @@ fun AudioListItem(
     }
 }
 
+@Composable
+fun LoadingAudioListItem() {
+    Surface {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shimmerEffect()
+                .padding(LocalSpacing.current.small),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Box(
+                Modifier.size(40.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(color = Neutral.Dark.Light)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(LocalSpacing.current.small))
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.extraSmall)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(4.dp))
+                        .size(height = 12.dp, width = (40..80).random().dp)
+                        .background(color = Neutral.Dark.Light)
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(4.dp))
+                        .size(height = 10.dp, width = (32..72).random().dp)
+                        .background(color = Neutral.Dark.Light)
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = { },
+                modifier = Modifier.size(24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = stringResource(R.string.audio_menu),
+                    tint = Neutral.Dark.Light
+                )
+            }
+        }
+    }
+}
+
 
 @Preview
 @Composable
@@ -98,6 +159,7 @@ fun AudioListItemPreview() {
         AudioListItem(
             Audio(
                 id = 0,
+                categoryId = 0,
                 imageRes = R.drawable.audio_image_preview,
                 title = "Audio Title",
                 subtitle = "Audio Subtitle",
@@ -110,3 +172,11 @@ fun AudioListItemPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+fun LoadingAudioListItemPreview() {
+    Box(modifier = Modifier.width(300.dp)) {
+        LoadingAudioListItem()
+    }
+    }
