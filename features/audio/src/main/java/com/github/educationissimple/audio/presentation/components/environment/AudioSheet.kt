@@ -47,11 +47,13 @@ import androidx.compose.ui.unit.offset
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
+import com.github.educationissimple.audio.domain.entities.PlayerController
+import com.github.educationissimple.audio.domain.utils.timeChangeToPosition
+import com.github.educationissimple.audio.presentation.entities.dummies.dummyAudio
 import com.github.educationissimple.audio.presentation.utils.formatDurationTime
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.locals.LocalSpacing
-import kotlin.math.round
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,11 +61,7 @@ fun AudioSheet(
     audio: Audio,
     isPlaying: Boolean,
     currentTime: Long,
-    onPlayClick: () -> Unit,
-    onPauseClick: () -> Unit,
-    onNextClick: () -> Unit,
-    onPreviousClick: () -> Unit,
-    onTimeChange: (Long) -> Unit,
+    onPlayerController: (PlayerController) -> Unit,
     onMenuClick: () -> Unit,
     isSheetOpen: Boolean,
     onDismiss: () -> Unit
@@ -96,9 +94,22 @@ fun AudioSheet(
             Spacer(modifier = Modifier.size(LocalSpacing.current.large))
             AudioTitle(audio, onMenuClick)
             Spacer(modifier = Modifier.size(24.dp))
-            AudioSlider(audio, musicProgress.value, currentTime, interactionSource, thumbSize, onTimeChange)
+            AudioSlider(
+                audio = audio,
+                musicProgress = musicProgress.value,
+                currentTime = currentTime,
+                interactionSource = interactionSource,
+                thumbSize = thumbSize,
+                onTimeChange = {
+                    onPlayerController(PlayerController.SetPosition(it))
+                }
+            )
             Spacer(modifier = Modifier.height(LocalSpacing.current.extraLarge))
-            AudioControls(isPlaying, onPlayClick, onPauseClick, onNextClick, onPreviousClick, onTimeChange)
+            AudioControls(
+                isPlaying = isPlaying,
+                onTimeToPosition = { timeChangeToPosition(audio.duration, currentTime, it) },
+                onPlayerController = onPlayerController,
+            )
             Spacer(modifier = Modifier.height(LocalSpacing.current.large))
         }
     }
@@ -146,7 +157,7 @@ fun AudioSlider(
     currentTime: Long,
     interactionSource: MutableInteractionSource,
     thumbSize: DpSize,
-    onTimeChange: (Long) -> Unit
+    onTimeChange: (Float) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -155,7 +166,7 @@ fun AudioSlider(
         Slider(
             value = musicProgress,
             onValueChange = {
-                onTimeChange(round(it * audio.duration).toLong())
+                onTimeChange(it)
             },
             valueRange = 0f..1f,
             colors = SliderDefaults.colors(
@@ -200,26 +211,37 @@ fun AudioSlider(
 @Composable
 fun AudioControls(
     isPlaying: Boolean,
-    onPlayClick: () -> Unit,
-    onPauseClick: () -> Unit,
-    onNextClick: () -> Unit,
-    onPreviousClick: () -> Unit,
-    onTimeChange: (Long) -> Unit
+    onTimeToPosition: (Long) -> Float,
+    onPlayerController: (PlayerController) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { onTimeChange(-10) }, modifier = Modifier.scale(1.6f)) {
+        IconButton(onClick = {
+            onPlayerController(
+                PlayerController.SetPosition(
+                    onTimeToPosition(
+                        10
+                    )
+                )
+            )
+        }, modifier = Modifier.scale(1.6f)) {
             Icon(imageVector = Icons.Default.Replay10, contentDescription = null)
         }
 
-        IconButton(onClick = onPreviousClick, modifier = Modifier.scale(1.8f)) {
+        IconButton(
+            onClick = { onPlayerController(PlayerController.Previous) },
+            modifier = Modifier.scale(1.8f)
+        ) {
             Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
         }
 
-        IconButton(onClick = if (isPlaying) onPauseClick else onPlayClick, modifier = Modifier.scale(2.6f)) {
+        IconButton(
+            onClick = { onPlayerController(PlayerController.PlayPause) },
+            modifier = Modifier.scale(2.6f)
+        ) {
             if (isPlaying) {
                 Icon(imageVector = Icons.Default.PauseCircle, contentDescription = null)
             } else {
@@ -227,11 +249,17 @@ fun AudioControls(
             }
         }
 
-        IconButton(onClick = onNextClick, modifier = Modifier.scale(1.8f)) {
+        IconButton(
+            onClick = { onPlayerController(PlayerController.Next) },
+            modifier = Modifier.scale(1.8f)
+        ) {
             Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
         }
 
-        IconButton(onClick = { onTimeChange(10) }, modifier = Modifier.scale(1.6f)) {
+        IconButton(
+            onClick = { onPlayerController(PlayerController.SetPosition(onTimeToPosition(10))) },
+            modifier = Modifier.scale(1.6f)
+        ) {
             Icon(imageVector = Icons.Default.Forward10, contentDescription = null)
         }
     }
@@ -241,22 +269,11 @@ fun AudioControls(
 @Composable
 fun AudioSheetPreview() {
     AudioSheet(
-        audio = Audio(
-            id = 0,
-            categoryId = 0,
-            imageRes = R.drawable.audio_image_preview,
-            title = "Audio Title",
-            subtitle = "Audio Subtitle",
-            duration = 100
-        ),
+        audio = dummyAudio,
         isPlaying = true,
         currentTime = 10,
-        onPlayClick = {},
-        onPauseClick = {},
-        onNextClick = {},
-        onPreviousClick = {},
+        onPlayerController = { },
         onMenuClick = {},
-        onTimeChange = {},
         isSheetOpen = true,
         onDismiss = {}
     )

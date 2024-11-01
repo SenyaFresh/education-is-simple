@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components.environment
+package com.github.educationissimple.components.composables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

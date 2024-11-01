@@ -20,8 +20,11 @@ composeNavigation = "2.8.3"
 serialization = "1.6.3"
 ktxImmutableCollections = "0.3.7"
 materialIcons = "1.7.4"
+exoplayer = "1.4.1"
 
 [libraries]
+media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer" }
+media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "ktxImmutableCollections"}
 kotlinx = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

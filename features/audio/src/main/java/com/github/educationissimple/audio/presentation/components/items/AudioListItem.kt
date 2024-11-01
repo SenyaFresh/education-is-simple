@@ -5,21 +5,29 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.presentation.components.PlayingIndicator
+import com.github.educationissimple.audio.presentation.entities.dummies.dummyAudio
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -39,13 +48,17 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 fun AudioListItem(
     audio: Audio,
     onClick: () -> Unit,
-    onMenuClick: () -> Unit,
+    onAudioDelete: () -> Unit,
     isAudioPlaying: Boolean,
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     Surface(
         color = if (isSelected) Neutral.Light.Medium else Neutral.Light.Lightest,
+        modifier = Modifier.height(IntrinsicSize.Min),
+        shape = RoundedCornerShape(4.dp),
         onClick = onClick
     ) {
         Row(
@@ -80,14 +93,22 @@ fun AudioListItem(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            IconButton(
-                onClick = onMenuClick,
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(R.string.audio_menu)
-                )
+            Box(Modifier.width(24.dp)) {
+                IconButton(
+                    onClick = { showMenu = true },
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = stringResource(R.string.audio_menu)
+                    )
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(text = { Text(text = "Удалить") }, onClick = onAudioDelete)
+                }
             }
         }
     }
@@ -157,16 +178,9 @@ fun LoadingAudioListItem() {
 fun AudioListItemPreview() {
     Box(modifier = Modifier.width(300.dp)) {
         AudioListItem(
-            Audio(
-                id = 0,
-                categoryId = 0,
-                imageRes = R.drawable.audio_image_preview,
-                title = "Audio Title",
-                subtitle = "Audio Subtitle",
-                duration = 0
-            ),
+            audio = dummyAudio,
             onClick = {},
-            onMenuClick = {},
+            onAudioDelete = {},
             isAudioPlaying = false,
             isSelected = true
         )
@@ -179,4 +193,4 @@ fun LoadingAudioListItemPreview() {
     Box(modifier = Modifier.width(300.dp)) {
         LoadingAudioListItem()
     }
-    }
+}

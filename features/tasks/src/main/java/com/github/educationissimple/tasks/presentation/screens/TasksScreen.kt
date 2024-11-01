@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.composables.AddFloatingActionButton
 import com.github.educationissimple.components.composables.SearchBar
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
@@ -35,7 +36,6 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
-import com.github.educationissimple.tasks.presentation.components.environment.AddFloatingActionButton
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
 import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn

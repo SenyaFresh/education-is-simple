@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.domain.usecases
+package com.github.educationissimple.tasks.domain.usecases.categories
 
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import javax.inject.Inject

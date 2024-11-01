@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.domain.usecases
+package com.github.educationissimple.tasks.domain.usecases.tasks
 
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.tasks.domain.entities.SortType

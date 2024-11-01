@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
+import com.github.educationissimple.audio.domain.entities.PlayerController
+import com.github.educationissimple.audio.presentation.entities.dummies.dummyAudio
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
@@ -31,9 +33,7 @@ import com.github.educationissimple.components.colors.Neutral
 fun CurrentAudioFloatingItem(
     audio: Audio,
     isPlaying: Boolean,
-    onPlayClick: () -> Unit,
-    onPauseClick: () -> Unit,
-    onClose: () -> Unit,
+    onPlaylistController: (PlayerController) -> Unit,
     onClick: () -> Unit
 ) {
 
@@ -45,7 +45,7 @@ fun CurrentAudioFloatingItem(
             modifier = Modifier.height(IntrinsicSize.Min),
         ) {
             IconButton(
-                onClick = onClose,
+                onClick = { onPlaylistController(PlayerController.Close) },
                 colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Light),
             ) {
                 Icon(
@@ -68,7 +68,7 @@ fun CurrentAudioFloatingItem(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                onClick = if (isPlaying) onPauseClick else onPlayClick,
+                onClick = { onPlaylistController(PlayerController.PlayPause) },
                 colors = IconButtonDefaults.iconButtonColors(contentColor = Highlight.Darkest)
             ) {
                 if (isPlaying) {
@@ -91,18 +91,9 @@ fun CurrentAudioFloatingItem(
 @Composable
 fun CurrentAudioFloatingItemPreview() {
     CurrentAudioFloatingItem(
-        audio = Audio(
-            id = 0,
-            categoryId = 0,
-            imageRes = R.drawable.audio_image_preview,
-            title = "Audio Title",
-            subtitle = "Audio Subtitle",
-            duration = 0
-        ),
+        audio = dummyAudio,
         isPlaying = true,
-        onPlayClick = {},
-        onPauseClick = {},
-        onClose = {},
+        onPlaylistController = {},
         onClick = {}
     )
 }
