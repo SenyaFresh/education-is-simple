@@ -1,13 +1,8 @@
 package com.github.educationissimple.audio.presentation.viewmodels
 
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
-import androidx.lifecycle.viewmodel.compose.saveable
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioCategory
+import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.entities.PlayerController
 import com.github.educationissimple.audio.domain.usecases.data.AddAudioUseCase
 import com.github.educationissimple.audio.domain.usecases.data.DeleteAudioUseCase
@@ -22,9 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(SavedStateHandleSaveableApi::class)
 class AudioViewModel(
-    savedStateHandle: SavedStateHandle,
     private val getAudioItemsUseCase: GetAudioItemsUseCase,
     private val addAudioUseCase: AddAudioUseCase,
     private val deleteAudioUseCase: DeleteAudioUseCase,
@@ -39,29 +32,34 @@ class AudioViewModel(
     private val _audioItems = MutableStateFlow<ResultContainer<List<Audio>>>(ResultContainer.Loading)
     val audioItems = _audioItems.asStateFlow()
 
-    private val _activeCategoryId = MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
+    private val _activeCategoryId = MutableStateFlow<ResultContainer<Long>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
 
-    private var _selectedAudioId by savedStateHandle.saveable { mutableLongStateOf(0L) }
-    val selectedAudioId = _selectedAudioId
+    private var _audioListState = MutableStateFlow<ResultContainer<AudioListState>>(ResultContainer.Loading)
+    val audioListState = _audioListState.asStateFlow()
 
-    private var _playingAudioId by savedStateHandle.saveable { mutableLongStateOf(0L) }
-    val playingAudioId = _playingAudioId
-
-    private var _currentAudioItem by savedStateHandle.saveable { mutableStateOf<Audio?>(null) }
-    val currentAudioItem = _currentAudioItem
-
-    private var _isCurrentAudioPlaying by savedStateHandle.saveable { mutableStateOf(false) }
-    val isCurrentAudioPlaying = _isCurrentAudioPlaying
-
-    private var _currentAudioPosition by savedStateHandle.saveable { mutableFloatStateOf(0f) }
-    val currentAudioPosition = _currentAudioPosition
+    init {
+        collectAudioItems()
+        collectPlayerState()
+    }
 
     fun onEvent(event: AudioEvent) {
         when(event) {
             is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.audio)
             is AudioEvent.DeleteAudioItemEvent -> onDeleteAudioItemEvent(event.id)
             is AudioEvent.PlayerEvent -> onPlayerEvent(event.controller)
+        }
+    }
+
+    private fun collectAudioItems() = viewModelScope.launch {
+        getAudioItemsUseCase.getAudioItems().collect {
+            _audioItems.value = it
+        }
+    }
+
+    private fun collectPlayerState() = viewModelScope.launch {
+        getPlayerStateUseCase.getPlayerState().collect {
+            _audioListState.value = it
         }
     }
 

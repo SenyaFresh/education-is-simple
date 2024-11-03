@@ -1,16 +1,16 @@
 package com.github.educationissimple.audio.domain.usecases.player
 
-import com.github.educationissimple.audio.domain.handlers.PlayerHandler
+import com.github.educationissimple.audio.domain.handlers.AudioListHandler
 import javax.inject.Inject
 
-class ControlAudioUseCase @Inject constructor(private val playerHandler: PlayerHandler) {
+class ControlAudioUseCase @Inject constructor(private val audioListHandler: AudioListHandler) {
 
     suspend fun playPause() {
-        playerHandler.playPause()
+        audioListHandler.playPause()
     }
 
     suspend fun setPosition(position: Float) {
-        playerHandler.setPosition(position)
+        audioListHandler.setPosition(position)
     }
 
 }

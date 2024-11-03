@@ -1,10 +1,10 @@
 package com.github.educationissimple.audio.domain.usecases.player
 
-import com.github.educationissimple.audio.domain.handlers.PlayerHandler
+import com.github.educationissimple.audio.domain.handlers.AudioListHandler
 import javax.inject.Inject
 
-class GetPlayerStateUseCase @Inject constructor(private val playerHandler: PlayerHandler) {
+class GetPlayerStateUseCase @Inject constructor(private val audioListHandler: AudioListHandler) {
 
-    // todo: get player state
+    suspend fun getPlayerState() = audioListHandler.getAudioListState()
 
 }
