@@ -1,9 +1,9 @@
 package com.github.educationissimple.audio_player.notifications
 
-import com.github.educationissimple.audio_player.services.AudioService
+import com.github.educationissimple.audio_player.services.AudioServiceManager
 
 interface AudioNotification {
 
-    fun startAudioNotification(service: AudioService)
+    fun startAudioNotification(serviceManager: AudioServiceManager)
 
 }

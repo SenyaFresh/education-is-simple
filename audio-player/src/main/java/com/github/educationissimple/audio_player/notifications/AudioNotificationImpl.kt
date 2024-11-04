@@ -3,7 +3,7 @@ package com.github.educationissimple.audio_player.notifications
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.os.Build
 import androidx.annotation.OptIn
@@ -14,12 +14,11 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import com.github.educationissimple.audio_player.R
-import com.github.educationissimple.audio_player.services.AudioService
+import com.github.educationissimple.audio_player.services.AudioServiceManager
 import javax.inject.Inject
 
 class AudioNotificationImpl @Inject constructor(
     private val context: Context,
-    private val pendingIntent: PendingIntent,
     private val mediaSession: MediaSession
 ): AudioNotification {
     private val notificationManager = NotificationManagerCompat.from(context)
@@ -31,9 +30,9 @@ class AudioNotificationImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun startAudioNotification(service: AudioService) {
+    override fun startAudioNotification(serviceManager: AudioServiceManager) {
         buildNotification()
-        startForeGroundNotificationService(service)
+        startForeGroundNotificationService(serviceManager.getService())
     }
 
     @OptIn(UnstableApi::class)
@@ -62,7 +61,7 @@ class AudioNotificationImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun startForeGroundNotificationService(service: AudioService) {
+    private fun startForeGroundNotificationService(service: Service) {
         val notification = Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setCategory(Notification.CATEGORY_SERVICE)
             .build()

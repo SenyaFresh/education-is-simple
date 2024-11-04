@@ -57,6 +57,8 @@ dependencies {
     api(project(":core:common-impl"))
     api(project(":data:tasks"))
     api(project(":features:tasks"))
+    api(project(":features:audio"))
+    api(project(":audio-player"))
 
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.navigation.compose)

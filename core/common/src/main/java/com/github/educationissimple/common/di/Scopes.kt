@@ -6,4 +6,7 @@ import javax.inject.Scope
 annotation class Feature
 
 @Scope
+annotation class Player
+
+@Scope
 annotation class AppScope
