@@ -1,8 +1,8 @@
 package com.github.educationissimple.audio_player.entities
 
-data class AudioListState(
+data class AudioPlayerListState(
     val state: State,
-    val currentAudioId: Long?,
+    val currentAudioUri: String?,
     val positionMs: Long,
     val durationMs: Long
 ) {

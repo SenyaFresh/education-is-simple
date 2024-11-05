@@ -1,7 +1,6 @@
 package com.github.educationissimple.audio_player.entities
 
 data class Audio(
-    val id: Long,
     val uri: String,
     val categoryId: Long?,
     val imageRes: Int,

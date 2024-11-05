@@ -4,4 +4,5 @@
     <string name="manage_categories">Редактировать категории</string>
     <string name="tasks">Задачи</string>
     <string name="calendar">Календарь</string>
+    <string name="audio">Аудио</string>
 </resources>

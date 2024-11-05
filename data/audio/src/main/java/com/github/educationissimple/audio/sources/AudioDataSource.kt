@@ -8,5 +8,5 @@ interface AudioDataSource {
 
     suspend fun addAudio(audio: AudioDataEntity)
 
-    suspend fun deleteAudio(id: Long)
+    suspend fun deleteAudio(uri: String)
 }

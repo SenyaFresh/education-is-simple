@@ -25,6 +25,14 @@ data object CalendarGraph {
 
 }
 
+@Serializable
+data object AudioGraph {
+
+    @Serializable
+    data object AudioScreen
+
+}
+
 fun NavBackStackEntry?.routeClass(): KClass<*>? {
     return this
         ?.destination

@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.educationissimple.R
+import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.CategoriesScreen
@@ -30,6 +31,7 @@ fun AppNavigation() {
         TasksGraph.CategoriesScreen::class -> R.string.manage_categories
         TasksGraph.TasksScreen::class -> R.string.tasks
         CalendarGraph.CalendarScreen::class -> R.string.calendar
+        AudioGraph.AudioScreen::class -> R.string.audio
         else -> null
     }
 
@@ -78,6 +80,15 @@ fun AppNavigation() {
                 composable<CalendarGraph.CalendarScreen> {
                     ShowBackground()
                     CalendarScreen()
+                }
+            }
+
+            navigation<AudioGraph>(
+                startDestination = AudioGraph.AudioScreen
+            ) {
+                composable<AudioGraph.AudioScreen> {
+                    ShowBackground()
+                    AudioListScreen()
                 }
             }
         }

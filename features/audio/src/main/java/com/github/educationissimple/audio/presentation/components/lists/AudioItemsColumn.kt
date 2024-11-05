@@ -19,10 +19,10 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 @Composable
 fun AudioItemsColumn(
     audioItems: ResultContainer<List<Audio>>,
-    selectedAudioId: Long? = null,
-    playingAudioId: Long? = null,
-    onAudioClick: (Long) -> Unit,
-    onAudioDelete: (Long) -> Unit
+    selectedAudioUri: String? = null,
+    playingAudioUri: String? = null,
+    onAudioClick: (String) -> Unit,
+    onAudioDelete: (String) -> Unit
 ) {
     ResultContainerComposable(
         container = audioItems,
@@ -49,13 +49,13 @@ fun AudioItemsColumn(
                 LocalSpacing.current.small
             )
         ) {
-            items(audioItems.unwrap(), key = { it.id }) { audio ->
+            items(audioItems.unwrap(), key = { it.uri }) { audio ->
                 AudioListItem(
                     audio = audio,
-                    onClick = { onAudioClick(audio.id) },
-                    onAudioDelete = { onAudioDelete(audio.id) },
-                    isAudioPlaying = audio.id == playingAudioId,
-                    isSelected = audio.id == selectedAudioId
+                    onClick = { onAudioClick(audio.uri) },
+                    onAudioDelete = { onAudioDelete(audio.uri) },
+                    isAudioPlaying = audio.uri == playingAudioUri,
+                    isSelected = audio.uri == selectedAudioUri
                 )
             }
         }

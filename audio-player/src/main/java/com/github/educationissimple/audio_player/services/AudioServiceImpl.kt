@@ -6,22 +6,34 @@ import android.os.Build
 import androidx.media3.common.Player
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import com.github.educationissimple.audio_player.notifications.AudioNotificationImpl
-import javax.inject.Inject
+import com.github.educationissimple.audio_player.di.DaggerPlayerComponent
+import com.github.educationissimple.audio_player.di.ExternalDiContainer
+import com.github.educationissimple.audio_player.di.ModuleDiContainer
+import com.github.educationissimple.audio_player.di.PlayerDepsProvider
+import com.github.educationissimple.audio_player.notifications.AudioNotification
 
 class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
 
-    @Inject
-    lateinit var mediaSession: MediaSession
-
-    @Inject
-    lateinit var notification: AudioNotificationImpl
+    private lateinit var mediaSession: MediaSession
+    private lateinit var notification: AudioNotification
 
     override fun getService(): Service {
         return this
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val moduleDiContainer = ModuleDiContainer()
+        val externalDiContainer = ExternalDiContainer()
+        DaggerPlayerComponent.builder()
+            .deps(PlayerDepsProvider.deps)
+            .build()
+            .also {
+                it.inject(moduleDiContainer)
+                it.inject(externalDiContainer)
+            }
+        mediaSession = moduleDiContainer.mediaSession
+        notification = moduleDiContainer.notification
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notification.startAudioNotification(this)
         }

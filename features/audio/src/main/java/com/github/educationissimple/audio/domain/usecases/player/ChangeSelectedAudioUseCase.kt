@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class ChangeSelectedAudioUseCase @Inject constructor(private val audioListHandler: AudioListHandler) {
 
-    suspend fun changeSelectedAudio(id: Long) {
-        audioListHandler.selectMedia(id)
+    suspend fun changeSelectedAudio(index: Int) {
+        audioListHandler.selectMedia(index)
     }
 
     suspend fun close() {

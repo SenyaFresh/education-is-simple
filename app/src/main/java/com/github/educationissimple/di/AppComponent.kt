@@ -2,6 +2,10 @@ package com.github.educationissimple.di
 
 import android.content.Context
 import com.github.educationissimple.CoreModule
+import com.github.educationissimple.audio.di.AudioDeps
+import com.github.educationissimple.audio.domain.handlers.AudioListHandler
+import com.github.educationissimple.audio.domain.repositories.AudioRepository
+import com.github.educationissimple.audio_player.di.PlayerDeps
 import com.github.educationissimple.common.CoreProvider
 import com.github.educationissimple.common.di.AppScope
 import com.github.educationissimple.tasks.di.TasksDeps
@@ -10,9 +14,15 @@ import dagger.BindsInstance
 import dagger.Component
 
 @[AppScope Component(modules = [AppModule::class, CoreModule::class])]
-interface AppComponent: TasksDeps {
+interface AppComponent: TasksDeps, AudioDeps, PlayerDeps {
+
+    override val context: Context
+
+    override val audioHandler: AudioListHandler
+    override val audioRepository: AudioRepository
 
     override val tasksRepository: TasksRepository
+
     val coreProvider: CoreProvider
 
     @Component.Builder

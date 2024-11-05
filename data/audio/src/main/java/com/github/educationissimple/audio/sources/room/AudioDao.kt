@@ -14,7 +14,7 @@ interface AudioDao {
     @Insert(entity = AudioDataEntity::class)
     suspend fun addAudio(audioDataEntity: AudioDataEntity)
 
-    @Query("DELETE FROM audioItems WHERE id = :id")
-    suspend fun deleteAudio(id: Long)
+    @Query("DELETE FROM audioItems WHERE uri = :uri")
+    suspend fun deleteAudio(uri: String)
 
 }

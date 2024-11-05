@@ -8,9 +8,9 @@ interface AudioListHandler {
 
     suspend fun getAudioListState(): Flow<ResultContainer<AudioListState>>
 
-    suspend fun selectMedia(id: Long)
+    suspend fun selectMedia(index: Int)
 
-    suspend fun setPosition(position: Float)
+    suspend fun setPosition(positionMs: Long)
 
     suspend fun playPause()
 

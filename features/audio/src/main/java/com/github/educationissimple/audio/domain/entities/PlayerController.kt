@@ -2,11 +2,11 @@ package com.github.educationissimple.audio.domain.entities
 
 sealed class PlayerController {
 
-    data class SelectMedia(val id: Long): PlayerController()
+    data class SelectMedia(val uri: String): PlayerController()
 
     data object PlayPause: PlayerController()
 
-    data class SetPosition(val position: Float): PlayerController()
+    data class SetPosition(val positionMs: Long): PlayerController()
 
     data object Next: PlayerController()
 

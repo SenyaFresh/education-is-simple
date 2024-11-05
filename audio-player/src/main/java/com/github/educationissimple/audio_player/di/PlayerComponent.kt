@@ -9,6 +9,10 @@ import dagger.Component
 @Component(modules = [PlayerModule::class])
 internal interface PlayerComponent {
 
+    fun inject(moduleDiContainer: ModuleDiContainer)
+
+    fun inject(externalDiContainer: ExternalDiContainer)
+
     @Component.Builder
     interface Builder {
         @BindsInstance

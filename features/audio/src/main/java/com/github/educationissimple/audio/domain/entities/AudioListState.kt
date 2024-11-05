@@ -2,8 +2,9 @@ package com.github.educationissimple.audio.domain.entities
 
 data class AudioListState(
     val state: State,
-    val progress: Float,
-    val duration: Long
+    val currentAudioUri: String?,
+    val positionMs: Long,
+    val durationMs: Long
 ) {
     enum class State {
         READY,

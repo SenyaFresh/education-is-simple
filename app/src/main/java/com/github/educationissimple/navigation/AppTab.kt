@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.github.educationissimple.R
 import kotlinx.collections.immutable.persistentListOf
@@ -24,5 +25,10 @@ val MainTabs = persistentListOf(
         imageVector = Icons.Default.DateRange,
         titleRes = R.string.calendar,
         graphRoute = CalendarGraph
+    ),
+    AppTab(
+        imageVector = Icons.Default.Phone,
+        titleRes = R.string.audio,
+        graphRoute = AudioGraph
     )
 )

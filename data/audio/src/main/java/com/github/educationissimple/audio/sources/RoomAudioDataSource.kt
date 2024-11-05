@@ -29,7 +29,7 @@ class RoomAudioDataSource @Inject constructor(
         audioDao.addAudio(audio)
     }
 
-    override suspend fun deleteAudio(id: Long) {
-        audioDao.deleteAudio(id)
+    override suspend fun deleteAudio(uri: String) {
+        audioDao.deleteAudio(uri)
     }
 }

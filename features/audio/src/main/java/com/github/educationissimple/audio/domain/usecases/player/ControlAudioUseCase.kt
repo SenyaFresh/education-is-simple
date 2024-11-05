@@ -9,8 +9,8 @@ class ControlAudioUseCase @Inject constructor(private val audioListHandler: Audi
         audioListHandler.playPause()
     }
 
-    suspend fun setPosition(position: Float) {
-        audioListHandler.setPosition(position)
+    suspend fun setPosition(positionMs: Long) {
+        audioListHandler.setPosition(positionMs)
     }
 
 }

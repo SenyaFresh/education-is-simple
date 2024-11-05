@@ -6,7 +6,7 @@ import com.github.educationissimple.common.di.AppScope
 import dagger.Binds
 import dagger.Module
 
-@Module
+@Module(includes = [AudioDataSourceModule::class])
 interface AudioDataRepositoryModule {
 
     @Binds

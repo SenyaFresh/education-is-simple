@@ -24,8 +24,8 @@ class RoomAudioDataRepository @Inject constructor(
         audioLoader.newAsyncLoad(silently = true)
     }
 
-    override suspend fun deleteAudio(id: Long) {
-        audioDataSource.deleteAudio(id)
+    override suspend fun deleteAudio(uri: String) {
+        audioDataSource.deleteAudio(uri)
         audioLoader.newAsyncLoad(silently = true)
     }
 }

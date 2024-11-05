@@ -1,7 +1,7 @@
 package com.github.educationissimple.audio.presentation.components.environment
 
+import android.net.Uri
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.PlayerController
@@ -101,7 +103,7 @@ fun AudioSheet(
                 interactionSource = interactionSource,
                 thumbSize = thumbSize,
                 onTimeChange = {
-                    onPlayerController(PlayerController.SetPosition(it))
+                    onPlayerController(PlayerController.SetPosition((it * audio.duration).toLong()))
                 }
             )
             Spacer(modifier = Modifier.height(LocalSpacing.current.extraLarge))
@@ -117,8 +119,11 @@ fun AudioSheet(
 
 @Composable
 fun AudioImage(audio: Audio) {
-    Image(
-        painter = painterResource(id = audio.imageRes),
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(Uri.parse(audio.uri))
+            .crossfade(true)
+            .build(),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -211,7 +216,7 @@ fun AudioSlider(
 @Composable
 fun AudioControls(
     isPlaying: Boolean,
-    onTimeToPosition: (Long) -> Float,
+    onTimeToPosition: (Long) -> Long,
     onPlayerController: (PlayerController) -> Unit
 ) {
     Row(
@@ -222,9 +227,7 @@ fun AudioControls(
         IconButton(onClick = {
             onPlayerController(
                 PlayerController.SetPosition(
-                    onTimeToPosition(
-                        10
-                    )
+                    onTimeToPosition(10)
                 )
             )
         }, modifier = Modifier.scale(1.6f)) {
@@ -257,7 +260,7 @@ fun AudioControls(
         }
 
         IconButton(
-            onClick = { onPlayerController(PlayerController.SetPosition(onTimeToPosition(10))) },
+            onClick = { onPlayerController(PlayerController.SetPosition(-10)) },
             modifier = Modifier.scale(1.6f)
         ) {
             Icon(imageVector = Icons.Default.Forward10, contentDescription = null)

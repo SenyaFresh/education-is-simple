@@ -5,7 +5,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.github.educationissimple.audio_player.entities.Audio
-import com.github.educationissimple.audio_player.entities.AudioListState
+import com.github.educationissimple.audio_player.entities.AudioPlayerListState
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import kotlinx.coroutines.Job
@@ -16,9 +16,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AudioListHandlerImpl @Inject constructor(private val player: ExoPlayer) : AudioListHandler, Player.Listener {
+class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlayer) : AudioListPlayerHandler, Player.Listener {
 
-    private val state = MutableStateFlow<ResultContainer<AudioListState>>(ResultContainer.Loading)
+    private val state = MutableStateFlow<ResultContainer<AudioPlayerListState>>(ResultContainer.Loading)
     private var progressJob: Job? = null
 
     init {
@@ -35,7 +35,7 @@ class AudioListHandlerImpl @Inject constructor(private val player: ExoPlayer) : 
         updateState()
     }
 
-    override suspend fun getAudioListState(): Flow<ResultContainer<AudioListState>> {
+    override suspend fun getAudioListState(): Flow<ResultContainer<AudioPlayerListState>> {
         return state
     }
 
@@ -103,18 +103,18 @@ class AudioListHandlerImpl @Inject constructor(private val player: ExoPlayer) : 
 
     private fun updateState() {
         val playbackState = when {
-            player.isPlaying -> AudioListState.State.AUDIO_PLAYING
-            player.playbackState == Player.STATE_BUFFERING -> AudioListState.State.BUFFERING
-            player.playbackState == Player.STATE_READY -> AudioListState.State.READY
-            else -> AudioListState.State.PLAYING
+            player.isPlaying -> AudioPlayerListState.State.AUDIO_PLAYING
+            player.playbackState == Player.STATE_BUFFERING -> AudioPlayerListState.State.BUFFERING
+            player.playbackState == Player.STATE_READY -> AudioPlayerListState.State.READY
+            else -> AudioPlayerListState.State.PLAYING
         }
-        val audioListState = AudioListState(
+        val audioPlayerListState = AudioPlayerListState(
             state = playbackState,
-            currentAudioId = player.currentMediaItem?.mediaId?.toLongOrNull(),
+            currentAudioUri = player.currentMediaItem?.localConfiguration?.uri?.toString(),
             positionMs = player.currentPosition,
             durationMs = player.duration.takeIf { it != C.TIME_UNSET } ?: 0
         )
-        state.value = ResultContainer.Done(audioListState)
+        state.value = ResultContainer.Done(audioPlayerListState)
     }
 
     override fun onPlaybackStateChanged(playbackState: Int) {
@@ -133,7 +133,6 @@ class AudioListHandlerImpl @Inject constructor(private val player: ExoPlayer) : 
 
 fun Audio.toMediaItem(): MediaItem {
     return MediaItem.Builder()
-        .setMediaId(id.toString())
         .setUri(uri)
         .build()
 }

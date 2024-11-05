@@ -8,8 +8,8 @@ interface AudioRepository {
 
     suspend fun getAudioItems(): Flow<ResultContainer<List<Audio>>>
 
-    suspend fun addAudioItem(audio: Audio)
+    suspend fun addAudioItem(uri: String)
 
-    suspend fun deleteAudioItem(id: Long)
+    suspend fun deleteAudioItem(uri: String)
 
 }

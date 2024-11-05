@@ -1,6 +1,6 @@
 package com.github.educationissimple.audio.presentation.components.items
 
-import androidx.compose.foundation.Image
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,11 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.presentation.components.PlayingIndicator
@@ -72,9 +74,12 @@ fun AudioListItem(
                 Modifier.size(40.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painterResource(audio.imageRes),
-                    contentDescription = stringResource(R.string.audio_image),
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(Uri.parse(audio.uri))
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(4.dp))

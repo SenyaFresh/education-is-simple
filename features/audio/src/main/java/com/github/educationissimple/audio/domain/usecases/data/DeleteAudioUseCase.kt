@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class DeleteAudioUseCase @Inject constructor(private val audioRepository: AudioRepository) {
 
-    suspend fun deleteAudioItem(id: Long) {
-        audioRepository.deleteAudioItem(id)
+    suspend fun deleteAudioItem(uri: String) {
+        audioRepository.deleteAudioItem(uri)
     }
 
 }
