@@ -22,7 +22,8 @@ class AdapterAudioRepository @Inject constructor(
     }
 
     override suspend fun addAudioItem(uri: String) {
-        audioDataRepository.addAudio(Uri.parse(uri).toAudioDataEntity(application) ?: throw Exception()) // todo
+        val audio = Uri.parse(uri).toAudioDataEntity(application)
+        audioDataRepository.addAudio(audio ?: throw Exception()) // todo
     }
 
     override suspend fun deleteAudioItem(uri: String) {

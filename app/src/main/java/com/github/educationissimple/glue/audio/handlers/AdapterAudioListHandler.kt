@@ -1,9 +1,11 @@
 package com.github.educationissimple.glue.audio.handlers
 
+import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.handlers.AudioListHandler
 import com.github.educationissimple.audio_player.handlers.AudioListPlayerHandler
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.glue.audio.mappers.toAudioItem
 import com.github.educationissimple.glue.audio.mappers.toAudioListState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -12,6 +14,18 @@ import javax.inject.Inject
 class AdapterAudioListHandler @Inject constructor(
     private val audioListPlayerHandler: AudioListPlayerHandler
 ) : AudioListHandler {
+
+    override suspend fun initAudioItems(audioItems: List<Audio>) {
+        audioListPlayerHandler.initAudioItems(audioItems.map { it.toAudioItem() })
+    }
+
+    override suspend fun addAudio(audio: Audio) {
+        audioListPlayerHandler.addAudio(audio.toAudioItem())
+    }
+
+    override suspend fun removeAudio(index: Int) {
+        audioListPlayerHandler.removeAudio(index)
+    }
 
     override suspend fun getAudioListState(): Flow<ResultContainer<AudioListState>> {
         return audioListPlayerHandler.getAudioListState()

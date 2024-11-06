@@ -4,7 +4,7 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.github.educationissimple.audio_player.entities.Audio
+import com.github.educationissimple.audio_player.entities.AudioItem
 import com.github.educationissimple.audio_player.entities.AudioPlayerListState
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
@@ -20,13 +20,20 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
 
     private val state = MutableStateFlow<ResultContainer<AudioPlayerListState>>(ResultContainer.Loading)
     private var progressJob: Job? = null
+    private var initialized = false
 
     init {
         player.addListener(this)
     }
 
-    override suspend fun addAudio(audio: Audio) {
-        player.addMediaItem(audio.toMediaItem())
+    override suspend fun initAudioItems(audioItemItems: List<AudioItem>) {
+        player.setMediaItems(audioItemItems.map { it.toMediaItem() })
+        initialized = true
+        updateState()
+    }
+
+    override suspend fun addAudio(audioItem: AudioItem) {
+        player.addMediaItem(audioItem.toMediaItem())
         updateState()
     }
 
@@ -102,6 +109,9 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
     }
 
     private fun updateState() {
+        if (initialized && player.playbackState == Player.STATE_IDLE) {
+            player.prepare()
+        }
         val playbackState = when {
             player.isPlaying -> AudioPlayerListState.State.AUDIO_PLAYING
             player.playbackState == Player.STATE_BUFFERING -> AudioPlayerListState.State.BUFFERING
@@ -131,7 +141,7 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
     }
 }
 
-fun Audio.toMediaItem(): MediaItem {
+fun AudioItem.toMediaItem(): MediaItem {
     return MediaItem.Builder()
         .setUri(uri)
         .build()

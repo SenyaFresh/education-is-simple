@@ -10,6 +10,7 @@ import androidx.media3.common.util.UnstableApi
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.entities.AudioDataEntity
+import com.github.educationissimple.audio_player.entities.AudioItem
 import com.github.educationissimple.audio_player.entities.AudioPlayerListState
 
 fun AudioDataEntity.toAudio(): Audio {
@@ -74,6 +75,16 @@ fun AudioPlayerListState.toAudioListState(): AudioListState {
         positionMs = positionMs,
         durationMs = durationMs
     )
+}
+
+fun Audio.toAudioItem(): AudioItem {
+    return AudioItem(
+        uri = uri,
+        categoryId = categoryId,
+        imageUri = imageUri,
+        title = title,
+        subtitle = subtitle,
+        duration = duration)
 }
 
 fun AudioPlayerListState.State.toAudioPlayerListStateState(): AudioListState.State {
