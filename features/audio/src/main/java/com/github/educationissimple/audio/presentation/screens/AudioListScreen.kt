@@ -60,17 +60,15 @@ fun AudioListContent(
         }
     )
 
-    Column {
-        ResultContainerComposable(
-            onTryAgain = {},
-            container = ResultContainer.wrap(
-                audioCategories,
-                audioItems,
-                activeCategoryId,
-                audioListState
-            )
-        ) {
-
+    ResultContainerComposable(
+        onTryAgain = {},
+        container = ResultContainer.wrap(
+            audioCategories,
+            audioItems,
+            activeCategoryId
+        )
+    ) {
+        Column {
             AudioCategoriesRow(
                 categories = audioCategories,
                 onCategoryClick = { },
@@ -84,8 +82,8 @@ fun AudioListContent(
 
             AudioItemsColumn(
                 audioItems = audioItems,
-                selectedAudioUri = audioListState.unwrap().currentAudioUri,
-                playingAudioUri = audioListState.unwrap().currentAudioUri,
+                selectedAudioUri = audioListState.unwrapOrNull()?.currentAudioUri,
+                playingAudioUri = audioListState.unwrapOrNull()?.currentAudioUri,
                 onAudioClick = { onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it))) },
                 onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
             )
@@ -94,7 +92,7 @@ fun AudioListContent(
 
     Box(modifier = Modifier.fillMaxSize()) {
         AddFloatingActionButton(
-            onClick = { selectAudioLauncher.launch("audio/mp3") },
+            onClick = { selectAudioLauncher.launch("audio/mpeg") },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(LocalSpacing.current.medium)

@@ -5,6 +5,10 @@ import javax.inject.Inject
 
 class ExternalDiContainer {
 
+    init {
+        _instance = this
+    }
+
     @Inject
     lateinit var playerListHandler: AudioListPlayerHandler
 

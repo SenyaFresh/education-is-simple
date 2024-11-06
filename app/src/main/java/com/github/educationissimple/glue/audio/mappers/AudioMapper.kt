@@ -1,8 +1,11 @@
 package com.github.educationissimple.glue.audio.mappers
 
+import android.app.Application
+import android.content.ContentUris
 import android.net.Uri
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import androidx.annotation.OptIn
-import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioListState
@@ -20,17 +23,48 @@ fun AudioDataEntity.toAudio(): Audio {
     )
 }
 
+private val projection: Array<String> = arrayOf(
+    MediaStore.Audio.AudioColumns.ARTIST,
+    MediaStore.Audio.AudioColumns.DURATION,
+    MediaStore.Audio.AudioColumns.TITLE
+)
 
 @OptIn(UnstableApi::class)
-fun Uri.toAudioDataEntity(): AudioDataEntity {
-    val mediaItem = MediaItem.fromUri(this)
-    return AudioDataEntity(
-        uri = this.toString(),
-        imageUri = mediaItem.mediaMetadata.artworkUri.toString(),
-        title = mediaItem.mediaMetadata.title.toString(),
-        subtitle = mediaItem.mediaMetadata.subtitle.toString(),
-        duration = mediaItem.mediaMetadata.durationMs
-    )
+fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
+    var audioDataEntity: AudioDataEntity? = null
+
+    val mediaUri = if (DocumentsContract.isDocumentUri(application, this)) {
+        val docId = DocumentsContract.getDocumentId(this)
+        val mediaId = docId.split(":")[1]
+        ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mediaId.toLong())
+    } else {
+        this
+    }
+
+    application.contentResolver.query(
+        mediaUri,
+        projection,
+        null,
+        null,
+        null
+    )?.use { cursor ->
+        if (cursor.moveToFirst()) {
+
+            val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
+            val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST)
+            val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)
+
+            audioDataEntity = AudioDataEntity(
+                uri = mediaUri.toString(),
+                imageUri = "", // todo: добыть изображение
+                title = cursor.getString(titleColumn),
+                subtitle = cursor.getString(artistColumn),
+                duration = cursor.getLong(durationColumn)
+            )
+        }
+    }
+
+    return audioDataEntity
 }
 
 fun AudioPlayerListState.toAudioListState(): AudioListState {

@@ -1,5 +1,6 @@
 package com.github.educationissimple.glue.audio.repositories
 
+import android.app.Application
 import android.net.Uri
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.repositories.AudioRepository
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AdapterAudioRepository @Inject constructor(
-    private val audioDataRepository: AudioDataRepository
+    private val audioDataRepository: AudioDataRepository,
+    private val application: Application
 ) : AudioRepository {
 
     override suspend fun getAudioItems(): Flow<ResultContainer<List<Audio>>> {
@@ -20,7 +22,7 @@ class AdapterAudioRepository @Inject constructor(
     }
 
     override suspend fun addAudioItem(uri: String) {
-        audioDataRepository.addAudio(Uri.parse(uri).toAudioDataEntity())
+        audioDataRepository.addAudio(Uri.parse(uri).toAudioDataEntity(application) ?: throw Exception()) // todo
     }
 
     override suspend fun deleteAudioItem(uri: String) {
