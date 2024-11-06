@@ -61,6 +61,7 @@ dependencies {
     api(project(":features:audio"))
     api(project(":audio-player"))
 
+    implementation(libs.material.icons)
     implementation(libs.media3.common)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.navigation.compose)
