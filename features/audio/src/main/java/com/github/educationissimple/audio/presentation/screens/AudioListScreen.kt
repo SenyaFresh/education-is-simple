@@ -83,7 +83,7 @@ fun AudioListContent(
             AudioItemsColumn(
                 audioItems = audioItems,
                 selectedAudioUri = audioListState.unwrapOrNull()?.currentAudioUri,
-                playingAudioUri = audioListState.unwrapOrNull()?.currentAudioUri,
+                playingAudioUri = if (audioListState.unwrapOrNull()?.state != AudioListState.State.AUDIO_PLAYING) null else audioListState.unwrapOrNull()?.currentAudioUri,
                 onAudioClick = { onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it))) },
                 onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
             )

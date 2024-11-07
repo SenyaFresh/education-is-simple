@@ -6,12 +6,15 @@ import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioCategory
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.entities.PlayerController
-import com.github.educationissimple.audio.domain.usecases.data.AddAudioUseCase
-import com.github.educationissimple.audio.domain.usecases.data.DeleteAudioUseCase
+import com.github.educationissimple.audio.domain.usecases.data.AddAudioToRepoUseCase
+import com.github.educationissimple.audio.domain.usecases.data.DeleteAudioFromRepoUseCase
 import com.github.educationissimple.audio.domain.usecases.data.GetAudioItemsUseCase
+import com.github.educationissimple.audio.domain.usecases.player.AddAudioToPlayerUseCase
 import com.github.educationissimple.audio.domain.usecases.player.ChangeSelectedAudioUseCase
 import com.github.educationissimple.audio.domain.usecases.player.ControlAudioUseCase
+import com.github.educationissimple.audio.domain.usecases.player.DeleteAudioFromPlayerUseCase
 import com.github.educationissimple.audio.domain.usecases.player.GetPlayerStateUseCase
+import com.github.educationissimple.audio.domain.usecases.player.InitPlayerUseCase
 import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.BaseViewModel
@@ -22,11 +25,14 @@ import javax.inject.Inject
 
 class AudioViewModel @Inject constructor(
     private val getAudioItemsUseCase: GetAudioItemsUseCase,
-    private val addAudioUseCase: AddAudioUseCase,
-    private val deleteAudioUseCase: DeleteAudioUseCase,
+    private val addAudioToRepoUseCase: AddAudioToRepoUseCase,
+    private val deleteAudioFromRepoUseCase: DeleteAudioFromRepoUseCase,
     private val changeSelectedAudioUseCase: ChangeSelectedAudioUseCase,
     private val controlAudioUseCase: ControlAudioUseCase,
-    private val getPlayerStateUseCase: GetPlayerStateUseCase
+    private val getPlayerStateUseCase: GetPlayerStateUseCase,
+    private val addAudioToPlayerUseCase: AddAudioToPlayerUseCase,
+    private val deleteAudioFromPlayerUseCase: DeleteAudioFromPlayerUseCase,
+    private val initPlayerUseCase: InitPlayerUseCase
 ) : BaseViewModel() {
 
     private val _audioCategories =
@@ -49,6 +55,8 @@ class AudioViewModel @Inject constructor(
         collectPlayerState()
     }
 
+    private var isPlayerInitialized = false
+
     fun onEvent(event: AudioEvent) {
         when (event) {
             is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.uri)
@@ -60,6 +68,10 @@ class AudioViewModel @Inject constructor(
     private fun collectAudioItems() = viewModelScope.launch {
         getAudioItemsUseCase.getAudioItems().collect {
             _audioItems.value = it
+            if (!isPlayerInitialized && it is ResultContainer.Done) {
+                initPlayerUseCase.initPlayer(it.unwrap())
+                isPlayerInitialized = true
+            }
         }
     }
 
@@ -70,11 +82,13 @@ class AudioViewModel @Inject constructor(
     }
 
     private fun onAddAudioItemEvent(uri: String) = viewModelScope.launch {
-        addAudioUseCase.addAudioItem(uri)
+        addAudioToRepoUseCase.addAudioItem(uri)
+        addAudioToPlayerUseCase.addAudio(uri)
     }
 
     private fun onDeleteAudioItemEvent(uri: String) = viewModelScope.launch {
-        deleteAudioUseCase.deleteAudioItem(uri)
+        deleteAudioFromRepoUseCase.deleteAudioItem(uri)
+        deleteAudioFromPlayerUseCase.deleteAudio(getIndexByUri(uri) ?: -1)
     }
 
     private fun onPlayerEvent(controller: PlayerController) = viewModelScope.launch {
@@ -99,21 +113,27 @@ class AudioViewModel @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     class Factory @Inject constructor(
         private val getAudioItemsUseCase: GetAudioItemsUseCase,
-        private val addAudioUseCase: AddAudioUseCase,
-        private val deleteAudioUseCase: DeleteAudioUseCase,
+        private val addAudioToRepoUseCase: AddAudioToRepoUseCase,
+        private val deleteAudioFromRepoUseCase: DeleteAudioFromRepoUseCase,
         private val changeSelectedAudioUseCase: ChangeSelectedAudioUseCase,
         private val controlAudioUseCase: ControlAudioUseCase,
-        private val getPlayerStateUseCase: GetPlayerStateUseCase
+        private val getPlayerStateUseCase: GetPlayerStateUseCase,
+        private val addAudioToPlayerUseCase: AddAudioToPlayerUseCase,
+        private val deleteAudioFromPlayerUseCase: DeleteAudioFromPlayerUseCase,
+        private val initPlayerUseCase: InitPlayerUseCase
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == AudioViewModel::class.java)
             return AudioViewModel(
                 getAudioItemsUseCase,
-                addAudioUseCase,
-                deleteAudioUseCase,
+                addAudioToRepoUseCase,
+                deleteAudioFromRepoUseCase,
                 changeSelectedAudioUseCase,
                 controlAudioUseCase,
-                getPlayerStateUseCase
+                getPlayerStateUseCase,
+                addAudioToPlayerUseCase,
+                deleteAudioFromPlayerUseCase,
+                initPlayerUseCase
             ) as T
         }
     }

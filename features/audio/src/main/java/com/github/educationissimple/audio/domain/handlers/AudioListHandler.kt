@@ -9,7 +9,7 @@ interface AudioListHandler {
 
     suspend fun initAudioItems(audioItems: List<Audio>)
 
-    suspend fun addAudio(audio: Audio)
+    suspend fun addAudio(uri: String)
 
     suspend fun removeAudio(index: Int)
 

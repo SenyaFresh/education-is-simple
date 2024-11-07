@@ -1,6 +1,5 @@
 package com.github.educationissimple.audio.presentation.components.items
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,9 +73,10 @@ fun AudioListItem(
                 Modifier.size(40.dp),
                 contentAlignment = Alignment.Center
             ) {
+
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(audio.uri))
+                        .data(audio.imageBitmap)
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
