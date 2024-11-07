@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 data class AudioItem(
     val uri: String,
     val categoryId: Long?,
-    val imageBitmap: Bitmap,
+    val imageBitmap: Bitmap?,
     val title: String,
     val subtitle: String,
     val duration: Long

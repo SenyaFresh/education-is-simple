@@ -2,7 +2,6 @@ package com.github.educationissimple.audio_player.services
 
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import androidx.media3.common.Player
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
@@ -16,6 +15,16 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
 
     private lateinit var mediaSession: MediaSession
     private lateinit var notification: AudioNotification
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            if (playbackState == Player.STATE_IDLE) {
+                stopAudioNotification()
+                stopForeground(STOP_FOREGROUND_REMOVE)
+            } else {
+                startAudioNotification()
+            }
+        }
+    }
 
     override fun getService(): Service {
         return this
@@ -34,10 +43,17 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
         mediaSession = moduleDiContainer.mediaSession
         notification = moduleDiContainer.notification
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification.startAudioNotification(this)
-        }
+        mediaSession.player.addListener(playerListener)
+
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun startAudioNotification() {
+        notification.startAudioNotification(this)
+    }
+
+    private fun stopAudioNotification() {
+        notification.stopAudioNotification()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
@@ -46,6 +62,8 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopAudioNotification()
+        mediaSession.player.removeListener(playerListener)
         mediaSession.apply {
             release()
             if (player.playbackState != Player.STATE_IDLE) {
@@ -55,5 +73,4 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
             }
         }
     }
-
 }

@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 )
 data class AudioDataEntity(
     @PrimaryKey val uri: String,
-    @ColumnInfo(name = "image_uri") val imageBitmap: Bitmap,
+    @ColumnInfo(name = "image_uri") val imageBitmap: Bitmap?,
     val title: String?,
     val subtitle: String?,
     val duration: Long?

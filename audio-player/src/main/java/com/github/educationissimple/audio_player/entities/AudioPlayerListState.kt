@@ -7,9 +7,9 @@ data class AudioPlayerListState(
     val durationMs: Long
 ) {
     enum class State {
+        IDLE,
         READY,
         AUDIO_PLAYING,
         BUFFERING,
-        PLAYING
     }
 }

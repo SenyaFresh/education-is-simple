@@ -50,7 +50,6 @@ fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
         null
     )?.use { cursor ->
         if (cursor.moveToFirst()) {
-
             val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)
@@ -71,10 +70,13 @@ fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
     return audioDataEntity
 }
 
-fun getAlbumBitmap(application: Application, albumId: Long): Bitmap {
+fun getAlbumBitmap(application: Application, albumId: Long): Bitmap? {
     val albumUri = ContentUris.withAppendedId(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, albumId)
 
-    return application.contentResolver.loadThumbnail(albumUri, Size(480, 480), null)
+    runCatching {
+        return application.contentResolver.loadThumbnail(albumUri, Size(480, 480), null)
+    }
+    return null
 }
 
 fun AudioPlayerListState.toAudioListState(): AudioListState {
@@ -100,7 +102,7 @@ fun AudioPlayerListState.State.toAudioPlayerListStateState(): AudioListState.Sta
     return when (this) {
         AudioPlayerListState.State.AUDIO_PLAYING -> AudioListState.State.AUDIO_PLAYING
         AudioPlayerListState.State.BUFFERING -> AudioListState.State.BUFFERING
-        AudioPlayerListState.State.PLAYING -> AudioListState.State.PLAYING
         AudioPlayerListState.State.READY -> AudioListState.State.READY
+        AudioPlayerListState.State.IDLE -> AudioListState.State.IDLE
     }
 }

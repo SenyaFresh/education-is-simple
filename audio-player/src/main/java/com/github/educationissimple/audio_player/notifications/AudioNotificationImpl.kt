@@ -14,14 +14,19 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import com.github.educationissimple.audio_player.R
+import com.github.educationissimple.audio_player.notifications.AudioNotification.Companion.NOTIFICATION_CHANNEL_ID
+import com.github.educationissimple.audio_player.notifications.AudioNotification.Companion.NOTIFICATION_CHANNEL_NAME
+import com.github.educationissimple.audio_player.notifications.AudioNotification.Companion.NOTIFICATION_ID
 import com.github.educationissimple.audio_player.services.AudioServiceManager
 import javax.inject.Inject
 
+@UnstableApi
 class AudioNotificationImpl @Inject constructor(
     private val context: Context,
     private val mediaSession: MediaSession
 ): AudioNotification {
     private val notificationManager = NotificationManagerCompat.from(context)
+    private var playerNotificationManager: PlayerNotificationManager? = null
 
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -31,13 +36,20 @@ class AudioNotificationImpl @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun startAudioNotification(serviceManager: AudioServiceManager) {
-        buildNotification()
+        if (playerNotificationManager == null) {
+            buildNotification()
+        }
+        playerNotificationManager?.setPlayer(mediaSession.player)
         startForeGroundNotificationService(serviceManager.getService())
+    }
+
+    override fun stopAudioNotification() {
+        playerNotificationManager?.setPlayer(null)
     }
 
     @OptIn(UnstableApi::class)
     private fun buildNotification() {
-        PlayerNotificationManager.Builder(
+        playerNotificationManager = PlayerNotificationManager.Builder(
             context,
             NOTIFICATION_ID,
             NOTIFICATION_CHANNEL_ID
@@ -56,7 +68,6 @@ class AudioNotificationImpl @Inject constructor(
                 it.setUseRewindActionInCompactView(true)
                 it.setUseNextActionInCompactView(true)
                 it.setPriority(NotificationCompat.PRIORITY_LOW)
-                it.setPlayer(mediaSession.player)
             }
     }
 
@@ -76,11 +87,5 @@ class AudioNotificationImpl @Inject constructor(
             NotificationManager.IMPORTANCE_LOW
         )
         notificationManager.createNotificationChannel(channel)
-    }
-
-    companion object {
-        private const val NOTIFICATION_ID = 111
-        private const val NOTIFICATION_CHANNEL_NAME = "app.AUDIO_CHANNEL_NAME"
-        private const val NOTIFICATION_CHANNEL_ID = "app.AUDIO_CHANNEL_ID"
     }
 }

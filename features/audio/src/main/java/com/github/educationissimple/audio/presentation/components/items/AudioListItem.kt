@@ -1,5 +1,6 @@
 package com.github.educationissimple.audio.presentation.components.items
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -70,20 +72,27 @@ fun AudioListItem(
             horizontalArrangement = Arrangement.Start
         ) {
             Box(
-                Modifier.size(40.dp),
+                Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
-
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(audio.imageBitmap)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(4.dp))
-                )
+                if (audio.imageBitmap == null) {
+                    Image(
+                        imageVector = Icons.Default.MusicNote,
+                        contentDescription = null,
+                    )
+                } else {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(audio.imageBitmap)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
                 if (isSelected) {
                     PlayingIndicator(isPlaying = isAudioPlaying, modifier = Modifier.size(10.dp))
                 }

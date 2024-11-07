@@ -16,20 +16,24 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlayer) : AudioListPlayerHandler, Player.Listener {
+class RealAudioListPlayerHandler @Inject constructor(
+    private val player: ExoPlayer
+) : AudioListPlayerHandler, Player.Listener {
 
-    private val state = MutableStateFlow<ResultContainer<AudioPlayerListState>>(ResultContainer.Loading)
+    private val state =
+        MutableStateFlow<ResultContainer<AudioPlayerListState>>(ResultContainer.Loading)
     private var progressJob: Job? = null
     private var initialized = false
+    private var closed = false
 
     init {
         player.addListener(this)
+        player.playWhenReady = false
     }
 
     override suspend fun initAudioItems(audioItemItems: List<AudioItem>) {
         player.setMediaItems(audioItemItems.map { it.toMediaItem() })
         initialized = true
-        updateState()
     }
 
     override suspend fun addAudio(audioItem: AudioItem) {
@@ -38,8 +42,13 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
     }
 
     override suspend fun removeAudio(index: Int) {
-        player.removeMediaItem(index)
-        updateState()
+        if (index == player.currentMediaItemIndex) {
+            player.removeMediaItem(index)
+            close()
+        } else {
+            player.removeMediaItem(index)
+            updateState()
+        }
     }
 
     override suspend fun getAudioListState(): Flow<ResultContainer<AudioPlayerListState>> {
@@ -47,9 +56,15 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
     }
 
     override suspend fun selectMedia(index: Int) {
+        if (closed) {
+            closed = false
+        }
+        if (initialized && player.playbackState == Player.STATE_IDLE) {
+            player.prepare()
+            player.playWhenReady = true
+        }
         if (index != player.currentMediaItemIndex) {
             player.seekToDefaultPosition(index)
-            player.playWhenReady = true
             startProgressing()
         } else {
             playPause()
@@ -80,7 +95,15 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
             seekToDefaultPosition(0)
         }
         stopProgressing()
-        updateState()
+        state.value = ResultContainer.Done(
+            AudioPlayerListState(
+                state = AudioPlayerListState.State.IDLE,
+                currentAudioUri = null,
+                positionMs = 0,
+                durationMs = 0
+            )
+        )
+        closed = true
     }
 
     override suspend fun next() {
@@ -109,14 +132,12 @@ class RealAudioListPlayerHandler @Inject constructor(private val player: ExoPlay
     }
 
     private fun updateState() {
-        if (initialized && player.playbackState == Player.STATE_IDLE) {
-            player.prepare()
-        }
+        if (closed) return
         val playbackState = when {
             player.isPlaying -> AudioPlayerListState.State.AUDIO_PLAYING
             player.playbackState == Player.STATE_BUFFERING -> AudioPlayerListState.State.BUFFERING
             player.playbackState == Player.STATE_READY -> AudioPlayerListState.State.READY
-            else -> AudioPlayerListState.State.PLAYING
+            else -> AudioPlayerListState.State.IDLE
         }
         val audioPlayerListState = AudioPlayerListState(
             state = playbackState,
