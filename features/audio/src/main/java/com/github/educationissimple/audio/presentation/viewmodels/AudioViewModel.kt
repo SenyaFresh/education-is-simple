@@ -43,6 +43,9 @@ class AudioViewModel @Inject constructor(
         MutableStateFlow<ResultContainer<List<Audio>>>(ResultContainer.Loading)
     val audioItems = _audioItems.asStateFlow()
 
+    private val _currentAudioItem = MutableStateFlow<Audio?>(null)
+    val currentAudioItem = _currentAudioItem
+
     private val _activeCategoryId = MutableStateFlow<ResultContainer<Long>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
 
@@ -76,8 +79,10 @@ class AudioViewModel @Inject constructor(
     }
 
     private fun collectPlayerState() = viewModelScope.launch {
-        getPlayerStateUseCase.getPlayerState().collect {
-            _audioListState.value = it
+        getPlayerStateUseCase.getPlayerState().collect { state ->
+            _audioListState.value = state
+            _currentAudioItem.value =
+                _audioItems.value.unwrapOrNull()?.find { it.uri == state.unwrap().currentAudioUri }
         }
     }
 
@@ -99,6 +104,7 @@ class AudioViewModel @Inject constructor(
             is PlayerController.SelectMedia -> getIndexByUri(controller.uri)?.let {
                 changeSelectedAudioUseCase.changeSelectedAudio(it)
             }
+
             is PlayerController.PlayPause -> controlAudioUseCase.playPause()
             is PlayerController.SetPosition -> controlAudioUseCase.setPosition(controller.positionMs)
         }

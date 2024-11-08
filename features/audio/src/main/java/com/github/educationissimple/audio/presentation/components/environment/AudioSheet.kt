@@ -1,12 +1,16 @@
 package com.github.educationissimple.audio.presentation.components.environment
 
-import android.net.Uri
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -14,8 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Forward10
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PauseCircle
 import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Replay10
@@ -35,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,7 +68,7 @@ fun AudioSheet(
     isPlaying: Boolean,
     currentTime: Long,
     onPlayerController: (PlayerController) -> Unit,
-    onMenuClick: () -> Unit,
+    onCategoryClick: () -> Unit,
     isSheetOpen: Boolean,
     onDismiss: () -> Unit
 ) {
@@ -94,7 +98,7 @@ fun AudioSheet(
         ) {
             AudioImage(audio)
             Spacer(modifier = Modifier.size(LocalSpacing.current.large))
-            AudioTitle(audio, onMenuClick)
+            AudioTitle(audio, onCategoryClick)
             Spacer(modifier = Modifier.size(24.dp))
             AudioSlider(
                 audio = audio,
@@ -109,7 +113,7 @@ fun AudioSheet(
             Spacer(modifier = Modifier.height(LocalSpacing.current.extraLarge))
             AudioControls(
                 isPlaying = isPlaying,
-                onTimeToPosition = { timeChangeToPosition(audio.duration, currentTime, it) },
+                onTimeToPosition = { timeChangeToPosition(currentTime, audio.duration, it) },
                 onPlayerController = onPlayerController,
             )
             Spacer(modifier = Modifier.height(LocalSpacing.current.large))
@@ -119,20 +123,36 @@ fun AudioSheet(
 
 @Composable
 fun AudioImage(audio: Audio) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(Uri.parse(audio.uri))
-            .crossfade(true)
-            .build(),
-        contentDescription = null,
-        modifier = Modifier
+    Box(
+        Modifier
             .fillMaxWidth()
+            .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-    )
+            .background(Neutral.Light.Medium),
+        contentAlignment = Alignment.Center
+    ) {
+        if (audio.imageBitmap == null) {
+            Image(
+                imageVector = Icons.Default.MusicNote,
+                contentDescription = null,
+                modifier = Modifier.size(52.dp)
+            )
+        } else {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(audio.imageBitmap)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
+        }
+    }
 }
 
 @Composable
-fun AudioTitle(audio: Audio, onMenuClick: () -> Unit) {
+fun AudioTitle(audio: Audio, onCategoryClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -145,10 +165,10 @@ fun AudioTitle(audio: Audio, onMenuClick: () -> Unit) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = onMenuClick, modifier = Modifier.size(24.dp)) {
+        IconButton(onClick = onCategoryClick) {
             Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = stringResource(R.string.audio_menu)
+                imageVector = Icons.Default.Category,
+                contentDescription = stringResource(R.string.audio_category)
             )
         }
     }
@@ -224,46 +244,65 @@ fun AudioControls(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = {
-            onPlayerController(
-                PlayerController.SetPosition(
-                    onTimeToPosition(10)
+        IconButton(
+            onClick = {
+                onPlayerController(
+                    PlayerController.SetPosition(
+                        onTimeToPosition(-10)
+                    )
                 )
+            },
+            modifier = Modifier.size(48.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Replay10,
+                contentDescription = null,
+                modifier = Modifier.size(36.dp)
             )
-        }, modifier = Modifier.scale(1.6f)) {
-            Icon(imageVector = Icons.Default.Replay10, contentDescription = null)
         }
 
         IconButton(
             onClick = { onPlayerController(PlayerController.Previous) },
-            modifier = Modifier.scale(1.8f)
+            modifier = Modifier.size(54.dp)
         ) {
-            Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.SkipPrevious,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
         }
 
         IconButton(
             onClick = { onPlayerController(PlayerController.PlayPause) },
-            modifier = Modifier.scale(2.6f)
+            modifier = Modifier.size(78.dp)
         ) {
-            if (isPlaying) {
-                Icon(imageVector = Icons.Default.PauseCircle, contentDescription = null)
-            } else {
-                Icon(imageVector = Icons.Default.PlayCircleFilled, contentDescription = null)
-            }
+            Icon(
+                imageVector = if (isPlaying) Icons.Default.PauseCircle else Icons.Default.PlayCircleFilled,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp)
+            )
         }
 
         IconButton(
             onClick = { onPlayerController(PlayerController.Next) },
-            modifier = Modifier.scale(1.8f)
+            modifier = Modifier.size(54.dp)
         ) {
-            Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.SkipNext,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
         }
 
         IconButton(
-            onClick = { onPlayerController(PlayerController.SetPosition(-10)) },
-            modifier = Modifier.scale(1.6f)
+            onClick = { onPlayerController(PlayerController.SetPosition(onTimeToPosition(10))) },
+            modifier = Modifier.size(48.dp) // Размер кнопки
         ) {
-            Icon(imageVector = Icons.Default.Forward10, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.Forward10,
+                contentDescription = null,
+                modifier = Modifier.size(36.dp) // Размер иконки
+            )
         }
     }
 }
@@ -276,7 +315,7 @@ fun AudioSheetPreview() {
         isPlaying = true,
         currentTime = 10,
         onPlayerController = { },
-        onMenuClick = {},
+        onCategoryClick = {},
         isSheetOpen = true,
         onDismiss = {}
     )

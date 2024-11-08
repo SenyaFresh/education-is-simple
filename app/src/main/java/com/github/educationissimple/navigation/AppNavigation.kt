@@ -3,6 +3,7 @@ package com.github.educationissimple.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.educationissimple.R
+import com.github.educationissimple.audio.presentation.components.environment.CurrentAudioFloatingItem
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
@@ -47,10 +49,13 @@ fun AppNavigation() {
             )
         },
         bottomBar = {
-            AppNavigationBar(
-                navigationController = navController,
-                tabs = MainTabs
-            )
+            Column {
+                CurrentAudioFloatingItem()
+                AppNavigationBar(
+                    navigationController = navController,
+                    tabs = MainTabs
+                )
+            }
         }
     ) { padding ->
         NavHost(
