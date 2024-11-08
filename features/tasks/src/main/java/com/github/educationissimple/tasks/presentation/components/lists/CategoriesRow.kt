@@ -1,28 +1,20 @@
 package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ContextualFlowRow
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.ActionableListItem
-import com.github.educationissimple.components.composables.LoadingActionableListItem
-import com.github.educationissimple.presentation.ResultContainerComposable
-import com.github.educationissimple.presentation.locals.LocalSpacing
+import com.github.educationissimple.components.composables.ActionableItemsFlowRow
+import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoriesRow(
     categories: ResultContainer<List<TaskCategory>>,
@@ -32,46 +24,17 @@ fun CategoriesRow(
     activeCategoryId: Long = NO_CATEGORY_ID,
     maxLines: Int = Int.MAX_VALUE
 ) {
-
-    ResultContainerComposable(
-        container = categories,
-        onTryAgain = { },
-        onLoading = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = modifier.padding(vertical = LocalSpacing.current.small)
-            ) {
-                repeat(5) {
-                    LoadingActionableListItem()
-                }
-            }
-        }
-    ) {
-        val displayedCategories = listOf(
-            TaskCategory(
-                id = NO_CATEGORY_ID,
-                name = firstCategoryLabel
-            )
-        ) + categories.unwrap()
-
-        ContextualFlowRow(
-            itemCount = displayedCategories.size,
-            maxLines = maxLines,
-            horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            modifier = modifier
-        ) { index ->
-            val category = displayedCategories[index]
-            key(category.id, activeCategoryId) {
-                ActionableListItem(
-                    label = category.name,
-                    isActive = category.id == activeCategoryId,
-                    onClick = { onCategoryClick(category.id) }
-                )
-            }
-        }
-    }
+    ActionableItemsFlowRow(
+        items = categories.map { list -> list.map { ActionableItem(it.id, it.name) } },
+        onItemClick = onCategoryClick,
+        modifier = modifier,
+        activeItemId = activeCategoryId,
+        leadingItem = ActionableItem(
+            id = NO_CATEGORY_ID,
+            name = firstCategoryLabel
+        ),
+        maxLines = maxLines
+    )
 }
 
 @Preview(showSystemUi = true)

@@ -53,7 +53,6 @@ fun ActionableListItem(
             if (isActive) Highlight.Darkest else Highlight.Lightest
         }
     }
-
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(18.dp),
