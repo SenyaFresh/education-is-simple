@@ -43,7 +43,13 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
         mediaSession = moduleDiContainer.mediaSession
         notification = moduleDiContainer.notification
 
+        // avoid app crash
+        startAudioNotification()
+        stopAudioNotification()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+
         mediaSession.player.addListener(playerListener)
+
 
         return super.onStartCommand(intent, flags, startId)
     }

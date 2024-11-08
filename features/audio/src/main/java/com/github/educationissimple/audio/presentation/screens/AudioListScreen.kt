@@ -1,5 +1,7 @@
 package com.github.educationissimple.audio.presentation.screens
 
+import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.horizontalScroll
@@ -27,6 +29,7 @@ import com.github.educationissimple.audio.domain.entities.AudioCategory
 import com.github.educationissimple.audio.domain.entities.AudioCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.entities.PlayerController
+import com.github.educationissimple.audio.presentation.components.dialogs.DeniedAudioPermissionDialog
 import com.github.educationissimple.audio.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.audio.presentation.components.lists.AudioCategoriesRow
 import com.github.educationissimple.audio.presentation.components.lists.AudioItemsColumn
@@ -37,6 +40,9 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.buttons.AddFloatingActionButton
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 fun AudioListScreen(
@@ -53,6 +59,7 @@ fun AudioListScreen(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AudioListContent(
     audioCategories: ResultContainer<List<AudioCategory>>,
@@ -62,7 +69,8 @@ fun AudioListContent(
     onAudioEvent: (AudioEvent) -> Unit
 ) {
     var selectedWhileAddingCategoryId by remember { mutableStateOf<Long?>(null) }
-    var showSelectCategoryDialog by remember { mutableStateOf(false) }
+    var showAddAudioDialog by remember { mutableStateOf(false) }
+    var showAudioPermissionDialog by remember { mutableStateOf(false) }
     val selectAudioLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -77,18 +85,46 @@ fun AudioListContent(
         }
     )
 
-    if (showSelectCategoryDialog) {
-        SelectCategoryDialog(
-            title = stringResource(R.string.select_audio_category),
-            categories = audioCategories,
-            onConfirm = {
-                selectedWhileAddingCategoryId = it.id
-                selectAudioLauncher.launch("audio/mpeg")
-                showSelectCategoryDialog = false
-            },
-            onCancel = { showSelectCategoryDialog = false },
-            onAddNewCategory = { onAudioEvent(AudioEvent.CreateCategoryEvent(it)) }
+    val audioPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(
+            Manifest.permission.READ_MEDIA_AUDIO
         )
+    } else {
+        rememberPermissionState(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+    }
+
+    if (showAudioPermissionDialog) {
+        DeniedAudioPermissionDialog(
+            audioPermissionState = audioPermissionState,
+            onDismiss = {
+                showAudioPermissionDialog = false
+                showAddAudioDialog = false
+            }
+        )
+    }
+
+    if (showAddAudioDialog) {
+        when (audioPermissionState.status) {
+            is PermissionStatus.Denied -> {
+                showAudioPermissionDialog = true
+            }
+
+            is PermissionStatus.Granted -> {
+                SelectCategoryDialog(
+                    title = stringResource(R.string.select_audio_category),
+                    categories = audioCategories,
+                    onConfirm = {
+                        selectedWhileAddingCategoryId = it.id
+                        selectAudioLauncher.launch("audio/mpeg")
+                        showAddAudioDialog = false
+                    },
+                    onCancel = { showAddAudioDialog = false },
+                    onAddNewCategory = { onAudioEvent(AudioEvent.CreateCategoryEvent(it)) }
+                )
+            }
+        }
     }
 
     ResultContainerComposable(
@@ -118,7 +154,13 @@ fun AudioListContent(
                 playingAudioUri =
                 if (audioListState.unwrapOrNull()?.state != AudioListState.State.AUDIO_PLAYING) null
                 else audioListState.unwrapOrNull()?.currentAudioUri,
-                onAudioClick = { onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it))) },
+                onAudioClick = {
+                    if (audioPermissionState.status is PermissionStatus.Granted) {
+                        onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it)))
+                    } else {
+                        showAudioPermissionDialog = true
+                    }
+                },
                 onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
             )
         }
@@ -126,7 +168,7 @@ fun AudioListContent(
 
     Box(modifier = Modifier.fillMaxSize()) {
         AddFloatingActionButton(
-            onClick = { showSelectCategoryDialog = true },
+            onClick = { showAddAudioDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(LocalSpacing.current.medium)
