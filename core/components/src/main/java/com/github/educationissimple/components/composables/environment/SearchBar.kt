@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.environment
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
-import com.github.educationissimple.components.composables.DefaultDialog
-import com.github.educationissimple.components.composables.DefaultRadioItem
+import com.github.educationissimple.components.composables.dialogs.DefaultDialog
+import com.github.educationissimple.components.composables.inputs.DefaultRadioItem
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 

@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.buttons
 
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors

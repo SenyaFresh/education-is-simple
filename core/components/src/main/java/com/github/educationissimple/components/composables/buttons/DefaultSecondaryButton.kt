@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.ButtonDefaults

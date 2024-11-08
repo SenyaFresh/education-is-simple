@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.audio.domain.entities.AudioCategory
 import com.github.educationissimple.audio.domain.entities.AudioCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.ActionableItemsFlowRow
+import com.github.educationissimple.components.composables.lists.ActionableItemsFlowRow
 import com.github.educationissimple.components.entities.ActionableItem
 
 @Composable

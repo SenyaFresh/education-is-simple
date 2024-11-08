@@ -8,9 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,10 +27,11 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.educationissimple.R
 import com.github.educationissimple.audio.presentation.components.environment.CurrentAudioFloatingItem
+import com.github.educationissimple.audio.presentation.screens.AudioCategoriesScreen
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
-import com.github.educationissimple.tasks.presentation.screens.CategoriesScreen
+import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScreen
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
 
 @Composable
@@ -30,10 +39,41 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val titleRes: Int? = when (currentBackStackEntry.value.routeClass()) {
-        TasksGraph.CategoriesScreen::class -> R.string.manage_categories
+        TasksGraph.TaskCategoriesScreen::class -> R.string.manage_task_categories
         TasksGraph.TasksScreen::class -> R.string.tasks
-        CalendarGraph.CalendarScreen::class -> R.string.calendar
+        TasksGraph.CalendarScreen::class -> R.string.calendar
         AudioGraph.AudioScreen::class -> R.string.audio
+        AudioGraph.AudioCategoriesScreen::class -> R.string.manage_audio_categories
+        else -> null
+    }
+    val leftIconAction: IconAction? = if (navController.previousBackStackEntry == null) {
+        null
+    } else {
+        IconAction(Icons.AutoMirrored.Filled.KeyboardArrowLeft) { navController.popBackStack() }
+    }
+    var tasksScreenSearchEnabled by remember { mutableStateOf(false) }
+
+    val rightIconsActions: List<IconAction>? = when (currentBackStackEntry.value.routeClass()) {
+        TasksGraph.TasksScreen::class -> listOf(
+            IconAction(
+                imageVector = if (!tasksScreenSearchEnabled) Icons.Default.Search else Icons.Default.SearchOff,
+                onClick = { tasksScreenSearchEnabled = !tasksScreenSearchEnabled }
+            ),
+            IconAction(
+                imageVector = Icons.Default.CalendarMonth,
+                onClick = { navController.navigate(TasksGraph.CalendarScreen) }
+            ),
+            IconAction(
+                imageVector = Icons.Default.Category,
+                onClick = { navController.navigate(TasksGraph.TaskCategoriesScreen) }
+            )
+        )
+        AudioGraph.AudioScreen::class -> listOf(
+            IconAction(
+                imageVector = Icons.Default.Category,
+                onClick = { navController.navigate(AudioGraph.AudioCategoriesScreen) }
+            )
+        )
         else -> null
     }
 
@@ -41,11 +81,8 @@ fun AppNavigation() {
         topBar = {
             AppTopBar(
                 titleRes = titleRes,
-                leftIconAction = if (navController.previousBackStackEntry == null) {
-                    LeftIconAction.None
-                } else {
-                    LeftIconAction.Visible(Icons.AutoMirrored.Filled.KeyboardArrowLeft) { navController.popBackStack() }
-                }
+                leftIconAction = leftIconAction,
+                rightIconsActions = rightIconsActions
             )
         },
         bottomBar = {
@@ -72,17 +109,16 @@ fun AppNavigation() {
             ) {
                 composable<TasksGraph.TasksScreen> {
                     ShowBackground()
-                    TasksScreen(onManageTasksClicked = { navController.navigate(TasksGraph.CategoriesScreen) })
+                    TasksScreen(
+                        searchEnabled = tasksScreenSearchEnabled,
+                        onSearchEnabledChange = { tasksScreenSearchEnabled = it }
+                    )
                 }
-                composable<TasksGraph.CategoriesScreen> {
+                composable<TasksGraph.TaskCategoriesScreen> {
                     ShowBackground()
-                    CategoriesScreen()
+                    TaskCategoriesScreen()
                 }
-            }
-            navigation<CalendarGraph>(
-                startDestination = CalendarGraph.CalendarScreen
-            ) {
-                composable<CalendarGraph.CalendarScreen> {
+                composable<TasksGraph.CalendarScreen> {
                     ShowBackground()
                     CalendarScreen()
                 }
@@ -95,6 +131,10 @@ fun AppNavigation() {
                     ShowBackground()
                     AudioListScreen()
                 }
+                composable<AudioGraph.AudioCategoriesScreen> {
+                    ShowBackground()
+                    AudioCategoriesScreen()
+                }
             }
         }
     }
@@ -102,10 +142,5 @@ fun AppNavigation() {
 
 @Composable
 fun ShowBackground() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Neutral.Light.Lightest
-    ) {
-
-    }
+    Surface(modifier = Modifier.fillMaxSize(), color = Neutral.Light.Lightest) {}
 }

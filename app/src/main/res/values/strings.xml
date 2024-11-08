@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Education is simple</string>
     <string name="category_constraint_exception">Категория с таким именем уже существует.</string>
-    <string name="manage_categories">Редактировать категории</string>
+    <string name="manage_task_categories">Редактировать категории задач</string>
     <string name="tasks">Задачи</string>
     <string name="calendar">Календарь</string>
     <string name="audio">Аудио</string>
+    <string name="manage_audio_categories">Редактировать категории аудио</string>
 </resources>

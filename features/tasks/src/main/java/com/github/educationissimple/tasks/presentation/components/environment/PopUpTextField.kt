@@ -38,9 +38,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.components.composables.ActionableListItem
-import com.github.educationissimple.components.composables.DefaultIconButton
-import com.github.educationissimple.components.composables.DefaultTextField
+import com.github.educationissimple.components.composables.buttons.DefaultIconButton
+import com.github.educationissimple.components.composables.inputs.DefaultTextField
+import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task

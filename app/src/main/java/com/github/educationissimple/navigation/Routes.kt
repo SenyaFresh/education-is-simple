@@ -13,16 +13,10 @@ data object TasksGraph {
     data object TasksScreen
 
     @Serializable
-    data object CategoriesScreen
-
-}
-
-@Serializable
-data object CalendarGraph {
+    data object TaskCategoriesScreen
 
     @Serializable
     data object CalendarScreen
-
 }
 
 @Serializable
@@ -30,6 +24,9 @@ data object AudioGraph {
 
     @Serializable
     data object AudioScreen
+
+    @Serializable
+    data object AudioCategoriesScreen
 
 }
 

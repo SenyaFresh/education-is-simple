@@ -11,4 +11,5 @@
     <string name="cancel">Отменить</string>
     <string name="continue_">Далее</string>
     <string name="select_audio_category">Выберите категорию аудио</string>
+    <string name="add_new_category">Добавить новую категорию</string>
 </resources>

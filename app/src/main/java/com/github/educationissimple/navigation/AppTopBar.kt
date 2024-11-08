@@ -14,16 +14,14 @@ import androidx.compose.ui.text.font.FontWeight
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 
-sealed class LeftIconAction {
-    data object None : LeftIconAction()
-    data class Visible(val imageVector: ImageVector, val onClick: () -> Unit) : LeftIconAction()
-}
+data class IconAction(val imageVector: ImageVector, val onClick: () -> Unit)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
     @StringRes titleRes: Int? = null,
-    leftIconAction: LeftIconAction
+    leftIconAction: IconAction? = null,
+    rightIconsActions: List<IconAction>? = null
 ) {
     TopAppBar(
         title = {
@@ -35,11 +33,22 @@ fun AppTopBar(
             }
         },
         navigationIcon = {
-            if (leftIconAction is LeftIconAction.Visible) {
-                IconButton(onClick = leftIconAction.onClick) {
+            leftIconAction?.let {
+                IconButton(onClick = it.onClick) {
                     Icon(
-                        imageVector = leftIconAction.imageVector,
+                        imageVector = it.imageVector,
                         tint = Highlight.Dark,
+                        contentDescription = null
+                    )
+                }
+            }
+        },
+        actions = {
+            rightIconsActions?.forEach {
+                IconButton(onClick = it.onClick) {
+                    Icon(
+                        imageVector = it.imageVector,
+                        tint = Neutral.Dark.Darkest,
                         contentDescription = null
                     )
                 }

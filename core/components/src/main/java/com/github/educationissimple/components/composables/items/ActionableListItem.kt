@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +33,8 @@ import com.github.educationissimple.components.R
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
+import com.github.educationissimple.components.composables.ActionIcon
+import com.github.educationissimple.components.composables.shimmerEffect
 
 @Composable
 fun ActionableListItem(
@@ -56,6 +58,7 @@ fun ActionableListItem(
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(18.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
         onClick = onClick,
         modifier = modifier,
     ) {

@@ -121,7 +121,8 @@ fun TaskListItem(
             width = 1.dp,
             color = task.priority.toColor(),
             shape = CardDefaults.shape
-        )
+        ),
+        elevation = CardDefaults.cardElevation(1.dp)
     ) {
         TaskCardContent(
             task = task,

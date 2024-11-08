@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.inputs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

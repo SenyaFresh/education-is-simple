@@ -10,6 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,8 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.AddFloatingActionButton
-import com.github.educationissimple.components.composables.SearchBar
+import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.buttons.AddFloatingActionButton
+import com.github.educationissimple.components.composables.environment.SearchBar
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
@@ -37,7 +43,6 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
-import com.github.educationissimple.tasks.presentation.components.environment.TasksListActionsDropdownMenu
 import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
@@ -48,7 +53,8 @@ import java.time.LocalDate
 fun TasksScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),
     viewModel: TasksViewModel = viewModel(factory = diContainer.viewModelFactory),
-    onManageTasksClicked: () -> Unit
+    searchEnabled: Boolean,
+    onSearchEnabledChange: (Boolean) -> Unit
 ) {
     TasksContent(
         previousTasks = viewModel.previousTasks.collectAsStateWithLifecycle().value,
@@ -56,7 +62,8 @@ fun TasksScreen(
         futureTasks = viewModel.futureTasks.collectAsStateWithLifecycle().value,
         completedTasks = viewModel.completedTasks.collectAsStateWithLifecycle().value,
         categories = viewModel.categories.collectAsStateWithLifecycle().value,
-        onManageTasksClicked = onManageTasksClicked,
+        searchEnabled = searchEnabled,
+        onSearchEnabledChange = onSearchEnabledChange,
         currentSortType = viewModel.sortType.collectAsStateWithLifecycle().value.unwrapOrNull(),
         activeCategoryId = viewModel.activeCategoryId.collectAsStateWithLifecycle().value.unwrapOrNull()
             ?: NO_CATEGORY_ID,
@@ -71,14 +78,14 @@ fun TasksContent(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
-    onManageTasksClicked: () -> Unit,
+    searchEnabled: Boolean,
+    onSearchEnabledChange: (Boolean) -> Unit,
     currentSortType: SortType? = null,
     activeCategoryId: Long = NO_CATEGORY_ID,
     onTasksEvent: (TasksEvent) -> Unit,
 ) {
     var isAddingTask by rememberSaveable { mutableStateOf(false) }
     var showSortTypeDialog by remember { mutableStateOf(false) }
-    var showSearchBar by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
@@ -119,7 +126,7 @@ fun TasksContent(
 
     Column {
         Crossfade(
-            targetState = showSearchBar,
+            targetState = searchEnabled,
             label = "Show search bar",
             animationSpec = tween(100),
             modifier = Modifier.animateContentSize()
@@ -129,7 +136,7 @@ fun TasksContent(
                     text = searchQuery,
                     onValueChange = { searchQuery = it },
                     onCancelClick = {
-                        showSearchBar = false
+                        onSearchEnabledChange(false)
                         searchQuery = ""
                     },
                     label = stringResource(R.string.search_task),
@@ -140,12 +147,13 @@ fun TasksContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TasksListActionsDropdownMenu(
+                    IconButton(
                         enabled = categories is ResultContainer.Done,
-                        onSortTypeItemClicked = { showSortTypeDialog = true },
-                        onFindItemClicked = { showSearchBar = true },
-                        onManageTasksClicked = onManageTasksClicked
-                    )
+                        onClick = { showSortTypeDialog = true },
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Darkest),
+                    ) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.Sort, contentDescription = null)
+                    }
 
                     CategoriesRow(
                         categories = categories,
@@ -248,8 +256,10 @@ fun TasksContentPreview() {
                 TaskCategory(it.toLong(), "Category $it")
             }
         ),
+        searchEnabled = false,
+        onSearchEnabledChange = {},
+        currentSortType = null,
         onTasksEvent = {},
-        onManageTasksClicked = {}
     )
 }
 
@@ -262,7 +272,9 @@ fun TasksScreenPreviewLoading() {
         futureTasks = ResultContainer.Loading,
         completedTasks = ResultContainer.Loading,
         categories = ResultContainer.Loading,
+        searchEnabled = false,
+        onSearchEnabledChange = {},
+        currentSortType = null,
         onTasksEvent = {},
-        onManageTasksClicked = {}
     )
 }

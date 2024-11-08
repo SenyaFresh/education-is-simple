@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.ActionableItemsFlowRow
+import com.github.educationissimple.components.composables.lists.ActionableItemsFlowRow
 import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID

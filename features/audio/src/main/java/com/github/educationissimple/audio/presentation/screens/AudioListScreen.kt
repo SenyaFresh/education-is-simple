@@ -34,7 +34,7 @@ import com.github.educationissimple.audio.presentation.entities.dummies.dummyAud
 import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.audio.presentation.viewmodels.AudioViewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.composables.AddFloatingActionButton
+import com.github.educationissimple.components.composables.buttons.AddFloatingActionButton
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 

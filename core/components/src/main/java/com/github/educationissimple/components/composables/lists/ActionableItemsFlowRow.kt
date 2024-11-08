@@ -1,4 +1,4 @@
-package com.github.educationissimple.components.composables
+package com.github.educationissimple.components.composables.lists
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.composables.items.ActionableListItem
+import com.github.educationissimple.components.composables.items.LoadingActionableListItem
 import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
