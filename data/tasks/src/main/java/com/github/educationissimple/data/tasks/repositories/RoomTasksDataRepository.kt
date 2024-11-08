@@ -4,7 +4,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.common.flow.LazyFlowLoaderFactory
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
-import com.github.educationissimple.data.tasks.sources.PreferencesDataSource
+import com.github.educationissimple.data.tasks.sources.TaskPreferencesDataSource
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class RoomTasksDataRepository @Inject constructor(
     private val tasksDataSource: TasksDataSource,
-    private val preferencesDataSource: PreferencesDataSource,
+    private val taskPreferencesDataSource: TaskPreferencesDataSource,
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
 
@@ -22,12 +22,12 @@ class RoomTasksDataRepository @Inject constructor(
     private var selectedDate: LocalDate = LocalDate.now()
 
     private var currentCategoryId: Long?
-        get() = preferencesDataSource.getSelectedCategoryId()
-        set(value) = preferencesDataSource.saveSelectedCategoryId(value)
+        get() = taskPreferencesDataSource.getSelectedCategoryId()
+        set(value) = taskPreferencesDataSource.saveSelectedCategoryId(value)
 
     private var currentSortType: String?
-        get() = preferencesDataSource.getSortType()
-        set(value) = preferencesDataSource.saveSortType(value)
+        get() = taskPreferencesDataSource.getSortType()
+        set(value) = taskPreferencesDataSource.saveSortType(value)
 
     private val selectedCategoryIdLoader = lazyFlowLoaderFactory.create {
         currentCategoryId
@@ -152,7 +152,7 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeCategory(categoryId: Long?) {
-        preferencesDataSource.saveSelectedCategoryId(categoryId)
+        // todo: check
         currentCategoryId = categoryId
         selectedCategoryIdLoader.newAsyncLoad(silently = true)
         updateSources()
@@ -169,11 +169,15 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun deleteCategory(id: Long) {
         tasksDataSource.deleteCategory(id)
+        if (currentCategoryId == id) {
+            currentCategoryId = null
+        }
         categoriesLoader.newAsyncLoad(silently = true)
+        updateSources()
     }
 
     override suspend fun changeSortingType(sortType: String?) {
-        preferencesDataSource.saveSortType(sortType)
+        // todo: check
         currentSortType = sortType
         selectedSortTypeLoader.newAsyncLoad(silently = true)
         updateSources()

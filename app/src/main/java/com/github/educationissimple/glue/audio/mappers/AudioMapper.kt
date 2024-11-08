@@ -62,7 +62,8 @@ fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
                 imageBitmap = albumBitmap,
                 title = cursor.getString(titleColumn),
                 subtitle = cursor.getString(artistColumn),
-                duration = cursor.getLong(durationColumn)
+                duration = cursor.getLong(durationColumn),
+                categoryId = null // todo
             )
         }
     }

@@ -6,6 +6,9 @@ import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioCategory
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.entities.PlayerController
+import com.github.educationissimple.audio.domain.usecases.categories.AddCategoryUseCase
+import com.github.educationissimple.audio.domain.usecases.categories.DeleteCategoryUseCase
+import com.github.educationissimple.audio.domain.usecases.categories.GetCategoriesUseCase
 import com.github.educationissimple.audio.domain.usecases.data.AddAudioToRepoUseCase
 import com.github.educationissimple.audio.domain.usecases.data.DeleteAudioFromRepoUseCase
 import com.github.educationissimple.audio.domain.usecases.data.GetAudioItemsUseCase
@@ -32,7 +35,10 @@ class AudioViewModel @Inject constructor(
     private val getPlayerStateUseCase: GetPlayerStateUseCase,
     private val addAudioToPlayerUseCase: AddAudioToPlayerUseCase,
     private val deleteAudioFromPlayerUseCase: DeleteAudioFromPlayerUseCase,
-    private val initPlayerUseCase: InitPlayerUseCase
+    private val initPlayerUseCase: InitPlayerUseCase,
+    private val addAudioCategoryUseCase: AddCategoryUseCase,
+    private val deleteAudioCategoryUseCase: DeleteCategoryUseCase,
+    private val getCategoriesUseCase: GetCategoriesUseCase
 ) : BaseViewModel() {
 
     private val _audioCategories =
@@ -46,7 +52,8 @@ class AudioViewModel @Inject constructor(
     private val _currentAudioItem = MutableStateFlow<Audio?>(null)
     val currentAudioItem = _currentAudioItem
 
-    private val _activeCategoryId = MutableStateFlow<ResultContainer<Long>>(ResultContainer.Loading)
+    private val _activeCategoryId =
+        MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
 
     private var _audioListState =
@@ -56,15 +63,20 @@ class AudioViewModel @Inject constructor(
     init {
         collectAudioItems()
         collectPlayerState()
+        collectAudioCategories()
+        collectActiveCategoryId()
     }
 
     private var isPlayerInitialized = false
 
     fun onEvent(event: AudioEvent) {
         when (event) {
-            is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.uri)
+            is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.uri, event.categoryId)
             is AudioEvent.DeleteAudioItemEvent -> onDeleteAudioItemEvent(event.uri)
             is AudioEvent.PlayerEvent -> onPlayerEvent(event.controller)
+            is AudioEvent.CreateCategoryEvent -> onAddCategoryEvent(event.name)
+            is AudioEvent.DeleteCategoryEvent -> onDeleteCategoryEvent(event.categoryId)
+            is AudioEvent.ChangeCategoryEvent -> onChangeCategoryEvent(event.categoryId)
         }
     }
 
@@ -78,6 +90,12 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    private fun collectAudioCategories() = viewModelScope.launch {
+        getCategoriesUseCase.getCategories().collect {
+            _audioCategories.value = it
+        }
+    }
+
     private fun collectPlayerState() = viewModelScope.launch {
         getPlayerStateUseCase.getPlayerState().collect { state ->
             _audioListState.value = state
@@ -86,14 +104,32 @@ class AudioViewModel @Inject constructor(
         }
     }
 
-    private fun onAddAudioItemEvent(uri: String) = viewModelScope.launch {
-        addAudioToRepoUseCase.addAudioItem(uri)
+    private fun collectActiveCategoryId() = viewModelScope.launch {
+        getCategoriesUseCase.getSelectedCategoryId().collect {
+            _activeCategoryId.value = it
+        }
+    }
+
+    private fun onAddAudioItemEvent(uri: String, categoryId: Long?) = viewModelScope.launch {
+        addAudioToRepoUseCase.addAudioItem(uri, categoryId)
         addAudioToPlayerUseCase.addAudio(uri)
     }
 
     private fun onDeleteAudioItemEvent(uri: String) = viewModelScope.launch {
         deleteAudioFromRepoUseCase.deleteAudioItem(uri)
         deleteAudioFromPlayerUseCase.deleteAudio(getIndexByUri(uri) ?: -1)
+    }
+
+    private fun onAddCategoryEvent(name: String) = viewModelScope.launch {
+        addAudioCategoryUseCase.addCategory(name)
+    }
+
+    private fun onDeleteCategoryEvent(categoryId: Long) = viewModelScope.launch {
+        deleteAudioCategoryUseCase.deleteCategory(categoryId)
+    }
+
+    private fun onChangeCategoryEvent(categoryId: Long?) = viewModelScope.launch {
+        getAudioItemsUseCase.changeSelectedCategoryId(categoryId)
     }
 
     private fun onPlayerEvent(controller: PlayerController) = viewModelScope.launch {
@@ -126,7 +162,10 @@ class AudioViewModel @Inject constructor(
         private val getPlayerStateUseCase: GetPlayerStateUseCase,
         private val addAudioToPlayerUseCase: AddAudioToPlayerUseCase,
         private val deleteAudioFromPlayerUseCase: DeleteAudioFromPlayerUseCase,
-        private val initPlayerUseCase: InitPlayerUseCase
+        private val initPlayerUseCase: InitPlayerUseCase,
+        private val addAudioCategoryUseCase: AddCategoryUseCase,
+        private val deleteAudioCategoryUseCase: DeleteCategoryUseCase,
+        private val getCategoriesUseCase: GetCategoriesUseCase
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == AudioViewModel::class.java)
@@ -139,7 +178,10 @@ class AudioViewModel @Inject constructor(
                 getPlayerStateUseCase,
                 addAudioToPlayerUseCase,
                 deleteAudioFromPlayerUseCase,
-                initPlayerUseCase
+                initPlayerUseCase,
+                addAudioCategoryUseCase,
+                deleteAudioCategoryUseCase,
+                getCategoriesUseCase
             ) as T
         }
     }

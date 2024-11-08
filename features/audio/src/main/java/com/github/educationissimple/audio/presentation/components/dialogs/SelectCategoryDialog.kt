@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components.dialogs
+package com.github.educationissimple.audio.presentation.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.educationissimple.audio.R
+import com.github.educationissimple.audio.domain.entities.AudioCategory
+import com.github.educationissimple.audio.domain.entities.AudioCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.audio.presentation.components.lists.AudioCategoriesRow
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.DefaultDialog
@@ -34,16 +38,12 @@ import com.github.educationissimple.components.composables.DefaultPrimaryButton
 import com.github.educationissimple.components.composables.DefaultSecondaryButton
 import com.github.educationissimple.components.composables.DefaultTextField
 import com.github.educationissimple.presentation.locals.LocalSpacing
-import com.github.educationissimple.tasks.R
-import com.github.educationissimple.tasks.domain.entities.TaskCategory
-import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
-import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 
 @Composable
 fun SelectCategoryDialog(
     title: String,
-    categories: ResultContainer<List<TaskCategory>>,
-    onConfirm: (TaskCategory) -> Unit,
+    categories: ResultContainer<List<AudioCategory>>,
+    onConfirm: (AudioCategory) -> Unit,
     onCancel: () -> Unit,
     onAddNewCategory: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -65,7 +65,7 @@ fun SelectCategoryDialog(
                 .fillMaxWidth()
         ) {
             // Categories list.
-            CategoriesRow(
+            AudioCategoriesRow(
                 categories = categories,
                 onCategoryClick = { activeCategoryId = it },
                 activeCategoryId = activeCategoryId,
@@ -110,7 +110,7 @@ fun SelectCategoryDialog(
                         .weight(1f)
                 )
                 DefaultPrimaryButton(
-                    label = stringResource(R.string.confirm),
+                    label = stringResource(R.string.continue_),
                     onClick = {
                         onConfirm(
                             getSelectedCategory(categories.unwrap(), activeCategoryId)
@@ -125,8 +125,8 @@ fun SelectCategoryDialog(
     }
 }
 
-private fun getSelectedCategory(categories: List<TaskCategory>, id: Long): TaskCategory {
-    return categories.firstOrNull { it.id == id } ?: TaskCategory(
+private fun getSelectedCategory(categories: List<AudioCategory>, id: Long): AudioCategory {
+    return categories.firstOrNull { it.id == id } ?: AudioCategory(
         NO_CATEGORY_ID,
         Core.resources.getString(R.string.no_category)
     )
@@ -140,7 +140,7 @@ fun SelectCategoryDialogPreview() {
             title = "Выберите категорию",
             categories = ResultContainer.Done(
                 (1..10).map {
-                    TaskCategory(id = it.toLong(), name = "Category $it")
+                    AudioCategory(id = it.toLong(), name = "Category $it")
                 }
             ),
             onConfirm = { },

@@ -113,6 +113,7 @@ fun PopUpTextFieldContent(
 
     if (showCategoriesDialog) {
         SelectCategoryDialog(
+            title = stringResource(R.string.select_task_category),
             categories = categories,
             onConfirm = {
                 showCategoriesDialog = false

@@ -8,8 +8,8 @@ import com.github.educationissimple.audio.entities.AudioDataEntity
 @Dao
 interface AudioDao {
 
-    @Query("SELECT * FROM audioItems")
-    suspend fun getAudio(): List<AudioDataEntity>
+    @Query("SELECT * FROM audioItems WHERE (:categoryId IS NULL OR category_id = :categoryId)")
+    suspend fun getAudio(categoryId: Long?): List<AudioDataEntity>
 
     @Insert(entity = AudioDataEntity::class)
     suspend fun addAudio(audioDataEntity: AudioDataEntity)

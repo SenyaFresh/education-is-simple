@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class AddAudioToRepoUseCase @Inject constructor(private val audioRepository: AudioRepository) {
 
-    suspend fun addAudioItem(uri: String) {
-        audioRepository.addAudioItem(uri)
+    suspend fun addAudioItem(uri: String, categoryId: Long?) {
+        audioRepository.addAudioItem(uri, categoryId)
     }
 
 }

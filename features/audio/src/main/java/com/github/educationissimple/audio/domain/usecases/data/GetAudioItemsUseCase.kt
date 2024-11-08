@@ -12,4 +12,8 @@ class GetAudioItemsUseCase @Inject constructor(private val audioRepository: Audi
         return audioRepository.getAudioItems()
     }
 
+    suspend fun changeSelectedCategoryId(categoryId: Long?) {
+        audioRepository.changeCategory(categoryId)
+    }
+
 }

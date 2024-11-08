@@ -6,4 +6,9 @@
     <string name="audio_pause">Остановить аудио</string>
     <string name="close_audio">Закрыть аудио</string>
     <string name="audio_category">Категория аудио</string>
+    <string name="no_category">Без категории</string>
+    <string name="input_new_category_here">Введите сюда новую категорию</string>
+    <string name="cancel">Отменить</string>
+    <string name="continue_">Далее</string>
+    <string name="select_audio_category">Выберите категорию аудио</string>
 </resources>
