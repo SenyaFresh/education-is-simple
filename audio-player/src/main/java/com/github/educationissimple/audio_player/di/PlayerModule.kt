@@ -1,6 +1,7 @@
 package com.github.educationissimple.audio_player.di
 
 import android.content.Context
+import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
@@ -53,6 +54,7 @@ class PlayerModule {
 @Module
 abstract class NotificationModule {
 
+    @OptIn(UnstableApi::class)
     @Binds
     @Player
     abstract fun provideNotificationManager(audioNotificationImpl: AudioNotificationImpl): AudioNotification
