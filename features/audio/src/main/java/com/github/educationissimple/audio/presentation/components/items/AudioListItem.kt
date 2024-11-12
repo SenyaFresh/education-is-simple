@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.DropdownMenu
@@ -119,9 +120,19 @@ fun AudioListItem(
                 }
                 DropdownMenu(
                     expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
+                    onDismissRequest = { showMenu = false },
+                    modifier = Modifier.background(color = Neutral.Light.Light)
                 ) {
-                    DropdownMenuItem(text = { Text(text = "Удалить") }, onClick = onAudioDelete)
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(R.string.delete)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null
+                            )
+                        },
+                        onClick = onAudioDelete
+                    )
                 }
             }
         }

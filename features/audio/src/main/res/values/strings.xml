@@ -17,4 +17,5 @@
     <string name="audio_permission_title">Разрешение для загрузки аудио</string>
     <string name="grant">Ок</string>
     <string name="go_to_settings">Настройки</string>
+    <string name="delete">Удалить</string>
 </resources>
