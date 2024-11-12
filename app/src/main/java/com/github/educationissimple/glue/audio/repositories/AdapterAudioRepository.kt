@@ -2,12 +2,15 @@ package com.github.educationissimple.glue.audio.repositories
 
 import android.app.Application
 import android.net.Uri
+import com.github.educationissimple.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioCategory
 import com.github.educationissimple.audio.domain.repositories.AudioRepository
 import com.github.educationissimple.audio.repositories.AudioDataRepository
 import com.github.educationissimple.audio.tuples.NewAudioCategoryTuple
+import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.common.UserFriendlyException
 import com.github.educationissimple.glue.audio.mappers.mapToAudioCategory
 import com.github.educationissimple.glue.audio.mappers.toAudio
 import com.github.educationissimple.glue.audio.mappers.toAudioDataEntity
@@ -21,12 +24,15 @@ class AdapterAudioRepository @Inject constructor(
 ) : AudioRepository {
 
     override suspend fun getAudioItems(): Flow<ResultContainer<List<Audio>>> {
-        return audioDataRepository.getAudio().map { container -> container.map { list -> list.map { it.toAudio() } } }
+        return audioDataRepository.getAudio()
+            .map { container -> container.map { list -> list.map { it.toAudio() } } }
     }
 
     override suspend fun addAudioItem(uri: String, categoryId: Long?) {
         val audio = Uri.parse(uri).toAudioDataEntity(application)?.copy(categoryId = categoryId)
-        audioDataRepository.addAudio(audio ?: throw Exception()) // todo
+        audioDataRepository.addAudio(
+            audio ?: throw UserFriendlyException(Core.resources.getString(R.string.add_audio_error))
+        )
     }
 
     override suspend fun deleteAudioItem(uri: String) {

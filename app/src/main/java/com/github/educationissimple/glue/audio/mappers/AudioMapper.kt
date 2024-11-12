@@ -63,7 +63,7 @@ fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
                 title = cursor.getString(titleColumn),
                 subtitle = cursor.getString(artistColumn),
                 duration = cursor.getLong(durationColumn),
-                categoryId = null // todo
+                categoryId = null
             )
         }
     }

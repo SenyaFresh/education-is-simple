@@ -152,7 +152,6 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeCategory(categoryId: Long?) {
-        // todo: check
         currentCategoryId = categoryId
         selectedCategoryIdLoader.newAsyncLoad(silently = true)
         updateSources()
@@ -177,7 +176,6 @@ class RoomTasksDataRepository @Inject constructor(
     }
 
     override suspend fun changeSortingType(sortType: String?) {
-        // todo: check
         currentSortType = sortType
         selectedSortTypeLoader.newAsyncLoad(silently = true)
         updateSources()

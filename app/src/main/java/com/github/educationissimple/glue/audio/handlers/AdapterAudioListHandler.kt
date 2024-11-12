@@ -2,11 +2,14 @@ package com.github.educationissimple.glue.audio.handlers
 
 import android.app.Application
 import android.net.Uri
+import com.github.educationissimple.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.domain.handlers.AudioListHandler
 import com.github.educationissimple.audio_player.handlers.AudioListPlayerHandler
+import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.common.UserFriendlyException
 import com.github.educationissimple.glue.audio.mappers.toAudio
 import com.github.educationissimple.glue.audio.mappers.toAudioDataEntity
 import com.github.educationissimple.glue.audio.mappers.toAudioItem
@@ -26,7 +29,7 @@ class AdapterAudioListHandler @Inject constructor(
 
     override suspend fun addAudio(uri: String) {
         val audio = Uri.parse(uri).toAudioDataEntity(application)?.toAudio()?.toAudioItem()
-                ?: throw Exception() // todo
+                ?: throw UserFriendlyException(Core.resources.getString(R.string.add_audio_error))
         audioListPlayerHandler.addAudio(audio)
     }
 
