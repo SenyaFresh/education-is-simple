@@ -2,7 +2,7 @@ package com.github.educationissimple.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Headset
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.github.educationissimple.R
@@ -16,7 +16,7 @@ data class AppTab(
 
 val MainTabs = persistentListOf(
     AppTab(
-        imageVector = Icons.Default.Checklist,
+        imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
         titleRes = R.string.tasks,
         graphRoute = TasksGraph
     ),

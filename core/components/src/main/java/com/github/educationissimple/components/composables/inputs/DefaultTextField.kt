@@ -12,8 +12,9 @@ fun DefaultTextField(
     text: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: @Composable() (() -> Unit)? = null,
-    trailingIcon: @Composable() (() -> Unit)? = null
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) = OutlinedTextField(
     value = text,
     onValueChange = onValueChange,
@@ -25,5 +26,6 @@ fun DefaultTextField(
     ),
     modifier = modifier,
     placeholder = placeholder,
+    leadingIcon = leadingIcon,
     trailingIcon = trailingIcon
 )

@@ -10,7 +10,8 @@ data class Task(
     val isCompleted: Boolean = false,
     val categoryId: TaskCategoryId? = null,
     val priority: Priority = Priority.NoPriority,
-    val date: LocalDate? = null
+    val date: LocalDate? = null,
+    val description: String? = null
 ) {
 
     sealed class Priority(val value: Int) {
