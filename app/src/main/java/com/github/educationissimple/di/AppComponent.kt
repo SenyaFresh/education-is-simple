@@ -2,6 +2,7 @@ package com.github.educationissimple.di
 
 import android.content.Context
 import com.github.educationissimple.CoreModule
+import com.github.educationissimple.MainActivity
 import com.github.educationissimple.audio.di.AudioDeps
 import com.github.educationissimple.audio.domain.handlers.AudioListHandler
 import com.github.educationissimple.audio.domain.repositories.AudioRepository
@@ -15,6 +16,8 @@ import dagger.Component
 
 @[AppScope Component(modules = [AppModule::class, CoreModule::class])]
 interface AppComponent: TasksDeps, AudioDeps, PlayerDeps {
+
+    fun inject(mainActivity: MainActivity)
 
     override val context: Context
 

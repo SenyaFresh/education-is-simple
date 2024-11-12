@@ -35,7 +35,10 @@ import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScr
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    onStartAudioService: () -> Unit,
+    onStopAudioService: () -> Unit
+) {
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val titleRes: Int? = when (currentBackStackEntry.value.routeClass()) {
@@ -87,7 +90,7 @@ fun AppNavigation() {
         },
         bottomBar = {
             Column {
-                CurrentAudioFloatingItem()
+                CurrentAudioFloatingItem(onStopAudioService = onStopAudioService)
                 AppNavigationBar(
                     navigationController = navController,
                     tabs = MainTabs
@@ -129,7 +132,7 @@ fun AppNavigation() {
             ) {
                 composable<AudioGraph.AudioScreen> {
                     ShowBackground()
-                    AudioListScreen()
+                    AudioListScreen(onStartAudioService = onStartAudioService)
                 }
                 composable<AudioGraph.AudioCategoriesScreen> {
                     ShowBackground()

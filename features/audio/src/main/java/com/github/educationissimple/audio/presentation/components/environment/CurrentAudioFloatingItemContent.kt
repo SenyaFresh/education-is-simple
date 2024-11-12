@@ -45,8 +45,13 @@ import com.github.educationissimple.components.colors.Neutral
 
 @Composable
 fun CurrentAudioFloatingItem(
+    onStopAudioService: () -> Unit,
     diContainer: AudioDiContainer = rememberAudioDiContainer(),
-    viewModel: AudioViewModel = viewModel(factory = diContainer.viewModelFactory)
+    viewModel: AudioViewModel = viewModel(
+        factory = diContainer.viewModelFactory.create(
+            onStopAudioService = onStopAudioService
+        )
+    )
 ) {
     val audioListState by viewModel.audioListState.collectAsStateWithLifecycle()
 

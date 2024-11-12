@@ -7,8 +7,10 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.github.educationissimple.audio_player.di.PlayerComponentHolder
 import com.github.educationissimple.audio_player.notifications.AudioNotification
+import javax.inject.Inject
+import kotlin.reflect.KClass
 
-class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
+class AudioServiceImpl @Inject constructor() : MediaSessionService(), AudioServiceManager {
 
     private lateinit var mediaSession: MediaSession
     private lateinit var notification: AudioNotification
@@ -23,18 +25,11 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
         }
     }
 
-    override fun getService(): Service {
-        return this
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         mediaSession = PlayerComponentHolder.getInstance().mediaSession()
         notification = PlayerComponentHolder.getInstance().notification()
 
-        // avoid app crash
         startAudioNotification()
-        stopAudioNotification()
-        stopForeground(STOP_FOREGROUND_REMOVE)
 
         mediaSession.player.addListener(playerListener)
 
@@ -67,4 +62,13 @@ class AudioServiceImpl : MediaSessionService(), AudioServiceManager {
             }
         }
     }
+
+    override fun getServiceClass(): KClass<out Service> {
+        return this::class
+    }
+
+    override fun getService(): Service {
+        return this
+    }
+
 }

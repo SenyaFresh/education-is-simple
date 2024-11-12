@@ -9,7 +9,7 @@ import javax.inject.Inject
 @Stable
 class AudioDiContainer {
     @Inject
-    lateinit var viewModelFactory: AudioViewModel.Factory
+    lateinit var viewModelFactory: AudioViewModel.Factory.Factory
 }
 
 @Composable

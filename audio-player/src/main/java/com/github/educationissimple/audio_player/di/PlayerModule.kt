@@ -12,12 +12,14 @@ import com.github.educationissimple.audio_player.handlers.AudioListPlayerHandler
 import com.github.educationissimple.audio_player.handlers.RealAudioListPlayerHandler
 import com.github.educationissimple.audio_player.notifications.AudioNotification
 import com.github.educationissimple.audio_player.notifications.AudioNotificationImpl
+import com.github.educationissimple.audio_player.services.AudioServiceImpl
+import com.github.educationissimple.audio_player.services.AudioServiceManager
 import com.github.educationissimple.common.di.Player
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
-@Module(includes = [NotificationModule::class, AudioPlayerHandlerModule::class])
+@Module(includes = [NotificationModule::class, AudioPlayerHandlerModule::class, ServiceModule::class])
 class PlayerModule {
 
     @Provides
@@ -58,6 +60,15 @@ abstract class NotificationModule {
     @Binds
     @Player
     abstract fun provideNotificationManager(audioNotificationImpl: AudioNotificationImpl): AudioNotification
+
+}
+
+@Module
+abstract class ServiceModule {
+
+    @Binds
+    @Player
+    abstract fun provideServiceManager(serviceManager: AudioServiceImpl): AudioServiceManager
 
 }
 

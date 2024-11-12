@@ -21,12 +21,17 @@ import com.github.educationissimple.audio.domain.usecases.player.InitPlayerUseCa
 import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.BaseViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AudioViewModel @Inject constructor(
+    private val onStartAudioService: () -> Unit,
+    private val onStopAudioService: () -> Unit,
     private val getAudioItemsUseCase: GetAudioItemsUseCase,
     private val addAudioToRepoUseCase: AddAudioToRepoUseCase,
     private val deleteAudioFromRepoUseCase: DeleteAudioFromRepoUseCase,
@@ -134,10 +139,14 @@ class AudioViewModel @Inject constructor(
 
     private fun onPlayerEvent(controller: PlayerController) = viewModelScope.launch {
         when (controller) {
-            is PlayerController.Close -> changeSelectedAudioUseCase.close()
+            is PlayerController.Close -> {
+                changeSelectedAudioUseCase.close()
+                onStopAudioService()
+            }
             is PlayerController.Next -> changeSelectedAudioUseCase.next()
             is PlayerController.Previous -> changeSelectedAudioUseCase.previous()
             is PlayerController.SelectMedia -> getIndexByUri(controller.uri)?.let {
+                onStartAudioService()
                 changeSelectedAudioUseCase.changeSelectedAudio(it)
             }
 
@@ -153,7 +162,9 @@ class AudioViewModel @Inject constructor(
     }
 
     @Suppress("UNCHECKED_CAST")
-    class Factory @Inject constructor(
+    class Factory @AssistedInject constructor(
+        @Assisted("onStartAudioService") private val onStartAudioService: () -> Unit,
+        @Assisted("onStopAudioService") private val onStopAudioService: () -> Unit,
         private val getAudioItemsUseCase: GetAudioItemsUseCase,
         private val addAudioToRepoUseCase: AddAudioToRepoUseCase,
         private val deleteAudioFromRepoUseCase: DeleteAudioFromRepoUseCase,
@@ -170,6 +181,8 @@ class AudioViewModel @Inject constructor(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == AudioViewModel::class.java)
             return AudioViewModel(
+                onStartAudioService,
+                onStopAudioService,
                 getAudioItemsUseCase,
                 addAudioToRepoUseCase,
                 deleteAudioFromRepoUseCase,
@@ -183,6 +196,14 @@ class AudioViewModel @Inject constructor(
                 deleteAudioCategoryUseCase,
                 getCategoriesUseCase
             ) as T
+        }
+
+        @AssistedFactory
+        interface Factory {
+            fun create(
+                @Assisted("onStartAudioService") onStartAudioService: () -> Unit = {},
+                @Assisted("onStopAudioService") onStopAudioService: () -> Unit = {}
+            ): AudioViewModel.Factory
         }
     }
 }

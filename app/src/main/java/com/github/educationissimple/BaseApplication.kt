@@ -10,7 +10,7 @@ import com.github.educationissimple.tasks.di.TasksDepsStore
 
 class BaseApplication: Application() {
 
-    private val appComponent: AppComponent by lazy {
+    val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
             .context(this)
             .build()

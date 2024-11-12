@@ -46,8 +46,13 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 fun AudioListScreen(
+    onStartAudioService: () -> Unit,
     diContainer: AudioDiContainer = rememberAudioDiContainer(),
-    viewModel: AudioViewModel = viewModel(factory = diContainer.viewModelFactory)
+    viewModel: AudioViewModel = viewModel(
+        factory = diContainer.viewModelFactory.create(
+            onStartAudioService = onStartAudioService
+        )
+    )
 ) {
     AudioListContent(
         audioCategories = viewModel.audioCategories.collectAsStateWithLifecycle().value,

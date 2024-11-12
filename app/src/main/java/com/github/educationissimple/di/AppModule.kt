@@ -7,6 +7,7 @@ import com.github.educationissimple.data.tasks.di.modules.TasksDataRepositoryMod
 import com.github.educationissimple.glue.audio.di.AudioListHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioListPlayerHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioRepositoryModule
+import com.github.educationissimple.glue.audio.di.AudioServiceManagerModule
 import com.github.educationissimple.glue.tasks.di.TasksRepositoryModule
 import dagger.Module
 import dagger.Provides
@@ -18,7 +19,8 @@ import dagger.Provides
         AudioDataRepositoryModule::class,
         AudioRepositoryModule::class,
         AudioListPlayerHandlerModule::class,
-        AudioListHandlerModule::class
+        AudioListHandlerModule::class,
+        AudioServiceManagerModule::class
     ]
 )
 class AppModule {

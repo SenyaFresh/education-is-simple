@@ -18,7 +18,7 @@ import com.github.educationissimple.components.entities.ActionableItem
 @Composable
 fun AudioCategoriesScreen(
     diContainer: AudioDiContainer = rememberAudioDiContainer(),
-    viewModel: AudioViewModel = viewModel(factory = diContainer.viewModelFactory)
+    viewModel: AudioViewModel = viewModel(factory = diContainer.viewModelFactory.create())
 ) {
     CategoriesContent(
         categories = viewModel.audioCategories.collectAsStateWithLifecycle().value,
