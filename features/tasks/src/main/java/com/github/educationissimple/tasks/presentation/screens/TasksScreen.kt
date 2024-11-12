@@ -90,24 +90,12 @@ fun TasksContent(
     var taskText by rememberSaveable { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
 
-    val onTaskCompletionChange: (Long, Boolean) -> Unit = { taskId, isCompleted ->
-        if (isCompleted) {
-            onTasksEvent(TasksEvent.CompleteTask(taskId))
-        } else {
-            onTasksEvent(TasksEvent.CancelTaskCompletion(taskId))
-        }
-    }
-
     val onTaskDelete: (Long) -> Unit = { taskId ->
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
-    val onTaskPriorityChange: (Long, Task.Priority) -> Unit = { taskId, priority ->
-        onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
-    }
-
-    val onTaskDateChange: (Long, LocalDate) -> Unit = { taskId, date ->
-        onTasksEvent(TasksEvent.ChangeTaskDate(taskId, date))
+    val onUpdateTask: (Task) -> Unit = { task ->
+        onTasksEvent(TasksEvent.UpdateTask(task))
     }
 
     if (showSortTypeDialog) {
@@ -178,9 +166,7 @@ fun TasksContent(
             futureTasks = futureTasks,
             completedTasks = completedTasks,
             onTaskDelete = onTaskDelete,
-            onTaskPriorityChange = onTaskPriorityChange,
-            onTaskDateChange = onTaskDateChange,
-            onTaskCompletionChange = onTaskCompletionChange
+            onUpdateTask = onUpdateTask
         )
     }
 

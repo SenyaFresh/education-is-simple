@@ -80,17 +80,20 @@ class TasksViewModel @Inject constructor(
     fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
-            is TasksEvent.ChangeTaskPriority -> changeTaskPriority(event.taskId, event.priority)
             is TasksEvent.ChangeSortType -> changeSortType(event.sortType)
-            is TasksEvent.CancelTaskCompletion -> cancelTaskCompletion(event.taskId)
-            is TasksEvent.CompleteTask -> completeTask(event.taskId)
             is TasksEvent.DeleteTask -> deleteTask(event.taskId)
+            is TasksEvent.UpdateTask -> updateTask(event.updatedTask)
             is TasksEvent.ChangeCategory -> changeCategory(event.categoryId)
             is TasksEvent.AddCategory -> addCategory(event.name)
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
             is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
-            is TasksEvent.ChangeTaskDate -> changeTaskDate(event.taskId, event.date)
             is TasksEvent.ChangeTasksSelectionDate -> changeSelectionDate(event.date)
+        }
+    }
+
+    private fun updateTask(updatedTask: Task) {
+        viewModelScope.launch {
+            updateTaskUseCase.updateTask(updatedTask)
         }
     }
 
@@ -109,47 +112,6 @@ class TasksViewModel @Inject constructor(
     private fun addTask(task: Task) {
         viewModelScope.launch {
             addTaskUseCase.addTask(task)
-        }
-    }
-
-    private fun changeTaskPriority(taskId: Long, priority: Task.Priority) {
-        viewModelScope.launch {
-            val task = findTask(taskId) ?: return@launch
-
-            updateTaskUseCase.updateTask(task.copy(priority = priority))
-        }
-    }
-
-    private fun changeTaskDate(taskId: Long, date: LocalDate) {
-        viewModelScope.launch {
-            val task = findTask(taskId) ?: return@launch
-
-            updateTaskUseCase.updateTask(task.copy(date = date))
-        }
-    }
-
-    private fun findTask(taskId: Long): Task? {
-        return previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
-            ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
-            ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId }
-            ?: completedTasks.value.unwrapOrNull()?.find { it.id == taskId }
-    }
-
-    private fun cancelTaskCompletion(taskId: Long) {
-        viewModelScope.launch {
-            val task =
-                completedTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
-            updateTaskUseCase.updateTask(task.copy(isCompleted = false))
-        }
-    }
-
-    private fun completeTask(taskId: Long) {
-        viewModelScope.launch {
-            val task = previousTasks.value.unwrapOrNull()?.find { it.id == taskId }
-                ?: todayTasks.value.unwrapOrNull()?.find { it.id == taskId }
-                ?: futureTasks.value.unwrapOrNull()?.find { it.id == taskId } ?: return@launch
-
-            updateTaskUseCase.updateTask(task.copy(isCompleted = true))
         }
     }
 

@@ -27,10 +27,8 @@ import java.time.LocalDate
 fun LazyListScope.tasksSubcolumn(
     title: String,
     tasksContainer: List<Task>,
-    onTaskCompletionChange: (Long, Boolean) -> Unit,
     onTaskDelete: (Long) -> Unit,
-    onTaskPriorityChange: (Long, Task.Priority) -> Unit,
-    onTaskDateChange: (Long, LocalDate) -> Unit,
+    onUpdateTask: (Task) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -68,16 +66,16 @@ fun LazyListScope.tasksSubcolumn(
             TaskListItem(
                 task = task,
                 onTaskCompletionChange = { isCompleted ->
-                    onTaskCompletionChange(task.id, isCompleted)
+                    onUpdateTask(task.copy(isCompleted = isCompleted))
                 },
                 onTaskDelete = {
                     onTaskDelete(task.id)
                 },
                 onPriorityChange = { priority ->
-                    onTaskPriorityChange(task.id, priority)
+                    onUpdateTask(task.copy(priority = priority))
                 },
                 onDateChange = { date ->
-                    onTaskDateChange(task.id, date)
+                    onUpdateTask(task.copy(date = date))
                 },
                 modifier = Modifier
                     .padding(top = LocalSpacing.current.small)
@@ -105,10 +103,8 @@ fun TasksColumnPreview() {
                     priority = Task.Priority.fromValue(it)
                 )
             },
-            onTaskCompletionChange = { _, _ -> },
-            onTaskDelete = { },
-            onTaskPriorityChange = { _, _ -> },
-            onTaskDateChange = { _, _ -> }
+            onTaskDelete = {},
+            onUpdateTask = {}
         )
         tasksSubcolumn(
             "Выполненные задачи",
@@ -121,10 +117,8 @@ fun TasksColumnPreview() {
                     priority = Task.Priority.fromValue(it - 5)
                 )
             },
-            onTaskCompletionChange = { _, _ -> },
-            onTaskDelete = { },
-            onTaskPriorityChange = { _, _ -> },
-            onTaskDateChange = { _, _ -> }
+            onTaskDelete = {},
+            onUpdateTask = {}
         )
     }
 }

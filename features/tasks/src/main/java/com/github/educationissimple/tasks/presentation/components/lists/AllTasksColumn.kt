@@ -30,9 +30,7 @@ fun AllTasksColumn(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     onTaskDelete: (Long) -> Unit,
-    onTaskPriorityChange: (Long, Task.Priority) -> Unit,
-    onTaskDateChange: (Long, LocalDate) -> Unit,
-    onTaskCompletionChange: (Long, Boolean) -> Unit
+    onUpdateTask: (Task) -> Unit
 ) {
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
     ResultContainerComposable(
@@ -105,10 +103,8 @@ fun AllTasksColumn(
                 tasksSubcolumn(
                     section.title,
                     section.tasks,
-                    onTaskCompletionChange = onTaskCompletionChange,
                     onTaskDelete = onTaskDelete,
-                    onTaskPriorityChange = onTaskPriorityChange,
-                    onTaskDateChange = onTaskDateChange,
+                    onUpdateTask = onUpdateTask,
                     isExpanded = section.isExpanded,
                     onExpandChange = section.onExpandChange
                 )
@@ -150,8 +146,6 @@ fun AllTasksColumnPreview() {
         completedTasks = ResultContainer.Done(
             tasks.subList(6, 8).map { it.copy(isCompleted = true) }),
         onTaskDelete = {},
-        onTaskPriorityChange = { _, _ -> },
-        onTaskCompletionChange = { _, _ -> },
-        onTaskDateChange = { _, _ -> }
+        onUpdateTask = {}
     )
 }

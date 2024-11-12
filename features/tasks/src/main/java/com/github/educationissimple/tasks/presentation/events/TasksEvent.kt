@@ -10,13 +10,7 @@ sealed class TasksEvent {
 
     data class ChangeTasksSelectionDate(val date: LocalDate): TasksEvent()
 
-    data class CompleteTask(val taskId: Long): TasksEvent()
-
-    data class CancelTaskCompletion(val taskId: Long): TasksEvent()
-
-    data class ChangeTaskPriority(val taskId: Long, val priority: Task.Priority): TasksEvent()
-
-    data class ChangeTaskDate(val taskId: Long, val date: LocalDate): TasksEvent()
+    data class UpdateTask(val updatedTask: Task): TasksEvent()
 
     data class ChangeSortType(val sortType: SortType): TasksEvent()
 

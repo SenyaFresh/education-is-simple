@@ -51,24 +51,12 @@ fun CalendarContent(
     completedTasks: ResultContainer<List<Task>>,
     onTasksEvent: (TasksEvent) -> Unit
 ) {
-    val onTaskCompletionChange: (Long, Boolean) -> Unit = { taskId, isCompleted ->
-        if (isCompleted) {
-            onTasksEvent(TasksEvent.CompleteTask(taskId))
-        } else {
-            onTasksEvent(TasksEvent.CancelTaskCompletion(taskId))
-        }
-    }
-
     val onTaskDelete: (Long) -> Unit = { taskId ->
         onTasksEvent(TasksEvent.DeleteTask(taskId))
     }
 
-    val onTaskPriorityChange: (Long, Task.Priority) -> Unit = { taskId, priority ->
-        onTasksEvent(TasksEvent.ChangeTaskPriority(taskId, priority))
-    }
-
-    val onTaskDateChange: (Long, LocalDate) -> Unit = { taskId, date ->
-        onTasksEvent(TasksEvent.ChangeTaskDate(taskId, date))
+    val onUpdateTask: (Task) -> Unit = { task ->
+        onTasksEvent(TasksEvent.UpdateTask(task))
     }
 
     var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
@@ -125,10 +113,8 @@ fun CalendarContent(
                     tasksSubcolumn(
                         section.title,
                         section.tasks,
-                        onTaskCompletionChange = onTaskCompletionChange,
                         onTaskDelete = onTaskDelete,
-                        onTaskPriorityChange = onTaskPriorityChange,
-                        onTaskDateChange = onTaskDateChange,
+                        onUpdateTask = onUpdateTask,
                         isExpanded = section.isExpanded,
                         onExpandChange = section.onExpandChange
                     )
