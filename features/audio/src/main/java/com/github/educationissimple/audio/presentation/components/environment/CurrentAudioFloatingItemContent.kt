@@ -59,7 +59,12 @@ fun CurrentAudioFloatingItem(
         CurrentAudioFloatingItemContent(
             audio = viewModel.currentAudioItem.collectAsStateWithLifecycle().value,
             state = audioListState.unwrap(),
-            onPlaylistController = { viewModel.onEvent(AudioEvent.PlayerEvent(it)) }
+            onPlaylistController = { viewModel.onEvent(AudioEvent.PlayerEvent(it)) },
+            onAudioDelete = {
+                audioListState.unwrapOrNull()?.currentAudioUri?.let {
+                    viewModel.onEvent(AudioEvent.DeleteAudioItemEvent(it))
+                }
+            }
         )
     }
 }
@@ -68,7 +73,8 @@ fun CurrentAudioFloatingItem(
 fun CurrentAudioFloatingItemContent(
     audio: Audio?,
     state: AudioListState,
-    onPlaylistController: (PlayerController) -> Unit
+    onPlaylistController: (PlayerController) -> Unit,
+    onAudioDelete: () -> Unit
 ) {
     var showPlaylistController by remember { mutableStateOf(false) }
 
@@ -79,7 +85,10 @@ fun CurrentAudioFloatingItemContent(
                 isPlaying = state.state == AudioListState.State.AUDIO_PLAYING,
                 isSheetOpen = showPlaylistController,
                 onPlayerController = onPlaylistController,
-                onCategoryClick = { }, // todo
+                onDeleteClick = {
+                    showPlaylistController = false
+                    onAudioDelete()
+                },
                 currentTime = state.positionMs,
                 onDismiss = { showPlaylistController = false }
             )
@@ -145,5 +154,6 @@ fun CurrentAudioFloatingItemPreview() {
         audio = dummyAudio,
         state = AudioListState(AudioListState.State.AUDIO_PLAYING, "", 0, 0),
         onPlaylistController = {},
+        onAudioDelete = {}
     )
 }

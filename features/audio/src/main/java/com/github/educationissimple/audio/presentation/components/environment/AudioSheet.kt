@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Forward10
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PauseCircle
@@ -68,7 +68,7 @@ fun AudioSheet(
     isPlaying: Boolean,
     currentTime: Long,
     onPlayerController: (PlayerController) -> Unit,
-    onCategoryClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     isSheetOpen: Boolean,
     onDismiss: () -> Unit
 ) {
@@ -98,7 +98,7 @@ fun AudioSheet(
         ) {
             AudioImage(audio)
             Spacer(modifier = Modifier.size(LocalSpacing.current.large))
-            AudioTitle(audio, onCategoryClick)
+            AudioTitle(audio, onDeleteClick)
             Spacer(modifier = Modifier.size(24.dp))
             AudioSlider(
                 audio = audio,
@@ -152,7 +152,7 @@ fun AudioImage(audio: Audio) {
 }
 
 @Composable
-fun AudioTitle(audio: Audio, onCategoryClick: () -> Unit) {
+fun AudioTitle(audio: Audio, onDeleteClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -165,10 +165,10 @@ fun AudioTitle(audio: Audio, onCategoryClick: () -> Unit) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = onCategoryClick) {
+        IconButton(onClick = onDeleteClick) {
             Icon(
-                imageVector = Icons.Default.Category,
-                contentDescription = stringResource(R.string.audio_category)
+                imageVector = Icons.Default.Delete,
+                contentDescription = stringResource(R.string.delete)
             )
         }
     }
@@ -315,7 +315,7 @@ fun AudioSheetPreview() {
         isPlaying = true,
         currentTime = 10,
         onPlayerController = { },
-        onCategoryClick = {},
+        onDeleteClick = {},
         isSheetOpen = true,
         onDismiss = {}
     )
