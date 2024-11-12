@@ -38,7 +38,6 @@ import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.audio.presentation.viewmodels.AudioViewModel
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.buttons.AddFloatingActionButton
-import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -132,44 +131,37 @@ fun AudioListContent(
         }
     }
 
-    ResultContainerComposable(
-        onTryAgain = {},
-        container = ResultContainer.wrap(
-            audioCategories,
-            audioItems
+    Column {
+        AudioCategoriesRow(
+            categories = audioCategories,
+            onCategoryClick = { onAudioEvent(AudioEvent.ChangeCategoryEvent(it)) },
+            firstCategoryLabel = "все",
+            activeCategoryId = activeCategoryId,
+            maxLines = 1,
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = LocalSpacing.current.small)
         )
-    ) {
-        Column {
-            AudioCategoriesRow(
-                categories = audioCategories,
-                onCategoryClick = { onAudioEvent(AudioEvent.ChangeCategoryEvent(it)) },
-                firstCategoryLabel = "все",
-                activeCategoryId = activeCategoryId,
-                maxLines = 1,
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = LocalSpacing.current.small)
-            )
 
-            AudioItemsColumn(
-                audioItems = audioItems,
-                selectedAudioUri =
-                if (audioListState.unwrapOrNull()?.state == AudioListState.State.IDLE) null
-                else audioListState.unwrapOrNull()?.currentAudioUri,
-                playingAudioUri =
-                if (audioListState.unwrapOrNull()?.state != AudioListState.State.AUDIO_PLAYING) null
-                else audioListState.unwrapOrNull()?.currentAudioUri,
-                onAudioClick = {
-                    if (audioPermissionState.status is PermissionStatus.Granted) {
-                        onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it)))
-                    } else {
-                        showAudioPermissionDialog = true
-                    }
-                },
-                onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
-            )
-        }
+        AudioItemsColumn(
+            audioItems = audioItems,
+            selectedAudioUri =
+            if (audioListState.unwrapOrNull()?.state == AudioListState.State.IDLE) null
+            else audioListState.unwrapOrNull()?.currentAudioUri,
+            playingAudioUri =
+            if (audioListState.unwrapOrNull()?.state != AudioListState.State.AUDIO_PLAYING) null
+            else audioListState.unwrapOrNull()?.currentAudioUri,
+            onAudioClick = {
+                if (audioPermissionState.status is PermissionStatus.Granted) {
+                    onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it)))
+                } else {
+                    showAudioPermissionDialog = true
+                }
+            },
+            onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
+        )
     }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         AddFloatingActionButton(
