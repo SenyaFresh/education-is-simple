@@ -53,9 +53,9 @@ import java.time.LocalDate
 fun TaskSheet(
     task: Task,
     categories: ResultContainer<List<TaskCategory>>,
-    isSheetOpen: Boolean,
-    onTaskChange: (Task) -> Unit,
     onAddNewCategory: (String) -> Unit,
+    isSheetOpen: Boolean,
+    onTaskUpdate: (Task) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -69,7 +69,7 @@ fun TaskSheet(
     if (showDateDialog) {
         ChangeDateDialog(
             onConfirm = {
-                onTaskChange(task.copy(date = it))
+                onTaskUpdate(task.copy(date = it))
                 showDateDialog = false
             },
             onDismiss = {
@@ -83,7 +83,7 @@ fun TaskSheet(
             priority = task.priority,
             onDismiss = { showPriorityDialog = false },
             onPriorityChange = {
-                onTaskChange(task.copy(priority = it))
+                onTaskUpdate(task.copy(priority = it))
             }
         )
     }
@@ -94,7 +94,7 @@ fun TaskSheet(
             categories = categories,
             onConfirm = {
                 showCategoriesDialog = false
-                onTaskChange(task.copy(categoryId = it.id))
+                onTaskUpdate(task.copy(categoryId = it.id))
             },
             onCancel = {
                 showCategoriesDialog = false
@@ -128,7 +128,7 @@ fun TaskSheet(
                     onValueChange = { taskLabel = it },
                     trailingIcon = {
                         if (taskLabel != task.text) {
-                            DefaultIconButton(onClick = { onTaskChange(task.copy(text = taskLabel)) }) {
+                            DefaultIconButton(onClick = { onTaskUpdate(task.copy(text = taskLabel)) }) {
                                 Icon(Icons.Default.CheckCircleOutline, contentDescription = null)
                             }
                         }
@@ -136,7 +136,7 @@ fun TaskSheet(
                     leadingIcon = {
                         Checkbox(
                             checked = task.isCompleted,
-                            onCheckedChange = { onTaskChange(task.copy(isCompleted = it)) },
+                            onCheckedChange = { onTaskUpdate(task.copy(isCompleted = it)) },
                             colors = CheckboxDefaults.colors(
                                 uncheckedColor = Neutral.Light.Darkest,
                                 checkedColor = Highlight.Darkest
@@ -167,7 +167,7 @@ fun TaskSheet(
                             onValueChange = { taskDescription = it },
                             trailingIcon = {
                                 if (taskDescription != (task.description ?: "")) {
-                                    DefaultIconButton(onClick = { onTaskChange(task.copy(description = taskDescription)) }) {
+                                    DefaultIconButton(onClick = { onTaskUpdate(task.copy(description = taskDescription)) }) {
                                         Icon(
                                             Icons.Default.CheckCircleOutline,
                                             contentDescription = null
@@ -221,7 +221,7 @@ fun TaskSheetPreview() {
         ),
         categories = ResultContainer.Done(listOf()),
         isSheetOpen = true,
-        onTaskChange = {},
+        onTaskUpdate = {},
         onAddNewCategory = {},
         onDismiss = {}
     )

@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
 import java.time.LocalDate
 
@@ -29,6 +31,8 @@ fun LazyListScope.tasksSubcolumn(
     tasksContainer: List<Task>,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit,
+    categories: ResultContainer<List<TaskCategory>>,
+    onAddNewCategory: (String) -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -65,18 +69,14 @@ fun LazyListScope.tasksSubcolumn(
         items(items = tasksContainer, key = { task -> task.id }) { task ->
             TaskListItem(
                 task = task,
-                onTaskCompletionChange = { isCompleted ->
-                    onUpdateTask(task.copy(isCompleted = isCompleted))
-                },
                 onTaskDelete = {
                     onTaskDelete(task.id)
                 },
-                onPriorityChange = { priority ->
-                    onUpdateTask(task.copy(priority = priority))
+                onTaskUpdate = {
+                    onUpdateTask(it)
                 },
-                onDateChange = { date ->
-                    onUpdateTask(task.copy(date = date))
-                },
+                categories = categories,
+                onAddNewCategory = onAddNewCategory,
                 modifier = Modifier
                     .padding(top = LocalSpacing.current.small)
                     .animateItem(
@@ -104,7 +104,9 @@ fun TasksColumnPreview() {
                 )
             },
             onTaskDelete = {},
-            onUpdateTask = {}
+            onUpdateTask = {},
+            categories = ResultContainer.Done(listOf()),
+            onAddNewCategory = {}
         )
         tasksSubcolumn(
             "Выполненные задачи",
@@ -118,7 +120,9 @@ fun TasksColumnPreview() {
                 )
             },
             onTaskDelete = {},
-            onUpdateTask = {}
+            onUpdateTask = {},
+            categories = ResultContainer.Done(listOf()),
+            onAddNewCategory = {}
         )
     }
 }

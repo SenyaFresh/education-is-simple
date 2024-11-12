@@ -140,7 +140,10 @@ fun TasksContent(
                         onClick = { showSortTypeDialog = true },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Darkest),
                     ) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.Sort, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Sort,
+                            contentDescription = null
+                        )
                     }
 
                     CategoriesRow(
@@ -165,8 +168,10 @@ fun TasksContent(
             todayTasks = todayTasks,
             futureTasks = futureTasks,
             completedTasks = completedTasks,
+            categories = categories,
+            onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
             onTaskDelete = onTaskDelete,
-            onUpdateTask = onUpdateTask
+            onUpdateTask = onUpdateTask,
         )
     }
 

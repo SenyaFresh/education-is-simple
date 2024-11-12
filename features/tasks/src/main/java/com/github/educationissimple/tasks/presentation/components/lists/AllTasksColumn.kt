@@ -20,6 +20,7 @@ import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskListItem
 import java.time.LocalDate
 
@@ -29,6 +30,8 @@ fun AllTasksColumn(
     todayTasks: ResultContainer<List<Task>>,
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
+    categories: ResultContainer<List<TaskCategory>>,
+    onAddNewCategory: (String) -> Unit,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit
 ) {
@@ -106,7 +109,9 @@ fun AllTasksColumn(
                     onTaskDelete = onTaskDelete,
                     onUpdateTask = onUpdateTask,
                     isExpanded = section.isExpanded,
-                    onExpandChange = section.onExpandChange
+                    onExpandChange = section.onExpandChange,
+                    categories = categories,
+                    onAddNewCategory = onAddNewCategory
                 )
             }
         }
@@ -146,6 +151,8 @@ fun AllTasksColumnPreview() {
         completedTasks = ResultContainer.Done(
             tasks.subList(6, 8).map { it.copy(isCompleted = true) }),
         onTaskDelete = {},
-        onUpdateTask = {}
+        onUpdateTask = {},
+        categories = ResultContainer.Done(listOf()),
+        onAddNewCategory = {}
     )
 }

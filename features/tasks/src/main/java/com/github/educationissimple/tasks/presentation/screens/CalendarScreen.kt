@@ -26,6 +26,7 @@ import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.components.CalendarView
 import com.github.educationissimple.tasks.presentation.components.lists.TaskSection
 import com.github.educationissimple.tasks.presentation.components.lists.tasksSubcolumn
@@ -41,6 +42,7 @@ fun CalendarScreen(
     CalendarContent(
         notCompletedTasks = viewModel.notCompletedTasksWithDate.collectAsStateWithLifecycle().value,
         completedTasks = viewModel.completedTasksWithDate.collectAsStateWithLifecycle().value,
+        categories = viewModel.categories.collectAsStateWithLifecycle().value,
         onTasksEvent = viewModel::onEvent
     )
 }
@@ -49,6 +51,7 @@ fun CalendarScreen(
 fun CalendarContent(
     notCompletedTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
+    categories: ResultContainer<List<TaskCategory>>,
     onTasksEvent: (TasksEvent) -> Unit
 ) {
     val onTaskDelete: (Long) -> Unit = { taskId ->
@@ -116,6 +119,8 @@ fun CalendarContent(
                         onTaskDelete = onTaskDelete,
                         onUpdateTask = onUpdateTask,
                         isExpanded = section.isExpanded,
+                        categories = categories,
+                        onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
                         onExpandChange = section.onExpandChange
                     )
                 }
@@ -146,5 +151,6 @@ fun CalendarContentPreview() {
         completedTasks = ResultContainer.Done(
             tasks.subList(2, 4).map { it.copy(isCompleted = true) }),
         onTasksEvent = {},
+        categories = ResultContainer.Done(listOf())
     )
 }

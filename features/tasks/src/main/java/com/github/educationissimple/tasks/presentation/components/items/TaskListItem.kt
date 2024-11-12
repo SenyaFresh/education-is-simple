@@ -3,6 +3,7 @@ package com.github.educationissimple.tasks.presentation.components.items
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
@@ -63,9 +65,11 @@ import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.utils.toTaskDate
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
+import com.github.educationissimple.tasks.presentation.components.environment.TaskSheet
 import com.github.educationissimple.tasks.presentation.utils.toColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -75,16 +79,17 @@ import kotlin.math.roundToInt
 @Composable
 fun TaskListItem(
     task: Task,
-    onTaskCompletionChange: (Boolean) -> Unit,
+    categories: ResultContainer<List<TaskCategory>>,
+    onAddNewCategory: (String) -> Unit,
     onTaskDelete: () -> Unit,
-    onPriorityChange: (Task.Priority) -> Unit,
-    onDateChange: (LocalDate) -> Unit,
+    onTaskUpdate: (Task) -> Unit,
     modifier: Modifier = Modifier,
     isActionsRevealed: Boolean = false
 ) {
     var isTaskCompleted by remember { mutableStateOf(task.isCompleted) }
     var showTaskPriorityDialog by remember { mutableStateOf(false) }
     var showTaskDateDialog by remember { mutableStateOf(false) }
+    var showTaskPropertiesSheet by remember { mutableStateOf(false) }
     var contextMenuWidth by remember { mutableFloatStateOf(0f) }
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
@@ -100,7 +105,7 @@ fun TaskListItem(
     if (showTaskPriorityDialog) {
         TaskPriorityDialog(
             onDismiss = { showTaskPriorityDialog = false },
-            onPriorityChange = onPriorityChange,
+            onPriorityChange = { onTaskUpdate(task.copy(priority = it)) },
             priority = task.priority
         )
     }
@@ -109,10 +114,21 @@ fun TaskListItem(
         ChangeDateDialog(
             onDismiss = { showTaskDateDialog = false },
             onConfirm = {
-                onDateChange(it)
+                onTaskUpdate(task.copy(date = it))
                 showTaskDateDialog = false
             },
             initialDate = task.date ?: LocalDate.now()
+        )
+    }
+
+    if (showTaskPropertiesSheet) {
+        TaskSheet(
+            task = task,
+            categories = categories,
+            onAddNewCategory = onAddNewCategory,
+            isSheetOpen = showTaskPropertiesSheet,
+            onTaskUpdate = onTaskUpdate,
+            onDismiss = { showTaskPropertiesSheet = false }
         )
     }
 
@@ -129,9 +145,10 @@ fun TaskListItem(
             isTaskCompleted = isTaskCompleted,
             onTaskCompletionChange = { isChecked ->
                 isTaskCompleted = isChecked
-                onTaskCompletionChange(isChecked)
+                onTaskUpdate(task.copy(isCompleted = isChecked))
             },
             onTaskDelete = onTaskDelete,
+            onTaskClicked = { showTaskPropertiesSheet = true },
             onPriorityClick = { showTaskPriorityDialog = true },
             onDateClick = { showTaskDateDialog = true },
             offset = offset,
@@ -148,6 +165,7 @@ private fun TaskCardContent(
     isTaskCompleted: Boolean,
     onTaskCompletionChange: (Boolean) -> Unit,
     onTaskDelete: () -> Unit,
+    onTaskClicked: () -> Unit,
     onPriorityClick: () -> Unit,
     onDateClick: () -> Unit,
     offset: Animatable<Float, *>,
@@ -174,7 +192,8 @@ private fun TaskCardContent(
             onTaskCompletionChange = onTaskCompletionChange,
             offset = offset,
             contextMenuWidth = contextMenuWidth,
-            scope = scope
+            scope = scope,
+            modifier = Modifier.clickable { onTaskClicked() }
         )
     }
 }
@@ -185,10 +204,11 @@ private fun BoxScope.TaskActions(
     onTaskDelete: () -> Unit,
     onPriorityClick: () -> Unit,
     onDateClick: () -> Unit,
-    taskPriority: Task.Priority
+    taskPriority: Task.Priority,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .align(Alignment.CenterEnd)
             .onSizeChanged { size -> onSizeChanged(size) },
         verticalAlignment = Alignment.CenterVertically
@@ -232,13 +252,14 @@ private fun TaskContent(
     onTaskCompletionChange: (Boolean) -> Unit,
     offset: Animatable<Float, *>,
     contextMenuWidth: Float,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
 ) {
     val priorityColor = task.priority.toColor()
 
     Surface(
         color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
-        modifier = Modifier
+        modifier = modifier
             .offset { IntOffset(offset.value.roundToInt(), 0) }
             .pointerInput(contextMenuWidth) {
                 detectHorizontalDragGestures(
@@ -357,10 +378,10 @@ fun TaskCardPreview() {
                     date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it % 3)
                 ),
-                onTaskCompletionChange = { _ -> },
-                onTaskDelete = { },
-                onDateChange = { _ -> },
-                onPriorityChange = { _ -> },
+                onTaskDelete = {},
+                onTaskUpdate = {},
+                categories = ResultContainer.Done(listOf()),
+                onAddNewCategory = {}
             )
         }
     }
