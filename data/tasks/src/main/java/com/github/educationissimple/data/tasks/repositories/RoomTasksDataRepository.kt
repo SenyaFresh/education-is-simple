@@ -6,9 +6,12 @@ import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.TaskPreferencesDataSource
 import com.github.educationissimple.data.tasks.sources.TasksDataSource
+import com.github.educationissimple.data.tasks.tuples.NewReminderTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
+import com.github.educationissimple.data.tasks.tuples.RemindersAndTasksTuple
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -33,16 +36,8 @@ class RoomTasksDataRepository @Inject constructor(
         currentCategoryId
     }
 
-    override suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
-        return selectedCategoryIdLoader.listen()
-    }
-
     private val selectedSortTypeLoader = lazyFlowLoaderFactory.create {
         currentSortType
-    }
-
-    override suspend fun getSelectedSortType(): Flow<ResultContainer<String?>> {
-        return selectedSortTypeLoader.listen()
     }
 
     private val notCompletedTasksForDateLoader = lazyFlowLoaderFactory.create {
@@ -100,6 +95,18 @@ class RoomTasksDataRepository @Inject constructor(
 
     private val categoriesLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getCategories()
+    }
+
+    private val remindersLoader = lazyFlowLoaderFactory.create {
+        tasksDataSource.getReminders()
+    }
+
+    override suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
+        return selectedCategoryIdLoader.listen()
+    }
+
+    override suspend fun getSelectedSortType(): Flow<ResultContainer<String?>> {
+        return selectedSortTypeLoader.listen()
     }
 
     override suspend fun changeSearchQuery(query: String?) {
@@ -179,6 +186,28 @@ class RoomTasksDataRepository @Inject constructor(
         currentSortType = sortType
         selectedSortTypeLoader.newAsyncLoad(silently = true)
         updateSources()
+    }
+
+    override suspend fun getReminders(): Flow<ResultContainer<List<RemindersAndTasksTuple>>> {
+        return remindersLoader.listen()
+    }
+
+    override suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskDataEntity>>> {
+        return remindersLoader.listen().map { container ->
+            container.map { list ->
+                list.filter { it.task.id == taskId }.map { it.task }
+            }
+        }
+    }
+
+    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple) {
+        tasksDataSource.createTaskReminder(newReminderTuple)
+        remindersLoader.newAsyncLoad(silently = false)
+    }
+
+    override suspend fun deleteTaskReminder(id: Long) {
+        tasksDataSource.deleteTaskReminder(id)
+        remindersLoader.newAsyncLoad(silently = false)
     }
 
     private fun updateSources(silently: Boolean = false) {

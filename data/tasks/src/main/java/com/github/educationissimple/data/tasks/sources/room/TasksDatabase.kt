@@ -18,4 +18,6 @@ abstract class TasksDatabase : RoomDatabase() {
 
     abstract fun getTasksCategoryDao(): TasksCategoryDao
 
+    abstract fun getTasksRemindersDao(): TasksRemindersDao
+
 }

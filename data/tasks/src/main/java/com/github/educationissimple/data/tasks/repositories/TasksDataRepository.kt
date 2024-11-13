@@ -3,8 +3,10 @@ package com.github.educationissimple.data.tasks.repositories
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
+import com.github.educationissimple.data.tasks.tuples.NewReminderTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
+import com.github.educationissimple.data.tasks.tuples.RemindersAndTasksTuple
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -45,5 +47,13 @@ interface TasksDataRepository {
     suspend fun deleteCategory(id: Long)
 
     suspend fun changeSortingType(sortType: String?)
+
+    suspend fun getReminders() : Flow<ResultContainer<List<RemindersAndTasksTuple>>>
+
+    suspend fun getRemindersForTask(taskId: Long) : Flow<ResultContainer<List<TaskDataEntity>>>
+
+    suspend fun createTaskReminder(newReminderTuple: NewReminderTuple)
+
+    suspend fun deleteTaskReminder(id: Long)
 
 }

@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
 import com.github.educationissimple.data.tasks.sources.room.TasksDatabase
+import com.github.educationissimple.data.tasks.tuples.NewReminderTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskCategoryTuple
 import com.github.educationissimple.data.tasks.tuples.NewTaskTuple
+import com.github.educationissimple.data.tasks.tuples.RemindersAndTasksTuple
 import com.github.educationissimple.data.tasks.utils.getMaxDate
 import com.github.educationissimple.data.tasks.utils.getMinDate
 import java.time.LocalDate
@@ -28,6 +30,7 @@ class RoomTasksDataSource @Inject constructor(
 
     private val tasksDao = db.getTasksDao()
     private val tasksCategoryDao = db.getTasksCategoryDao()
+    private val tasksRemindersDao = db.getTasksRemindersDao()
 
     override suspend fun createTask(newTaskTuple: NewTaskTuple) {
         tasksDao.createTask(newTaskTuple)
@@ -115,6 +118,18 @@ class RoomTasksDataSource @Inject constructor(
 
     override suspend fun deleteCategory(id: Long) {
         tasksCategoryDao.deleteCategory(id)
+    }
+
+    override suspend fun getReminders(): List<RemindersAndTasksTuple> {
+        return tasksRemindersDao.getReminders()
+    }
+
+    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple) {
+        tasksRemindersDao.createReminder(newReminderTuple)
+    }
+
+    override suspend fun deleteTaskReminder(id: Long) {
+        tasksRemindersDao.deleteReminder(id)
     }
 
 }
