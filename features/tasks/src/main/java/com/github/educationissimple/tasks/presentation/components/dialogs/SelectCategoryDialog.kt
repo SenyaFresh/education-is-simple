@@ -12,6 +12,7 @@ import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.domain.entities.TaskCategoryId
 
 @Composable
 fun SelectCategoryDialog(
@@ -21,7 +22,7 @@ fun SelectCategoryDialog(
     onCancel: () -> Unit,
     onAddNewCategory: (String) -> Unit,
     modifier: Modifier = Modifier,
-    initialActiveCategoryId: Long = NO_CATEGORY_ID
+    initialActiveCategoryId: TaskCategoryId = NO_CATEGORY_ID
 ) {
     SelectOrCreateDialog(
         title = title,

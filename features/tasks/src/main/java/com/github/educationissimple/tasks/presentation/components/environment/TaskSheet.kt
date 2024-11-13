@@ -8,19 +8,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.CheckCircleOutline
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,18 +32,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.buttons.DefaultIconButton
 import com.github.educationissimple.components.composables.inputs.DefaultTextField
+import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
@@ -59,8 +68,7 @@ fun TaskSheet(
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var taskLabel by remember { mutableStateOf(task.text) }
-    var taskDescription by remember { mutableStateOf(task.description ?: "") }
+    var updatedTask by remember { mutableStateOf(task) }
     var showTaskDescriptionTextField by remember { mutableStateOf(false) }
     var showDateDialog by remember { mutableStateOf(false) }
     var showPriorityDialog by remember { mutableStateOf(false) }
@@ -69,21 +77,22 @@ fun TaskSheet(
     if (showDateDialog) {
         ChangeDateDialog(
             onConfirm = {
-                onTaskUpdate(task.copy(date = it))
+                updatedTask = updatedTask.copy(date = it)
                 showDateDialog = false
             },
             onDismiss = {
                 showDateDialog = false
-            }
+            },
+            initialDate = updatedTask.date ?: LocalDate.now()
         )
     }
 
     if (showPriorityDialog) {
         TaskPriorityDialog(
-            priority = task.priority,
+            priority = updatedTask.priority,
             onDismiss = { showPriorityDialog = false },
             onPriorityChange = {
-                onTaskUpdate(task.copy(priority = it))
+                updatedTask = updatedTask.copy(priority = it)
             }
         )
     }
@@ -94,13 +103,13 @@ fun TaskSheet(
             categories = categories,
             onConfirm = {
                 showCategoriesDialog = false
-                onTaskUpdate(task.copy(categoryId = it.id))
+                updatedTask = updatedTask.copy(categoryId = it.id)
             },
             onCancel = {
                 showCategoriesDialog = false
             },
             onAddNewCategory = onAddNewCategory,
-            initialActiveCategoryId = task.id
+            initialActiveCategoryId = updatedTask.categoryId ?: NO_CATEGORY_ID
         )
     }
 
@@ -112,98 +121,119 @@ fun TaskSheet(
         }
     }
 
-    ModalBottomSheet(sheetState = sheetState, onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = onDismiss,
+        containerColor = Neutral.Light.Lightest
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(LocalSpacing.current.medium),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                DefaultTextField(
-                    text = taskLabel,
-                    onValueChange = { taskLabel = it },
-                    trailingIcon = {
-                        if (taskLabel != task.text) {
-                            DefaultIconButton(onClick = { onTaskUpdate(task.copy(text = taskLabel)) }) {
-                                Icon(Icons.Default.CheckCircleOutline, contentDescription = null)
-                            }
-                        }
-                    },
-                    leadingIcon = {
-                        Checkbox(
-                            checked = task.isCompleted,
-                            onCheckedChange = { onTaskUpdate(task.copy(isCompleted = it)) },
-                            colors = CheckboxDefaults.colors(
-                                uncheckedColor = Neutral.Light.Darkest,
-                                checkedColor = Highlight.Darkest
-                            )
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth()
+            Row {
+                ActionableListItem(
+                    label = categories.unwrapOrNull()
+                        ?.find { it.id == updatedTask.categoryId }?.name
+                        ?: "Без категории",
+                    onClick = { showCategoriesDialog = true }
                 )
-            }
-            Spacer(modifier = Modifier.height(120.dp))
-            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
-            Box(
-                modifier = Modifier.animateContentSize()
-            ) {
-                Column {
-                    TaskPropertyItem(
-                        iconVector = Icons.Default.Description,
-                        label = if (task.description == null) "Добавить описание" else "Изменить описание",
-                        rightArrowOpened = showTaskDescriptionTextField,
-                        onPropertyClick = {
-                            showTaskDescriptionTextField = !showTaskDescriptionTextField
+                Spacer(modifier = Modifier.weight(1f))
+                if (task != updatedTask) {
+                    DefaultIconButton(
+                        onClick = {
+                            onTaskUpdate(updatedTask)
                         }
-                    )
-
-                    if (showTaskDescriptionTextField) {
-                        DefaultTextField(
-                            text = taskDescription,
-                            onValueChange = { taskDescription = it },
-                            trailingIcon = {
-                                if (taskDescription != (task.description ?: "")) {
-                                    DefaultIconButton(onClick = { onTaskUpdate(task.copy(description = taskDescription)) }) {
-                                        Icon(
-                                            Icons.Default.CheckCircleOutline,
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null
                         )
                     }
                 }
             }
-            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
-            TaskPropertyItem(
-                iconVector = Icons.Default.CalendarMonth,
-                label = "Изменить дату задачи",
-                onPropertyClick = {
-                    showDateDialog = true
+            Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Neutral.Light.Light),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Checkbox(
+                        checked = updatedTask.isCompleted,
+                        onCheckedChange = { updatedTask = task.copy(isCompleted = it) },
+                        colors = CheckboxDefaults.colors(
+                            uncheckedColor = Neutral.Light.Darkest,
+                            checkedColor = Highlight.Darkest
+                        ),
+                        modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                    )
+                    DefaultTextField(
+                        text = updatedTask.text,
+                        onValueChange = { updatedTask = task.copy(text = it) },
+                        containerColor = Color.Transparent,
+                        textStyle = TextStyle.Default.copy(
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .offset((-12).dp, 0.dp)
+                    )
                 }
-            )
-            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
-            TaskPropertyItem(
-                iconVector = Icons.AutoMirrored.Filled.StarHalf,
-                label = "Изменить приоритет задачи",
-                onPropertyClick = {
-                    showPriorityDialog = true
+            }
+            Spacer(modifier = Modifier.height(LocalSpacing.current.semiMedium))
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Support.Success.Light),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Column {
+                    Box(
+                        modifier = Modifier.animateContentSize()
+                    ) {
+                        Column {
+                            TaskPropertyItem(
+                                iconVector = Icons.Default.Description,
+                                label = "Описание",
+                                rightArrowOpened = showTaskDescriptionTextField,
+                                onPropertyClick = {
+                                    showTaskDescriptionTextField = !showTaskDescriptionTextField
+                                }
+                            )
+
+                            if (showTaskDescriptionTextField) {
+                                DefaultTextField(
+                                    text = updatedTask.description ?: "",
+                                    onValueChange = { updatedTask = task.copy(description = it) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(100.dp),
+                                    placeholder = { Text("Добавьте описание задачи", fontSize = 14.sp) }
+                                )
+                            }
+                        }
+                    }
+//            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
+                    TaskPropertyItem(
+                        iconVector = Icons.Default.CalendarMonth,
+                        label = "Дата задачи",
+                        onPropertyClick = {
+                            showDateDialog = true
+                        }
+                    )
+//            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
+                    TaskPropertyItem(
+                        iconVector = Icons.AutoMirrored.Filled.StarHalf,
+                        label = "Приоритет задачи",
+                        onPropertyClick = {
+                            showPriorityDialog = true
+                        }
+                    )
                 }
-            )
-            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
-            TaskPropertyItem(
-                iconVector = Icons.Default.Category,
-                label = "Изменить категорию задачи",
-                onPropertyClick = {
-                    showCategoriesDialog = true
-                }
-            )
+            }
         }
     }
 }

@@ -27,6 +27,7 @@ import com.google.accompanist.permissions.PermissionStatus
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun DeniedAudioPermissionDialog(audioPermissionState: PermissionState, onDismiss: () -> Unit) {
+    if (audioPermissionState.status !is PermissionStatus.Denied) return
     DefaultDialog(
         onDismiss = onDismiss,
         title = stringResource(R.string.audio_permission_title)
@@ -37,37 +38,6 @@ fun DeniedAudioPermissionDialog(audioPermissionState: PermissionState, onDismiss
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
                 Text(stringResource(R.string.audio_permission_rationale))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
-                ) {
-                    DefaultSecondaryButton(
-                        label = stringResource(R.string.cancel),
-                        onClick = onDismiss,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                    DefaultPrimaryButton(
-                        label = stringResource(R.string.grant),
-                        onClick = {
-                            audioPermissionState.launchPermissionRequest()
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-                }
-            }
-        } else {
-            Column(
-                modifier = Modifier.padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
-            ) {
-                Text(stringResource(R.string.audio_permission_denied))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -93,6 +63,35 @@ fun DeniedAudioPermissionDialog(audioPermissionState: PermissionState, onDismiss
                                 )
                             )
                             context.startActivity(intent)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+            }
+        } else {
+            Column(
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+            ) {
+                Text(stringResource(R.string.audio_permission_denied))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+                ) {
+                    DefaultSecondaryButton(
+                        label = stringResource(R.string.cancel),
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                    DefaultPrimaryButton(
+                        label = stringResource(R.string.grant),
+                        onClick = {
+                            audioPermissionState.launchPermissionRequest()
                         },
                         modifier = Modifier
                             .fillMaxWidth()

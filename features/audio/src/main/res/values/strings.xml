@@ -12,8 +12,8 @@
     <string name="continue_">Далее</string>
     <string name="select_audio_category">Выберите категорию аудио</string>
     <string name="add_new_category">Добавить новую категорию</string>
-    <string name="audio_permission_denied">Без разрешения вы не можете добавлять и воспроизводить аудио. Пожалуйста, предоставьте разрешение в настройках приложения.</string>
-    <string name="audio_permission_rationale">Пожалуйста, предоставьте разрешение, чтобы загрузить или воспроизвести аудио.</string>
+    <string name="audio_permission_rationale">Без разрешения вы не можете добавлять и воспроизводить аудио. Пожалуйста, предоставьте разрешение в настройках приложения.</string>
+    <string name="audio_permission_denied">Пожалуйста, предоставьте разрешение, чтобы загрузить или воспроизвести аудио.</string>
     <string name="audio_permission_title">Разрешение для загрузки аудио</string>
     <string name="grant">Ок</string>
     <string name="go_to_settings">Настройки</string>

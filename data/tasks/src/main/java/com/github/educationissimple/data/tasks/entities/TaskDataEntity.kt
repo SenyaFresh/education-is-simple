@@ -23,6 +23,7 @@ data class TaskDataEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "category_id") val categoryId: Long?,
     val text: String,
+    val description: String?,
     @ColumnInfo(defaultValue = "0") val priority: Int,
     val date: LocalDate,
     @ColumnInfo(name = "is_completed", defaultValue = "0") val isCompleted: Boolean

@@ -14,7 +14,8 @@ fun TaskDataEntity.mapToTask(): Task {
         isCompleted = isCompleted,
         categoryId = categoryId,
         priority = Task.Priority.fromValue(priority),
-        date = date
+        date = date,
+        description = description
     )
 }
 
@@ -25,7 +26,8 @@ fun Task.mapToTaskDataEntity(): TaskDataEntity {
         isCompleted = isCompleted,
         categoryId = categoryId,
         priority = priority.value,
-        date = date ?: LocalDate.now()
+        date = date ?: LocalDate.now(),
+        description = description
     )
 }
 

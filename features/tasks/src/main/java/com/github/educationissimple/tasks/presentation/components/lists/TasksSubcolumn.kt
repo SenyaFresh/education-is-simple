@@ -66,7 +66,7 @@ fun LazyListScope.tasksSubcolumn(
 
     // Subcolumn content.
     if (isExpanded) {
-        items(items = tasksContainer, key = { task -> task.id }) { task ->
+        items(items = tasksContainer, key = { task -> listOf(task.id, task.isCompleted, task.date.toString()) }) { task ->
             TaskListItem(
                 task = task,
                 onTaskDelete = {
