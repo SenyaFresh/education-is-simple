@@ -1,4 +1,4 @@
-package com.github.educationissimple.tasks.presentation.components
+package com.github.educationissimple.tasks.presentation.components.inputs
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize

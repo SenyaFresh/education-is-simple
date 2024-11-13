@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +28,8 @@ import com.github.educationissimple.tasks.di.TasksDiContainer
 import com.github.educationissimple.tasks.di.rememberTasksDiContainer
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
-import com.github.educationissimple.tasks.presentation.components.CalendarView
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
+import com.github.educationissimple.tasks.presentation.components.inputs.CalendarView
 import com.github.educationissimple.tasks.presentation.components.lists.TaskSection
 import com.github.educationissimple.tasks.presentation.components.lists.tasksSubcolumn
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
@@ -43,6 +45,7 @@ fun CalendarScreen(
         notCompletedTasks = viewModel.notCompletedTasksWithDate.collectAsStateWithLifecycle().value,
         completedTasks = viewModel.completedTasksWithDate.collectAsStateWithLifecycle().value,
         categories = viewModel.categories.collectAsStateWithLifecycle().value,
+        getRemindersForTask = viewModel::getRemindersForTask,
         onTasksEvent = viewModel::onEvent
     )
 }
@@ -52,6 +55,7 @@ fun CalendarContent(
     notCompletedTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
+    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
     onTasksEvent: (TasksEvent) -> Unit
 ) {
     val onTaskDelete: (Long) -> Unit = { taskId ->
@@ -121,7 +125,10 @@ fun CalendarContent(
                         isExpanded = section.isExpanded,
                         categories = categories,
                         onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
-                        onExpandChange = section.onExpandChange
+                        onExpandChange = section.onExpandChange,
+                        getRemindersForTask = getRemindersForTask,
+                        onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
+                        onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
                     )
                 }
             }
@@ -151,6 +158,7 @@ fun CalendarContentPreview() {
         completedTasks = ResultContainer.Done(
             tasks.subList(2, 4).map { it.copy(isCompleted = true) }),
         onTasksEvent = {},
-        categories = ResultContainer.Done(listOf())
+        categories = ResultContainer.Done(emptyList()),
+        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) }
     )
 }

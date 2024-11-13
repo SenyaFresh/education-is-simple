@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.dialogs.TasksSortDialog
 import com.github.educationissimple.tasks.presentation.components.environment.PopUpTextField
 import com.github.educationissimple.tasks.presentation.components.lists.AllTasksColumn
@@ -67,6 +69,7 @@ fun TasksScreen(
         currentSortType = viewModel.sortType.collectAsStateWithLifecycle().value.unwrapOrNull(),
         activeCategoryId = viewModel.activeCategoryId.collectAsStateWithLifecycle().value.unwrapOrNull()
             ?: NO_CATEGORY_ID,
+        getRemindersForTask = viewModel::getRemindersForTask,
         onTasksEvent = viewModel::onEvent
     )
 }
@@ -78,6 +81,7 @@ fun TasksContent(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
+    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
     searchEnabled: Boolean,
     onSearchEnabledChange: (Boolean) -> Unit,
     currentSortType: SortType? = null,
@@ -172,6 +176,9 @@ fun TasksContent(
             onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
             onTaskDelete = onTaskDelete,
             onUpdateTask = onUpdateTask,
+            getRemindersForTask = getRemindersForTask,
+            onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
+            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
         )
     }
 
@@ -247,6 +254,7 @@ fun TasksContentPreview() {
                 TaskCategory(it.toLong(), "Category $it")
             }
         ),
+        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
         searchEnabled = false,
         onSearchEnabledChange = {},
         currentSortType = null,
@@ -263,6 +271,7 @@ fun TasksScreenPreviewLoading() {
         futureTasks = ResultContainer.Loading,
         completedTasks = ResultContainer.Loading,
         categories = ResultContainer.Loading,
+        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
         searchEnabled = false,
         onSearchEnabledChange = {},
         currentSortType = null,

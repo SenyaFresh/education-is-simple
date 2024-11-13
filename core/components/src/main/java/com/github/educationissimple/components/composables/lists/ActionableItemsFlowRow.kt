@@ -25,13 +25,12 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 @Composable
 fun ActionableItemsFlowRow(
     items: ResultContainer<List<ActionableItem>>,
-    onItemClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
+    onItemClick: (Long) -> Unit = {},
     activeItemId: Long? = null,
     leadingItem: ActionableItem? = null,
     maxLines: Int = Int.MAX_VALUE
 ) {
-
     ResultContainerComposable(
         container = items,
         onTryAgain = { },
@@ -64,7 +63,8 @@ fun ActionableItemsFlowRow(
                 ActionableListItem(
                     label = category.name,
                     isActive = category.id == activeItemId,
-                    onClick = { onItemClick(category.id) }
+                    onClick = { onItemClick(category.id) },
+                    modifier = Modifier
                 )
             }
         }

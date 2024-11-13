@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -51,10 +52,13 @@ import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
+import com.github.educationissimple.tasks.presentation.components.dialogs.PickDateTimeDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import com.github.educationissimple.tasks.presentation.components.items.TaskPropertyItem
+import com.github.educationissimple.tasks.presentation.components.lists.RemindersList
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,9 +66,12 @@ import java.time.LocalDate
 fun TaskSheet(
     task: Task,
     categories: ResultContainer<List<TaskCategory>>,
+    reminders: ResultContainer<List<TaskReminder>>,
     onAddNewCategory: (String) -> Unit,
     isSheetOpen: Boolean,
     onTaskUpdate: (Task) -> Unit,
+    onCreateReminder: (TaskReminder) -> Unit,
+    onDeleteReminder: (TaskReminder) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -73,6 +80,8 @@ fun TaskSheet(
     var showDateDialog by remember { mutableStateOf(false) }
     var showPriorityDialog by remember { mutableStateOf(false) }
     var showCategoriesDialog by remember { mutableStateOf(false) }
+    var showReminders by remember { mutableStateOf(false) }
+    var showReminderCreatorDialog by remember { mutableStateOf(false) }
 
     if (showDateDialog) {
         ChangeDateDialog(
@@ -110,6 +119,15 @@ fun TaskSheet(
             },
             onAddNewCategory = onAddNewCategory,
             initialActiveCategoryId = updatedTask.categoryId ?: NO_CATEGORY_ID
+        )
+    }
+
+    if (showReminderCreatorDialog) {
+        PickDateTimeDialog(
+            onConfirm = {
+                onCreateReminder(TaskReminder(taskId = task.id, taskText = task.text, datetime = it))
+            },
+            onDismiss = { showReminderCreatorDialog = false },
         )
     }
 
@@ -216,7 +234,6 @@ fun TaskSheet(
                             }
                         }
                     }
-//            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
                     TaskPropertyItem(
                         iconVector = Icons.Default.CalendarMonth,
                         label = "Дата задачи",
@@ -224,7 +241,6 @@ fun TaskSheet(
                             showDateDialog = true
                         }
                     )
-//            HorizontalDivider(thickness = 1.dp, color = Neutral.Dark.Lightest)
                     TaskPropertyItem(
                         iconVector = Icons.AutoMirrored.Filled.StarHalf,
                         label = "Приоритет задачи",
@@ -232,6 +248,25 @@ fun TaskSheet(
                             showPriorityDialog = true
                         }
                     )
+                    Box(
+                        modifier = Modifier.animateContentSize()
+                    ) {
+                        TaskPropertyItem(
+                            iconVector = Icons.Default.Notifications,
+                            label = "Создать напоминание",
+                            onPropertyClick = {
+                                showReminders = true
+                            }
+                        )
+
+                        if (showReminders) {
+                            RemindersList(
+                                reminders = reminders,
+                                onDelete = onDeleteReminder,
+                                onCreate = { showReminderCreatorDialog = true }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -249,10 +284,13 @@ fun TaskSheetPreview() {
             date = LocalDate.now(),
             priority = Task.Priority.fromValue(1)
         ),
-        categories = ResultContainer.Done(listOf()),
+        categories = ResultContainer.Done(emptyList()),
+        reminders = ResultContainer.Done(emptyList()),
         isSheetOpen = true,
         onTaskUpdate = {},
         onAddNewCategory = {},
-        onDismiss = {}
+        onDismiss = {},
+        onCreateReminder = {},
+        onDeleteReminder = {}
     )
 }

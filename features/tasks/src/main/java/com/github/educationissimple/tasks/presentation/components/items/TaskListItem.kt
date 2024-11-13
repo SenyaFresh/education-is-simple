@@ -66,6 +66,7 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.domain.utils.toTaskDate
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
@@ -80,9 +81,12 @@ import kotlin.math.roundToInt
 fun TaskListItem(
     task: Task,
     categories: ResultContainer<List<TaskCategory>>,
+    reminders: ResultContainer<List<TaskReminder>>,
     onAddNewCategory: (String) -> Unit,
     onTaskDelete: () -> Unit,
     onTaskUpdate: (Task) -> Unit,
+    onCreateReminder: (TaskReminder) -> Unit,
+    onDeleteReminder: (TaskReminder) -> Unit,
     modifier: Modifier = Modifier,
     isActionsRevealed: Boolean = false
 ) {
@@ -125,6 +129,9 @@ fun TaskListItem(
         TaskSheet(
             task = task,
             categories = categories,
+            reminders = reminders,
+            onCreateReminder = onCreateReminder,
+            onDeleteReminder = onDeleteReminder,
             onAddNewCategory = onAddNewCategory,
             isSheetOpen = showTaskPropertiesSheet,
             onTaskUpdate = onTaskUpdate,
@@ -378,10 +385,13 @@ fun TaskCardPreview() {
                     date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it % 3)
                 ),
+                categories = ResultContainer.Done(emptyList()),
+                reminders = ResultContainer.Done(emptyList()),
                 onTaskDelete = {},
                 onTaskUpdate = {},
-                categories = ResultContainer.Done(listOf()),
-                onAddNewCategory = {}
+                onAddNewCategory = {},
+                onCreateReminder = {},
+                onDeleteReminder = {}
             )
         }
     }

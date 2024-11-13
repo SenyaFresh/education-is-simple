@@ -4,6 +4,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -44,5 +45,14 @@ interface TasksRepository {
     suspend fun deleteCategory(categoryId: Long)
 
     suspend fun changeCategory(categoryId: Long?)
+
+    suspend fun getAllReminders(): Flow<ResultContainer<List<TaskReminder>>>
+
+    suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskReminder>>>
+
+    suspend fun createReminder(reminder: TaskReminder)
+
+    suspend fun deleteReminder(reminder: TaskReminder)
+
 
 }

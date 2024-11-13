@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,7 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
 import java.time.LocalDate
 
@@ -31,6 +34,9 @@ fun LazyListScope.tasksSubcolumn(
     tasksContainer: List<Task>,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit,
+    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    onDeleteReminder: (TaskReminder) -> Unit,
+    onCreateReminder: (TaskReminder) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     onAddNewCategory: (String) -> Unit,
     isExpanded: Boolean = true,
@@ -76,6 +82,9 @@ fun LazyListScope.tasksSubcolumn(
                     onUpdateTask(it)
                 },
                 categories = categories,
+                reminders = getRemindersForTask(task.id).value,
+                onCreateReminder = onCreateReminder,
+                onDeleteReminder = onDeleteReminder,
                 onAddNewCategory = onAddNewCategory,
                 modifier = Modifier
                     .padding(top = LocalSpacing.current.small)
@@ -94,35 +103,23 @@ fun LazyListScope.tasksSubcolumn(
 fun TasksColumnPreview() {
     LazyColumn {
         tasksSubcolumn(
-            "Задачи на сегодня",
-            (1..4).map {
+            "Задачи",
+            (0..8).map {
                 Task(
                     id = it.toLong(),
                     text = "Задача $it",
-                    date = if (it % 2 == 0) LocalDate.now() else null,
-                    priority = Task.Priority.fromValue(it)
-                )
-            },
-            onTaskDelete = {},
-            onUpdateTask = {},
-            categories = ResultContainer.Done(listOf()),
-            onAddNewCategory = {}
-        )
-        tasksSubcolumn(
-            "Выполненные задачи",
-            (5..8).map {
-                Task(
-                    id = it.toLong(),
-                    text = "Задача $it",
-                    isCompleted = true,
+                    isCompleted = (it % 2 == 0),
                     date = if (it % 2 == 0) LocalDate.now() else null,
                     priority = Task.Priority.fromValue(it - 5)
                 )
             },
             onTaskDelete = {},
             onUpdateTask = {},
-            categories = ResultContainer.Done(listOf()),
-            onAddNewCategory = {}
+            categories = ResultContainer.Done(emptyList()),
+            onAddNewCategory = {},
+            getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+            onDeleteReminder = {},
+            onCreateReminder = {}
         )
     }
 }

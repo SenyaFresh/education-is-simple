@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskListItem
 import java.time.LocalDate
 
@@ -33,7 +35,10 @@ fun AllTasksColumn(
     categories: ResultContainer<List<TaskCategory>>,
     onAddNewCategory: (String) -> Unit,
     onTaskDelete: (Long) -> Unit,
-    onUpdateTask: (Task) -> Unit
+    onUpdateTask: (Task) -> Unit,
+    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    onDeleteReminder: (TaskReminder) -> Unit,
+    onCreateReminder: (TaskReminder) -> Unit,
 ) {
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
     ResultContainerComposable(
@@ -111,7 +116,10 @@ fun AllTasksColumn(
                     isExpanded = section.isExpanded,
                     onExpandChange = section.onExpandChange,
                     categories = categories,
-                    onAddNewCategory = onAddNewCategory
+                    onAddNewCategory = onAddNewCategory,
+                    getRemindersForTask = getRemindersForTask,
+                    onDeleteReminder = onDeleteReminder,
+                    onCreateReminder = onCreateReminder
                 )
             }
         }
@@ -152,7 +160,10 @@ fun AllTasksColumnPreview() {
             tasks.subList(6, 8).map { it.copy(isCompleted = true) }),
         onTaskDelete = {},
         onUpdateTask = {},
-        categories = ResultContainer.Done(listOf()),
-        onAddNewCategory = {}
+        categories = ResultContainer.Done(emptyList()),
+        onAddNewCategory = {},
+        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+        onDeleteReminder = {},
+        onCreateReminder = {}
     )
 }

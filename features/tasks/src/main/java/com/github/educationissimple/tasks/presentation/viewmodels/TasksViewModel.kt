@@ -1,5 +1,7 @@
 package com.github.educationissimple.tasks.presentation.viewmodels
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.educationissimple.common.ResultContainer
@@ -7,9 +9,13 @@ import com.github.educationissimple.presentation.BaseViewModel
 import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.domain.usecases.categories.AddCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.categories.DeleteCategoryUseCase
 import com.github.educationissimple.tasks.domain.usecases.categories.GetCategoriesUseCase
+import com.github.educationissimple.tasks.domain.usecases.reminders.CreateReminderUseCase
+import com.github.educationissimple.tasks.domain.usecases.reminders.DeleteReminderUseCase
+import com.github.educationissimple.tasks.domain.usecases.reminders.GetRemindersUseCase
 import com.github.educationissimple.tasks.domain.usecases.tasks.AddTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.tasks.DeleteTaskUseCase
 import com.github.educationissimple.tasks.domain.usecases.tasks.GetTasksUseCase
@@ -28,7 +34,10 @@ class TasksViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val addCategoryUseCase: AddCategoryUseCase,
-    private val deleteCategoryUseCase: DeleteCategoryUseCase
+    private val deleteCategoryUseCase: DeleteCategoryUseCase,
+    private val getRemindersUseCase: GetRemindersUseCase,
+    private val createReminderUseCase: CreateReminderUseCase,
+    private val deleteReminderUseCase: DeleteReminderUseCase,
 ) : BaseViewModel() {
 
     private val _sortType = MutableStateFlow<ResultContainer<SortType?>>(ResultContainer.Loading)
@@ -65,6 +74,10 @@ class TasksViewModel @Inject constructor(
         MutableStateFlow<ResultContainer<List<TaskCategory>>>(ResultContainer.Loading)
     val categories = _categories.asStateFlow()
 
+    private val _reminders =
+        MutableStateFlow<ResultContainer<List<TaskReminder>>>(ResultContainer.Loading)
+    val reminders = _reminders.asStateFlow()
+
     init {
         collectNotCompletedTasksWithDate()
         collectCompletedTasksWithDate()
@@ -77,6 +90,7 @@ class TasksViewModel @Inject constructor(
         collectSelectedCategoryId()
     }
 
+
     fun onEvent(event: TasksEvent) = debounce {
         when (event) {
             is TasksEvent.AddTask -> addTask(event.task)
@@ -88,6 +102,32 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
             is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
             is TasksEvent.ChangeTasksSelectionDate -> changeSelectionDate(event.date)
+            is TasksEvent.AddTaskReminder -> deleteReminder(event.taskReminder)
+            is TasksEvent.DeleteTaskReminder -> createReminder(event.taskReminder)
+        }
+    }
+
+    fun getRemindersForTask(taskId: Long): State<ResultContainer<List<TaskReminder>>> {
+        val remindersForTask = mutableStateOf<ResultContainer<List<TaskReminder>>>(ResultContainer.Loading)
+        debounce {
+            viewModelScope.launch {
+                getRemindersUseCase.getRemindersForTask(taskId).collect {
+                    remindersForTask.value = it
+                }
+            }
+        }
+        return remindersForTask
+    }
+
+    private fun createReminder(reminder: TaskReminder) {
+        viewModelScope.launch {
+            createReminderUseCase.createReminder(reminder)
+        }
+    }
+
+    private fun deleteReminder(reminder: TaskReminder) {
+        viewModelScope.launch {
+            deleteReminderUseCase.deleteReminder(reminder)
         }
     }
 
@@ -225,7 +265,10 @@ class TasksViewModel @Inject constructor(
         private val getTasksUseCase: GetTasksUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
         private val addCategoryUseCase: AddCategoryUseCase,
-        private val deleteCategoryUseCase: DeleteCategoryUseCase
+        private val deleteCategoryUseCase: DeleteCategoryUseCase,
+        private val getRemindersUseCase: GetRemindersUseCase,
+        private val createReminderUseCase: CreateReminderUseCase,
+        private val deleteReminderUseCase: DeleteReminderUseCase,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == TasksViewModel::class.java)
@@ -236,7 +279,10 @@ class TasksViewModel @Inject constructor(
                 getTasksUseCase,
                 getCategoriesUseCase,
                 addCategoryUseCase,
-                deleteCategoryUseCase
+                deleteCategoryUseCase,
+                getRemindersUseCase,
+                createReminderUseCase,
+                deleteReminderUseCase
             ) as T
         }
     }

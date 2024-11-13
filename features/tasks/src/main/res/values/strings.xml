@@ -32,4 +32,8 @@
     <string name="select_task_date">Выбрать дату задачи</string>
     <string name="input_task_here">Введите сюда новую задачу</string>
     <string name="date">Дата</string>
+    <string name="continue_">Далее</string>
+    <string name="go_back">Назад</string>
+    <string name="select_reminder_date">Выбрать дату напоминания</string>
+    <string name="select_reminder_time">Выбрать время напоминания</string>
 </resources>

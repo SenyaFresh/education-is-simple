@@ -2,6 +2,7 @@ package com.github.educationissimple.tasks.presentation.events
 
 import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import java.time.LocalDate
 
 sealed class TasksEvent {
@@ -23,5 +24,9 @@ sealed class TasksEvent {
     data class AddCategory(val name: String): TasksEvent()
 
     data class DeleteCategory(val categoryId: Long): TasksEvent()
+
+    data class AddTaskReminder(val taskReminder: TaskReminder): TasksEvent()
+
+    data class DeleteTaskReminder(val taskReminder: TaskReminder): TasksEvent()
 
 }
