@@ -46,6 +46,12 @@
             android:name=".notifications.receivers.AlarmReceiver"
             android:enabled="true">
         </receiver>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
     </application>
 
 </manifest>

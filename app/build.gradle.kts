@@ -63,6 +63,7 @@ dependencies {
     api(project(":services:audio-player"))
     api(project(":services:notifications"))
 
+    implementation(libs.work.manager)
     implementation(libs.material.icons)
     implementation(libs.media3.common)
     implementation(libs.kotlinx.collections.immutable)

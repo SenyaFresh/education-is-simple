@@ -10,6 +10,7 @@ import com.github.educationissimple.audio_player.di.PlayerDeps
 import com.github.educationissimple.common.CoreProvider
 import com.github.educationissimple.common.di.AppScope
 import com.github.educationissimple.notifications.di.ReminderDeps
+import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.di.TasksDeps
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import dagger.BindsInstance
@@ -19,6 +20,8 @@ import dagger.Component
 interface AppComponent: TasksDeps, AudioDeps, PlayerDeps, ReminderDeps {
 
     fun inject(mainActivity: MainActivity)
+
+    fun remindersSyncWorkerFactory(): RemindersSyncWorker.Factory
 
     override val context: Context
 

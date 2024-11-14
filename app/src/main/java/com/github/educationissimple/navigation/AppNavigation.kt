@@ -16,31 +16,69 @@ import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.github.educationissimple.R
 import com.github.educationissimple.audio.presentation.components.environment.CurrentAudioFloatingItem
 import com.github.educationissimple.audio.presentation.screens.AudioCategoriesScreen
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskRemindersScreen
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
+import java.time.Duration
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AppNavigation(
     onStartAudioService: () -> Unit,
     onStopAudioService: () -> Unit
 ) {
+    val context = LocalContext.current.applicationContext
+    LaunchedEffect(Unit) {
+        val currentTime = Calendar.getInstance()
+        val midnight = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
+        val timeUntilMidnight = midnight.timeInMillis - currentTime.timeInMillis
+
+        val workRequest = PeriodicWorkRequestBuilder<RemindersSyncWorker>(
+            repeatInterval = 1,
+            repeatIntervalTimeUnit = TimeUnit.DAYS
+        ).setBackoffCriteria(
+            backoffPolicy = BackoffPolicy.LINEAR,
+            duration = Duration.ofMinutes(5)
+        ).addTag(RemindersSyncWorker.TAG)
+            .setInitialDelay(timeUntilMidnight, TimeUnit.MILLISECONDS).build()
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueueUniquePeriodicWork(
+            RemindersSyncWorker.TAG,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
+    }
+
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val titleRes: Int? = when (currentBackStackEntry.value.routeClass()) {
@@ -78,12 +116,14 @@ fun AppNavigation(
                 onClick = { navController.navigate(TasksGraph.TaskCategoriesScreen) }
             )
         )
+
         AudioGraph.AudioScreen::class -> listOf(
             IconAction(
                 imageVector = Icons.Default.Category,
                 onClick = { navController.navigate(AudioGraph.AudioCategoriesScreen) }
             )
         )
+
         else -> null
     }
 
