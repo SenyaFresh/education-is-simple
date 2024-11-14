@@ -6,10 +6,11 @@ import androidx.room.TypeConverters
 import com.github.educationissimple.data.tasks.converters.DateConverter
 import com.github.educationissimple.data.tasks.entities.TaskCategoryDataEntity
 import com.github.educationissimple.data.tasks.entities.TaskDataEntity
+import com.github.educationissimple.data.tasks.entities.TaskReminderDataEntity
 
 @Database(
     version = 1,
-    entities = [TaskDataEntity::class, TaskCategoryDataEntity::class]
+    entities = [TaskDataEntity::class, TaskCategoryDataEntity::class, TaskReminderDataEntity::class]
 )
 @TypeConverters(DateConverter::class)
 abstract class TasksDatabase : RoomDatabase() {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +23,8 @@ import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.items.LoadingTaskListItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 @Composable
@@ -36,7 +37,7 @@ fun AllTasksColumn(
     onAddNewCategory: (String) -> Unit,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit,
-    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    getRemindersForTask: (Long) -> StateFlow<ResultContainer<List<TaskReminder>>>,
     onDeleteReminder: (TaskReminder) -> Unit,
     onCreateReminder: (TaskReminder) -> Unit,
 ) {
@@ -162,7 +163,7 @@ fun AllTasksColumnPreview() {
         onUpdateTask = {},
         categories = ResultContainer.Done(emptyList()),
         onAddNewCategory = {},
-        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+        getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
         onDeleteReminder = {},
         onCreateReminder = {}
     )

@@ -126,6 +126,7 @@ fun TaskSheet(
         PickDateTimeDialog(
             onConfirm = {
                 onCreateReminder(TaskReminder(taskId = task.id, taskText = task.text, datetime = it))
+                showReminderCreatorDialog = false
             },
             onDismiss = { showReminderCreatorDialog = false },
         )
@@ -251,20 +252,22 @@ fun TaskSheet(
                     Box(
                         modifier = Modifier.animateContentSize()
                     ) {
-                        TaskPropertyItem(
-                            iconVector = Icons.Default.Notifications,
-                            label = "Создать напоминание",
-                            onPropertyClick = {
-                                showReminders = true
-                            }
-                        )
-
-                        if (showReminders) {
-                            RemindersList(
-                                reminders = reminders,
-                                onDelete = onDeleteReminder,
-                                onCreate = { showReminderCreatorDialog = true }
+                        Column {
+                            TaskPropertyItem(
+                                iconVector = Icons.Default.Notifications,
+                                label = "Создать напоминание",
+                                onPropertyClick = {
+                                    showReminders = true
+                                }
                             )
+
+                            if (showReminders) {
+                                RemindersList(
+                                    reminders = reminders,
+                                    onDelete = onDeleteReminder,
+                                    onCreate = { showReminderCreatorDialog = true }
+                                )
+                            }
                         }
                     }
                 }

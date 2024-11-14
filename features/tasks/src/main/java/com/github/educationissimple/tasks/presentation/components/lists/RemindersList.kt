@@ -3,16 +3,14 @@ package com.github.educationissimple.tasks.presentation.components.lists
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.buttons.DefaultIconButton
@@ -27,11 +25,9 @@ import com.github.educationissimple.tasks.presentation.components.items.Reminder
 fun RemindersList(
     reminders: ResultContainer<List<TaskReminder>>,
     onDelete: (TaskReminder) -> Unit,
-    onCreate: (TaskReminder) -> Unit,
+    onCreate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showAddReminderDialog by remember { mutableStateOf(false) }
-
     ResultContainerComposable(
         container = reminders,
         onTryAgain = {},
@@ -43,13 +39,13 @@ fun RemindersList(
     ) {
         ContextualFlowRow(
             itemCount = reminders.unwrap().size + 1,
-            horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+            horizontalArrangement = Arrangement.End,
             verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            modifier = modifier
+            modifier = modifier.padding(LocalSpacing.current.small).fillMaxWidth()
         ) { index ->
-            if (index == reminders.unwrap().size + 1) {
+            if (index == reminders.unwrap().size) {
                 DefaultIconButton(
-                    onClick = { showAddReminderDialog = true },
+                    onClick = onCreate,
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null)
                 }

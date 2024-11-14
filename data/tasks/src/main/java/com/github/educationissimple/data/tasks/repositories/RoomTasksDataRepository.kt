@@ -192,10 +192,10 @@ class RoomTasksDataRepository @Inject constructor(
         return remindersLoader.listen()
     }
 
-    override suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskDataEntity>>> {
+    override suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<RemindersAndTasksTuple>>> {
         return remindersLoader.listen().map { container ->
             container.map { list ->
-                list.filter { it.task.id == taskId }.map { it.task }
+                list.filter { it.task.id == taskId }
             }
         }
     }

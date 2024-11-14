@@ -6,6 +6,7 @@ import com.github.educationissimple.audio_player.di.PlayerDepsStore
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.di.AppComponent
 import com.github.educationissimple.di.DaggerAppComponent
+import com.github.educationissimple.notifications.di.ReminderDepsStore
 import com.github.educationissimple.tasks.di.TasksDepsStore
 
 class BaseApplication: Application() {
@@ -22,6 +23,7 @@ class BaseApplication: Application() {
         AudioDepsStore.deps = appComponent
         TasksDepsStore.deps = appComponent
         PlayerDepsStore.deps = appComponent
+        ReminderDepsStore.deps = appComponent
     }
 
 }

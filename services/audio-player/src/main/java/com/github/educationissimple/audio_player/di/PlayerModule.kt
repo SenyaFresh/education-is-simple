@@ -14,7 +14,7 @@ import com.github.educationissimple.audio_player.notifications.AudioNotification
 import com.github.educationissimple.audio_player.notifications.AudioNotificationImpl
 import com.github.educationissimple.audio_player.services.AudioServiceImpl
 import com.github.educationissimple.audio_player.services.AudioServiceManager
-import com.github.educationissimple.common.di.Player
+import com.github.educationissimple.common.di.Service
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -23,18 +23,18 @@ import dagger.Provides
 class PlayerModule {
 
     @Provides
-    @Player
+    @Service
     fun provideContext(deps: PlayerDeps): Context = deps.context
 
     @Provides
-    @Player
+    @Service
     fun provideAudioAttributes(): AudioAttributes = AudioAttributes.Builder()
         .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
         .setUsage(C.USAGE_MEDIA)
         .build()
 
     @Provides
-    @Player
+    @Service
     @UnstableApi
     fun provideExoPlayer(
         context: Context,
@@ -46,7 +46,7 @@ class PlayerModule {
         .build()
 
     @Provides
-    @Player
+    @Service
     fun provideMediaSession(
         context: Context,
         player: ExoPlayer,
@@ -58,7 +58,7 @@ abstract class NotificationModule {
 
     @OptIn(UnstableApi::class)
     @Binds
-    @Player
+    @Service
     abstract fun provideNotificationManager(audioNotificationImpl: AudioNotificationImpl): AudioNotification
 
 }
@@ -67,7 +67,7 @@ abstract class NotificationModule {
 abstract class ServiceModule {
 
     @Binds
-    @Player
+    @Service
     abstract fun provideServiceManager(serviceManager: AudioServiceImpl): AudioServiceManager
 
 }
@@ -76,7 +76,7 @@ abstract class ServiceModule {
 abstract class AudioPlayerHandlerModule {
 
     @Binds
-    @Player
+    @Service
     abstract fun bindAudioListPlayerHandler(realAudioListPlayerHandler: RealAudioListPlayerHandler): AudioListPlayerHandler
 
 }

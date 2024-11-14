@@ -60,7 +60,8 @@ dependencies {
     api(project(":data:audio"))
     api(project(":features:tasks"))
     api(project(":features:audio"))
-    api(project(":audio-player"))
+    api(project(":services:audio-player"))
+    api(project(":services:notifications"))
 
     implementation(libs.material.icons)
     implementation(libs.media3.common)

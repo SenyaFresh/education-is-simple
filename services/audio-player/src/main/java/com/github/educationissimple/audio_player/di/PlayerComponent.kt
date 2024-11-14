@@ -5,11 +5,11 @@ import androidx.media3.session.MediaSession
 import com.github.educationissimple.audio_player.handlers.AudioListPlayerHandler
 import com.github.educationissimple.audio_player.notifications.AudioNotification
 import com.github.educationissimple.audio_player.services.AudioServiceManager
-import com.github.educationissimple.common.di.Player
+import com.github.educationissimple.common.di.Service
 import dagger.BindsInstance
 import dagger.Component
 
-@Player
+@Service
 @Component(modules = [PlayerModule::class])
 interface PlayerComponent {
 

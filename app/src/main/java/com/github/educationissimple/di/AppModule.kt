@@ -8,6 +8,7 @@ import com.github.educationissimple.glue.audio.di.AudioListHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioListPlayerHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioRepositoryModule
 import com.github.educationissimple.glue.audio.di.AudioServiceManagerModule
+import com.github.educationissimple.glue.tasks.di.RemindersSchedulerModule
 import com.github.educationissimple.glue.tasks.di.TasksRepositoryModule
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,7 @@ import dagger.Provides
     includes = [
         TasksDataRepositoryModule::class,
         TasksRepositoryModule::class,
+        RemindersSchedulerModule::class,
         AudioDataRepositoryModule::class,
         AudioRepositoryModule::class,
         AudioListPlayerHandlerModule::class,

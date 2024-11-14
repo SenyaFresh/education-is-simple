@@ -14,18 +14,20 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.items.TaskListItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 
@@ -34,7 +36,7 @@ fun LazyListScope.tasksSubcolumn(
     tasksContainer: List<Task>,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit,
-    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    getRemindersForTask: (Long) -> StateFlow<ResultContainer<List<TaskReminder>>>,
     onDeleteReminder: (TaskReminder) -> Unit,
     onCreateReminder: (TaskReminder) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
@@ -73,6 +75,7 @@ fun LazyListScope.tasksSubcolumn(
     // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer, key = { task -> listOf(task.id, task.isCompleted, task.date.toString()) }) { task ->
+            val reminders by getRemindersForTask(task.id).collectAsStateWithLifecycle()
             TaskListItem(
                 task = task,
                 onTaskDelete = {
@@ -82,7 +85,7 @@ fun LazyListScope.tasksSubcolumn(
                     onUpdateTask(it)
                 },
                 categories = categories,
-                reminders = getRemindersForTask(task.id).value,
+                reminders = reminders,
                 onCreateReminder = onCreateReminder,
                 onDeleteReminder = onDeleteReminder,
                 onAddNewCategory = onAddNewCategory,
@@ -117,7 +120,7 @@ fun TasksColumnPreview() {
             onUpdateTask = {},
             categories = ResultContainer.Done(emptyList()),
             onAddNewCategory = {},
-            getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+            getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
             onDeleteReminder = {},
             onCreateReminder = {}
         )

@@ -1,7 +1,5 @@
 package com.github.educationissimple.tasks.presentation.viewmodels
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.educationissimple.common.ResultContainer
@@ -22,6 +20,7 @@ import com.github.educationissimple.tasks.domain.usecases.tasks.GetTasksUseCase
 import com.github.educationissimple.tasks.domain.usecases.tasks.UpdateTaskUseCase
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -78,6 +77,8 @@ class TasksViewModel @Inject constructor(
         MutableStateFlow<ResultContainer<List<TaskReminder>>>(ResultContainer.Loading)
     val reminders = _reminders.asStateFlow()
 
+    private val _remindersForTasks = mutableMapOf<Long, MutableStateFlow<ResultContainer<List<TaskReminder>>>>()
+
     init {
         collectNotCompletedTasksWithDate()
         collectCompletedTasksWithDate()
@@ -102,21 +103,23 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.DeleteCategory -> deleteCategory(event.categoryId)
             is TasksEvent.ChangeTaskSearchText -> changeTaskSearchText(event.text)
             is TasksEvent.ChangeTasksSelectionDate -> changeSelectionDate(event.date)
-            is TasksEvent.AddTaskReminder -> deleteReminder(event.taskReminder)
-            is TasksEvent.DeleteTaskReminder -> createReminder(event.taskReminder)
+            is TasksEvent.AddTaskReminder -> createReminder(event.taskReminder)
+            is TasksEvent.DeleteTaskReminder -> deleteReminder(event.taskReminder)
         }
     }
 
-    fun getRemindersForTask(taskId: Long): State<ResultContainer<List<TaskReminder>>> {
-        val remindersForTask = mutableStateOf<ResultContainer<List<TaskReminder>>>(ResultContainer.Loading)
+    fun getRemindersForTask(taskId: Long): StateFlow<ResultContainer<List<TaskReminder>>> {
+        if (_remindersForTasks[taskId] == null) {
+            _remindersForTasks[taskId] = MutableStateFlow(ResultContainer.Loading)
+        }
         debounce {
             viewModelScope.launch {
                 getRemindersUseCase.getRemindersForTask(taskId).collect {
-                    remindersForTask.value = it
+                    _remindersForTasks[taskId]!!.value = it
                 }
             }
         }
-        return remindersForTask
+        return _remindersForTasks[taskId]!!.asStateFlow()
     }
 
     private fun createReminder(reminder: TaskReminder) {

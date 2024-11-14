@@ -1,6 +1,8 @@
 package com.github.educationissimple.tasks.presentation.components.inputs
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -38,20 +40,26 @@ fun TimePicker(
     var selectedHour by remember { mutableIntStateOf(selectedTime.hour) }
     var selectedMinute by remember { mutableIntStateOf(selectedTime.minute) }
 
+    val hoursInteractionSource = remember { MutableInteractionSource() }
+    val isHoursFocused by hoursInteractionSource.collectIsFocusedAsState()
+
+    val minutesInteractionSource = remember { MutableInteractionSource() }
+    val isMinutesFocused by minutesInteractionSource.collectIsFocusedAsState()
+
     LaunchedEffect(selectedHour, selectedMinute) {
         onTimeSelect(LocalTime.of(selectedHour, selectedMinute))
     }
 
     Row(
-        modifier = Modifier.height(IntrinsicSize.Min),
+        modifier = modifier.height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             horizontalAlignment = Alignment.Start
         ) {
             OutlinedTextField(
-                value = selectedHour.toString(),
-                onValueChange = { if (it.toInt() in 0..23) selectedHour = it.toInt() },
+                value = formatTime(selectedHour, isHoursFocused),
+                onValueChange = { parseInput(it, 0..23)?.let { hour -> selectedHour = hour } },
                 modifier = Modifier.size(width = 100.dp, height = 80.dp),
                 textStyle = TextStyle.Default.copy(fontSize = 48.sp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -59,7 +67,8 @@ fun TimePicker(
                     unfocusedContainerColor = Neutral.Light.Medium,
                     focusedBorderColor = Highlight.Darkest,
                     unfocusedBorderColor = Color.Transparent
-                )
+                ),
+                interactionSource = hoursInteractionSource
             )
             Text(text = "Часы", color = Neutral.Dark.Dark)
         }
@@ -81,8 +90,8 @@ fun TimePicker(
             horizontalAlignment = Alignment.Start
         ) {
             OutlinedTextField(
-                value = if (selectedMinute < 10) "0$selectedMinute" else selectedMinute.toString(),
-                onValueChange = { if (it.toInt() in 0..59) selectedMinute = it.toInt() },
+                value = formatTime(selectedMinute, isMinutesFocused),
+                onValueChange = { parseInput(it, 0..59)?.let { minute -> selectedMinute = minute } },
                 modifier = Modifier.size(width = 100.dp, height = 80.dp),
                 textStyle = TextStyle.Default.copy(fontSize = 48.sp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -90,7 +99,8 @@ fun TimePicker(
                     unfocusedContainerColor = Neutral.Light.Medium,
                     focusedBorderColor = Highlight.Darkest,
                     unfocusedBorderColor = Color.Transparent
-                )
+                ),
+                interactionSource = minutesInteractionSource
             )
             Text(text = "Минуты", color = Neutral.Dark.Dark)
         }
@@ -101,4 +111,18 @@ fun TimePicker(
 @Composable
 fun TimePickerPreview() {
     TimePicker()
+}
+
+private fun parseInput(input: String, range: IntRange): Int? {
+    if (input.isEmpty()) return 0
+    val number = input.toIntOrNull()
+    return if (number in range) number else null
+}
+
+private fun formatTime(time: Int, selected: Boolean): String {
+    return if (selected) {
+        if (time == 0) "" else time.toString()
+    } else {
+        if (time < 10) "0$time" else time.toString()
+    }
 }

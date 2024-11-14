@@ -17,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +48,8 @@ import com.github.educationissimple.tasks.presentation.components.lists.AllTasks
 import com.github.educationissimple.tasks.presentation.components.lists.CategoriesRow
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 @Composable
@@ -81,7 +82,7 @@ fun TasksContent(
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
-    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    getRemindersForTask: (Long) -> StateFlow<ResultContainer<List<TaskReminder>>>,
     searchEnabled: Boolean,
     onSearchEnabledChange: (Boolean) -> Unit,
     currentSortType: SortType? = null,
@@ -254,7 +255,7 @@ fun TasksContentPreview() {
                 TaskCategory(it.toLong(), "Category $it")
             }
         ),
-        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+        getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
         searchEnabled = false,
         onSearchEnabledChange = {},
         currentSortType = null,
@@ -271,7 +272,7 @@ fun TasksScreenPreviewLoading() {
         futureTasks = ResultContainer.Loading,
         completedTasks = ResultContainer.Loading,
         categories = ResultContainer.Loading,
-        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) },
+        getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
         searchEnabled = false,
         onSearchEnabledChange = {},
         currentSortType = null,

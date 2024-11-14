@@ -12,16 +12,22 @@ import com.github.educationissimple.glue.tasks.mappers.mapToSortType
 import com.github.educationissimple.glue.tasks.mappers.mapToTask
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskCategory
 import com.github.educationissimple.glue.tasks.mappers.mapToTaskDataEntity
+import com.github.educationissimple.glue.tasks.mappers.mapToTaskReminder
+import com.github.educationissimple.glue.tasks.mappers.toNewReminderTuple
+import com.github.educationissimple.glue.tasks.mappers.toReminderItem
+import com.github.educationissimple.notifications.schedulers.ReminderScheduler
 import com.github.educationissimple.tasks.domain.entities.SortType
 import com.github.educationissimple.tasks.domain.entities.Task
 import com.github.educationissimple.tasks.domain.entities.TaskCategory
+import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
 
 class AdapterTasksRepository @Inject constructor(
-    private val tasksDataRepository: TasksDataRepository
+    private val tasksDataRepository: TasksDataRepository,
+    private val reminderScheduler: ReminderScheduler,
 ) : TasksRepository {
     override suspend fun changeSelectionDate(date: LocalDate) {
         tasksDataRepository.changeSelectionDate(date)
@@ -108,6 +114,24 @@ class AdapterTasksRepository @Inject constructor(
 
     override suspend fun changeCategory(categoryId: Long?) {
         tasksDataRepository.changeCategory(categoryId)
+    }
+
+    override suspend fun getAllReminders(): Flow<ResultContainer<List<TaskReminder>>> {
+        return tasksDataRepository.getReminders().mapToTaskReminder()
+    }
+
+    override suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskReminder>>> {
+        return tasksDataRepository.getRemindersForTask(taskId).mapToTaskReminder()
+    }
+
+    override suspend fun createReminder(reminder: TaskReminder) {
+        reminderScheduler.schedule(reminder.toReminderItem())
+        tasksDataRepository.createTaskReminder(reminder.toNewReminderTuple())
+    }
+
+    override suspend fun deleteReminder(reminder: TaskReminder) {
+        reminderScheduler.cancel(reminder.toReminderItem())
+        tasksDataRepository.deleteTaskReminder(reminder.id)
     }
 
     override suspend fun changeSortType(sortType: SortType?) {

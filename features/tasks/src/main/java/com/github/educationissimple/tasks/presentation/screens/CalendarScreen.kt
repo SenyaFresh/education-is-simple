@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +33,8 @@ import com.github.educationissimple.tasks.presentation.components.lists.TaskSect
 import com.github.educationissimple.tasks.presentation.components.lists.tasksSubcolumn
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 @Composable
@@ -55,7 +56,7 @@ fun CalendarContent(
     notCompletedTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
     categories: ResultContainer<List<TaskCategory>>,
-    getRemindersForTask: (Long) -> State<ResultContainer<List<TaskReminder>>>,
+    getRemindersForTask: (Long) -> StateFlow<ResultContainer<List<TaskReminder>>>,
     onTasksEvent: (TasksEvent) -> Unit
 ) {
     val onTaskDelete: (Long) -> Unit = { taskId ->
@@ -159,6 +160,6 @@ fun CalendarContentPreview() {
             tasks.subList(2, 4).map { it.copy(isCompleted = true) }),
         onTasksEvent = {},
         categories = ResultContainer.Done(emptyList()),
-        getRemindersForTask = { mutableStateOf(ResultContainer.Done(emptyList())) }
+        getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) }
     )
 }

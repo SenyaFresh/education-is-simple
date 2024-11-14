@@ -50,7 +50,7 @@ interface TasksDataRepository {
 
     suspend fun getReminders() : Flow<ResultContainer<List<RemindersAndTasksTuple>>>
 
-    suspend fun getRemindersForTask(taskId: Long) : Flow<ResultContainer<List<TaskDataEntity>>>
+    suspend fun getRemindersForTask(taskId: Long) : Flow<ResultContainer<List<RemindersAndTasksTuple>>>
 
     suspend fun createTaskReminder(newReminderTuple: NewReminderTuple)
 
