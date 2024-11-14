@@ -14,12 +14,10 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.Task
@@ -75,7 +73,6 @@ fun LazyListScope.tasksSubcolumn(
     // Subcolumn content.
     if (isExpanded) {
         items(items = tasksContainer, key = { task -> listOf(task.id, task.isCompleted, task.date.toString()) }) { task ->
-            val reminders by getRemindersForTask(task.id).collectAsStateWithLifecycle()
             TaskListItem(
                 task = task,
                 onTaskDelete = {
@@ -85,7 +82,7 @@ fun LazyListScope.tasksSubcolumn(
                     onUpdateTask(it)
                 },
                 categories = categories,
-                reminders = reminders,
+                getReminders = { getRemindersForTask(task.id) },
                 onCreateReminder = onCreateReminder,
                 onDeleteReminder = onDeleteReminder,
                 onAddNewCategory = onAddNewCategory,

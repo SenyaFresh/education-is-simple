@@ -77,7 +77,8 @@ class TasksViewModel @Inject constructor(
         MutableStateFlow<ResultContainer<List<TaskReminder>>>(ResultContainer.Loading)
     val reminders = _reminders.asStateFlow()
 
-    private val _remindersForTasks = mutableMapOf<Long, MutableStateFlow<ResultContainer<List<TaskReminder>>>>()
+    private val _remindersForTasks =
+        mutableMapOf<Long, MutableStateFlow<ResultContainer<List<TaskReminder>>>>()
 
     init {
         collectNotCompletedTasksWithDate()
@@ -112,12 +113,13 @@ class TasksViewModel @Inject constructor(
     fun getRemindersForTask(taskId: Long): StateFlow<ResultContainer<List<TaskReminder>>> {
         if (_remindersForTasks[taskId] == null) {
             _remindersForTasks[taskId] = MutableStateFlow(ResultContainer.Loading)
-        }
-        debounce {
-            viewModelScope.launch {
-                getRemindersUseCase.getRemindersForTask(taskId).collect {
-                    _remindersForTasks[taskId]!!.value = it
+            debounce {
+                viewModelScope.launch {
+                    getRemindersUseCase.getRemindersForTask(taskId).collect {
+                        _remindersForTasks[taskId]!!.value = it
+                    }
                 }
+
             }
         }
         return _remindersForTasks[taskId]!!.asStateFlow()

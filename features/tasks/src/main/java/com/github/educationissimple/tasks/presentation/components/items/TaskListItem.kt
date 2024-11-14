@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
@@ -73,6 +74,8 @@ import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPr
 import com.github.educationissimple.tasks.presentation.components.environment.TaskSheet
 import com.github.educationissimple.tasks.presentation.utils.toColor
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -81,7 +84,7 @@ import kotlin.math.roundToInt
 fun TaskListItem(
     task: Task,
     categories: ResultContainer<List<TaskCategory>>,
-    reminders: ResultContainer<List<TaskReminder>>,
+    getReminders: () -> StateFlow<ResultContainer<List<TaskReminder>>>,
     onAddNewCategory: (String) -> Unit,
     onTaskDelete: () -> Unit,
     onTaskUpdate: (Task) -> Unit,
@@ -126,6 +129,7 @@ fun TaskListItem(
     }
 
     if (showTaskPropertiesSheet) {
+        val reminders by getReminders().collectAsStateWithLifecycle()
         TaskSheet(
             task = task,
             categories = categories,
@@ -386,7 +390,7 @@ fun TaskCardPreview() {
                     priority = Task.Priority.fromValue(it % 3)
                 ),
                 categories = ResultContainer.Done(emptyList()),
-                reminders = ResultContainer.Done(emptyList()),
+                getReminders = { MutableStateFlow(ResultContainer.Done(emptyList())) },
                 onTaskDelete = {},
                 onTaskUpdate = {},
                 onAddNewCategory = {},

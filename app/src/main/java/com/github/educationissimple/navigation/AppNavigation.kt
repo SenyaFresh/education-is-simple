@@ -1,5 +1,7 @@
 package com.github.educationissimple.navigation
 
+import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -36,12 +38,14 @@ import com.github.educationissimple.R
 import com.github.educationissimple.audio.presentation.components.environment.CurrentAudioFloatingItem
 import com.github.educationissimple.audio.presentation.screens.AudioCategoriesScreen
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
+import com.github.educationissimple.common.Core
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskRemindersScreen
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
+import kotlinx.coroutines.delay
 import java.time.Duration
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -96,6 +100,28 @@ fun AppNavigation(
         IconAction(Icons.AutoMirrored.Filled.KeyboardArrowLeft) { navController.popBackStack() }
     }
     var tasksScreenSearchEnabled by remember { mutableStateOf(false) }
+
+
+    var exit by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = exit) {
+        if (exit) {
+            delay(2000)
+            exit = false
+        }
+    }
+
+    BackHandler {
+        if (exit) {
+            context.startActivity(Intent(Intent.ACTION_MAIN).apply {
+                addCategory(Intent.CATEGORY_HOME)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            })
+        } else {
+            exit = true
+            Core.toaster.showToast("Нажмите еще раз чтобы выйти")
+        }
+    }
 
     val rightIconsActions: List<IconAction>? = when (currentBackStackEntry.value.routeClass()) {
         TasksGraph.TasksScreen::class -> listOf(
