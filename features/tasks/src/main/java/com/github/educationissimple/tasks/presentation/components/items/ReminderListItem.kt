@@ -40,7 +40,7 @@ fun ReminderListItem(
     Card(
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(containerColor = Neutral.Dark.Dark),
+        colors = CardDefaults.cardColors(containerColor = Neutral.Dark.Light),
         modifier = Modifier.animateContentSize()
     ) {
         Row(
