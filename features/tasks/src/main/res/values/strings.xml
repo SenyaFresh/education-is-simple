@@ -36,4 +36,9 @@
     <string name="go_back">Назад</string>
     <string name="select_reminder_date">Выбрать дату напоминания</string>
     <string name="select_reminder_time">Выбрать время напоминания</string>
+    <string name="reminders">Напоминания</string>
+    <string name="task_priority">Приоритет задачи</string>
+    <string name="task_date">Дата задачи</string>
+    <string name="add_task_description">Добавьте описание задачи</string>
+    <string name="Description">Описание</string>
 </resources>

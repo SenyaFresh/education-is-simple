@@ -2,7 +2,8 @@ package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,24 +40,28 @@ fun RemindersList(
             }
         }
     ) {
-        LazyColumn(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            modifier = modifier.padding(LocalSpacing.current.small).fillMaxWidth()
-        ) {
-            items(items = reminders.unwrap(), key = { it.id }) { reminder ->
-                ReminderListItem(
-                    reminder = reminder,
-                    actionIconVector = Icons.Default.Delete,
-                    onAction = { onDelete(reminder) }
-                )
-            }
-            item {
-                DefaultIconButton(
-                    onClick = onCreate,
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null)
+        Row{
+            LazyColumn(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+                modifier = modifier.padding(LocalSpacing.current.small)
+            ) {
+                items(items = reminders.unwrap(), key = { it.id }) { reminder ->
+                    ReminderListItem(
+                        reminder = reminder,
+                        actionIconVector = Icons.Default.Delete,
+                        onAction = { onDelete(reminder) }
+                    )
                 }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            DefaultIconButton(
+                onClick = onCreate,
+                modifier = Modifier.padding(LocalSpacing.current.small)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     }

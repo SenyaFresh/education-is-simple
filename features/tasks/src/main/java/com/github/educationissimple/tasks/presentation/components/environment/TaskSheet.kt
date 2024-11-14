@@ -155,7 +155,7 @@ fun TaskSheet(
                 ActionableListItem(
                     label = categories.unwrapOrNull()
                         ?.find { it.id == updatedTask.categoryId }?.name
-                        ?: "Без категории",
+                        ?: stringResource(R.string.no_category),
                     onClick = { showCategoriesDialog = true }
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -216,7 +216,7 @@ fun TaskSheet(
                         Column {
                             TaskPropertyItem(
                                 iconVector = Icons.Default.Description,
-                                label = "Описание",
+                                label = stringResource(R.string.Description),
                                 rightArrowOpened = showTaskDescriptionTextField,
                                 onPropertyClick = {
                                     showTaskDescriptionTextField = !showTaskDescriptionTextField
@@ -230,21 +230,21 @@ fun TaskSheet(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(100.dp),
-                                    placeholder = { Text("Добавьте описание задачи", fontSize = 14.sp) }
+                                    placeholder = { Text(stringResource(R.string.add_task_description), fontSize = 14.sp) }
                                 )
                             }
                         }
                     }
                     TaskPropertyItem(
                         iconVector = Icons.Default.CalendarMonth,
-                        label = "Дата задачи",
+                        label = stringResource(R.string.task_date),
                         onPropertyClick = {
                             showDateDialog = true
                         }
                     )
                     TaskPropertyItem(
                         iconVector = Icons.AutoMirrored.Filled.StarHalf,
-                        label = "Приоритет задачи",
+                        label = stringResource(R.string.task_priority),
                         onPropertyClick = {
                             showPriorityDialog = true
                         }
@@ -255,9 +255,10 @@ fun TaskSheet(
                         Column {
                             TaskPropertyItem(
                                 iconVector = Icons.Default.Notifications,
-                                label = "Создать напоминание",
+                                rightArrowOpened = showReminders,
+                                label = stringResource(R.string.reminders),
                                 onPropertyClick = {
-                                    showReminders = true
+                                    showReminders = !showReminders
                                 }
                             )
 
@@ -272,6 +273,7 @@ fun TaskSheet(
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
         }
     }
 }
