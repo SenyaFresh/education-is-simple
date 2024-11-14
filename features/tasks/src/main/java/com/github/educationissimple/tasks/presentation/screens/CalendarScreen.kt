@@ -1,21 +1,28 @@
 package com.github.educationissimple.tasks.presentation.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
@@ -105,32 +112,45 @@ fun CalendarContent(
                         selectedDate = it
                         onTasksEvent(TasksEvent.ChangeTasksSelectionDate(it))
                     },
-                    modifier = Modifier.padding(LocalSpacing.current.small).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(LocalSpacing.current.small)
+                        .fillMaxWidth()
                 )
-
             }
 
-            LazyColumn(
-                contentPadding = PaddingValues(
-                    start = LocalSpacing.current.semiMedium,
-                    end = LocalSpacing.current.semiMedium,
-                    bottom = LocalSpacing.current.small
-                )
-            ) {
-                taskSections.forEach { section ->
-                    tasksSubcolumn(
-                        section.title,
-                        section.tasks,
-                        onTaskDelete = onTaskDelete,
-                        onUpdateTask = onUpdateTask,
-                        isExpanded = section.isExpanded,
-                        categories = categories,
-                        onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
-                        onExpandChange = section.onExpandChange,
-                        getRemindersForTask = getRemindersForTask,
-                        onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
-                        onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
+            if (taskSections.all { it.tasks.isEmpty() }) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(R.string.no_tasks_for_selected_date),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(LocalSpacing.current.medium)
                     )
+                }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        start = LocalSpacing.current.semiMedium,
+                        end = LocalSpacing.current.semiMedium,
+                        bottom = LocalSpacing.current.small
+                    )
+                ) {
+                    taskSections.forEach { section ->
+                        tasksSubcolumn(
+                            section.title,
+                            section.tasks,
+                            onTaskDelete = onTaskDelete,
+                            onUpdateTask = onUpdateTask,
+                            isExpanded = section.isExpanded,
+                            categories = categories,
+                            onAddNewCategory = { onTasksEvent(TasksEvent.AddCategory(it)) },
+                            onExpandChange = section.onExpandChange,
+                            getRemindersForTask = getRemindersForTask,
+                            onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
+                            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
+                        )
+                    }
                 }
             }
         }

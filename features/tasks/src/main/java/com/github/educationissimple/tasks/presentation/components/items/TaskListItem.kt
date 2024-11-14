@@ -266,7 +266,7 @@ private fun TaskContent(
 
     Surface(
         color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
-        modifier = modifier
+        modifier = Modifier
             .offset { IntOffset(offset.value.roundToInt(), 0) }
             .pointerInput(contextMenuWidth) {
                 detectHorizontalDragGestures(
@@ -291,7 +291,7 @@ private fun TaskContent(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize()
         ) {
             Spacer(
                 modifier = Modifier

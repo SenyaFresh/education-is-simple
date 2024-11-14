@@ -33,7 +33,9 @@ fun RemindersList(
         container = reminders,
         onTryAgain = {},
         onLoading = {
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+            ) {
                 repeat(3) {
                     LoadingActionableListItem()
                 }

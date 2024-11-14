@@ -49,6 +49,7 @@ dependencies {
     api(project(":core:common"))
     api(project(":core:components"))
 
+    implementation(libs.accompanist.permissions)
     implementation(libs.material.icons)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

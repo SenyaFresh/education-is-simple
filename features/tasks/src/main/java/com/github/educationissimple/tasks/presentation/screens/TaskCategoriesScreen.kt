@@ -35,6 +35,7 @@ fun CategoriesContent(
         items = categories.map { list -> list.map { ActionableItem(it.id, it.name) } },
         addLabel = stringResource(R.string.add_new_category),
         addPlaceholder = stringResource(R.string.input_new_category_here),
+        emptyListMessage = stringResource(R.string.no_categories_yet),
         onDelete = { categoryId ->
             onEvent(TasksEvent.DeleteCategory(categoryId))
         },

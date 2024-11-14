@@ -41,4 +41,14 @@
     <string name="task_date">Дата задачи</string>
     <string name="add_task_description">Добавьте описание задачи</string>
     <string name="Description">Описание</string>
+    <string name="you_didnt_add_any_task_yet">Вы пока не добавили ни одной задачи</string>
+    <string name="add_task_by_pressing">Добавьте задачу, нажав на кнопу \"+\"</string>
+    <string name="no_tasks_for_selected_date">Для выделенной даты задач не запланировано</string>
+    <string name="no_categories_yet">Пока нет никаких категорий</string>
+    <string name="no_reminders_yet">Пока нет никаких напоминаний</string>
+    <string name="notifications_permission_rationale">Без разрешения вы не можете добавлять напоминания. Пожалуйста, предоставьте разрешение в настройках приложения.</string>
+    <string name="notifications_permission_denied">Пожалуйста, предоставьте разрешение, чтобы создать напоминание.</string>
+    <string name="notifications_permission_title">Разрешение для отправки уведомлений</string>
+    <string name="go_to_settings">Настройки</string>
+    <string name="grant">Ок</string>
 </resources>

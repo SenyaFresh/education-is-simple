@@ -1,5 +1,7 @@
 package com.github.educationissimple.tasks.presentation.components.environment
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,14 +56,18 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion.NO_CATEGORY_ID
 import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import com.github.educationissimple.tasks.presentation.components.dialogs.ChangeDateDialog
+import com.github.educationissimple.tasks.presentation.components.dialogs.DeniedNotificationsPermissionDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.PickDateTimeDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.SelectCategoryDialog
 import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPriorityDialog
 import com.github.educationissimple.tasks.presentation.components.items.TaskPropertyItem
 import com.github.educationissimple.tasks.presentation.components.lists.RemindersList
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun TaskSheet(
     task: Task,
@@ -82,6 +88,13 @@ fun TaskSheet(
     var showCategoriesDialog by remember { mutableStateOf(false) }
     var showReminders by remember { mutableStateOf(false) }
     var showReminderCreatorDialog by remember { mutableStateOf(false) }
+    var showNotificationsPermissionDialog by remember { mutableStateOf(false) }
+
+    val notificationsPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        null
+    }
 
     if (showDateDialog) {
         ChangeDateDialog(
@@ -123,12 +136,29 @@ fun TaskSheet(
     }
 
     if (showReminderCreatorDialog) {
-        PickDateTimeDialog(
-            onConfirm = {
-                onCreateReminder(TaskReminder(taskId = task.id, taskText = task.text, datetime = it))
+        when (notificationsPermissionState?.status) {
+            is PermissionStatus.Denied -> {
+                showNotificationsPermissionDialog = true
+            }
+            else -> {
+                PickDateTimeDialog(
+                    onConfirm = {
+                        onCreateReminder(TaskReminder(taskId = task.id, taskText = task.text, datetime = it))
+                        showReminderCreatorDialog = false
+                    },
+                    onDismiss = { showReminderCreatorDialog = false },
+                )
+            }
+        }
+    }
+
+    if (showNotificationsPermissionDialog) {
+        DeniedNotificationsPermissionDialog(
+            notificationsPermissionState = notificationsPermissionState!!,
+            onDismiss = {
+                showNotificationsPermissionDialog = false
                 showReminderCreatorDialog = false
-            },
-            onDismiss = { showReminderCreatorDialog = false },
+            }
         )
     }
 

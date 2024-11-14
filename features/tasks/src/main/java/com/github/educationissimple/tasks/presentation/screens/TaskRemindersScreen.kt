@@ -43,11 +43,12 @@ fun TaskRemindersContent(
         },
         addLabel = stringResource(R.string.add_new_category),
         addPlaceholder = stringResource(R.string.input_new_category_here),
-        onDelete = { categoryId ->
-            onEvent(TasksEvent.DeleteCategory(categoryId))
+        emptyListMessage = stringResource(R.string.no_reminders_yet),
+        onDelete = { reminderId ->
+
         },
-        onAdd = { categoryName ->
-            onEvent(TasksEvent.AddCategory(categoryName))
+        onAdd = { reminderId ->
+
         }
     )
 }

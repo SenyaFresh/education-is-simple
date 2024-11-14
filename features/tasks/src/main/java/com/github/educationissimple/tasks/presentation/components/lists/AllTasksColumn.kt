@@ -1,21 +1,28 @@
 package com.github.educationissimple.tasks.presentation.components.lists
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
@@ -100,28 +107,44 @@ fun AllTasksColumn(
                 }
             )
         )
-
-        LazyColumn(
-            contentPadding = PaddingValues(
-                start = LocalSpacing.current.semiMedium,
-                end = LocalSpacing.current.semiMedium,
-                bottom = LocalSpacing.current.small
-            )
-        ) {
-            taskSections.forEach { section ->
-                tasksSubcolumn(
-                    section.title,
-                    section.tasks,
-                    onTaskDelete = onTaskDelete,
-                    onUpdateTask = onUpdateTask,
-                    isExpanded = section.isExpanded,
-                    onExpandChange = section.onExpandChange,
-                    categories = categories,
-                    onAddNewCategory = onAddNewCategory,
-                    getRemindersForTask = getRemindersForTask,
-                    onDeleteReminder = onDeleteReminder,
-                    onCreateReminder = onCreateReminder
+        if (taskSections.all { it.tasks.isEmpty() }) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(R.string.you_didnt_add_any_task_yet),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = stringResource(R.string.add_task_by_pressing),
+                        fontSize = 14.sp,
+                        color = Neutral.Dark.Lightest
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(
+                    start = LocalSpacing.current.semiMedium,
+                    end = LocalSpacing.current.semiMedium,
+                    bottom = LocalSpacing.current.small
                 )
+            ) {
+                taskSections.forEach { section ->
+                    tasksSubcolumn(
+                        section.title,
+                        section.tasks,
+                        onTaskDelete = onTaskDelete,
+                        onUpdateTask = onUpdateTask,
+                        isExpanded = section.isExpanded,
+                        onExpandChange = section.onExpandChange,
+                        categories = categories,
+                        onAddNewCategory = onAddNewCategory,
+                        getRemindersForTask = getRemindersForTask,
+                        onDeleteReminder = onDeleteReminder,
+                        onCreateReminder = onCreateReminder
+                    )
+                }
             }
         }
     }
