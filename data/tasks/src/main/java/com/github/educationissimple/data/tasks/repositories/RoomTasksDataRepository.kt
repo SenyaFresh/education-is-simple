@@ -21,7 +21,7 @@ class RoomTasksDataRepository @Inject constructor(
     lazyFlowLoaderFactory: LazyFlowLoaderFactory
 ) : TasksDataRepository {
 
-    private var searchQuery: String? = null
+    private var tasksSearchQuery: String? = null
     private var selectedDate: LocalDate = LocalDate.now()
 
     private var currentCategoryId: Long?
@@ -44,7 +44,7 @@ class RoomTasksDataRepository @Inject constructor(
         tasksDataSource.getTasksByDate(
             date = selectedDate,
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -53,7 +53,7 @@ class RoomTasksDataRepository @Inject constructor(
         tasksDataSource.getCompletedTasks(
             date = selectedDate,
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -62,7 +62,7 @@ class RoomTasksDataRepository @Inject constructor(
         tasksDataSource.getTasksBeforeDate(
             date = LocalDate.now(),
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -71,7 +71,7 @@ class RoomTasksDataRepository @Inject constructor(
         tasksDataSource.getTasksByDate(
             date = LocalDate.now(),
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -80,7 +80,7 @@ class RoomTasksDataRepository @Inject constructor(
         tasksDataSource.getTasksAfterDate(
             date = LocalDate.now(),
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -88,7 +88,7 @@ class RoomTasksDataRepository @Inject constructor(
     private val completedTasksLoader = lazyFlowLoaderFactory.create {
         tasksDataSource.getCompletedTasks(
             categoryId = currentCategoryId,
-            searchText = searchQuery,
+            searchText = tasksSearchQuery,
             sortType = currentSortType
         )
     }
@@ -109,8 +109,8 @@ class RoomTasksDataRepository @Inject constructor(
         return selectedSortTypeLoader.listen()
     }
 
-    override suspend fun changeSearchQuery(query: String?) {
-        searchQuery = query
+    override suspend fun changeTasksSearchQuery(query: String?) {
+        tasksSearchQuery = query
         updateSources()
     }
 
@@ -216,7 +216,7 @@ class RoomTasksDataRepository @Inject constructor(
                 tasksDataSource.getTasksByDate(
                     date = selectedDate,
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },
@@ -227,7 +227,7 @@ class RoomTasksDataRepository @Inject constructor(
                 tasksDataSource.getCompletedTasks(
                     date = selectedDate,
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },
@@ -238,7 +238,7 @@ class RoomTasksDataRepository @Inject constructor(
                 tasksDataSource.getTasksBeforeDate(
                     date = LocalDate.now(),
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },
@@ -249,7 +249,7 @@ class RoomTasksDataRepository @Inject constructor(
                 tasksDataSource.getTasksByDate(
                     date = LocalDate.now(),
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },
@@ -260,7 +260,7 @@ class RoomTasksDataRepository @Inject constructor(
                 tasksDataSource.getTasksAfterDate(
                     date = LocalDate.now(),
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },
@@ -270,7 +270,7 @@ class RoomTasksDataRepository @Inject constructor(
             valueLoader = {
                 tasksDataSource.getCompletedTasks(
                     categoryId = currentCategoryId,
-                    searchText = searchQuery,
+                    searchText = tasksSearchQuery,
                     sortType = currentSortType
                 )
             },

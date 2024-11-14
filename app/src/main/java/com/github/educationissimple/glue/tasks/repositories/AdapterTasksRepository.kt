@@ -58,7 +58,7 @@ class AdapterTasksRepository @Inject constructor(
     }
 
     override suspend fun changeTaskSearchText(text: String) {
-        tasksDataRepository.changeSearchQuery(text)
+        tasksDataRepository.changeTasksSearchQuery(text)
     }
 
     override suspend fun getSelectedSortType(): Flow<ResultContainer<SortType?>> {

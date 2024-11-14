@@ -17,6 +17,10 @@ data object TasksGraph {
 
     @Serializable
     data object CalendarScreen
+
+    @Serializable
+    data object RemindersScreen
+
 }
 
 @Serializable

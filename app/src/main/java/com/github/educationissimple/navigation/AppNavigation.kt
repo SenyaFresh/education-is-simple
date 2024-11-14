@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScreen
+import com.github.educationissimple.tasks.presentation.screens.TaskRemindersScreen
 import com.github.educationissimple.tasks.presentation.screens.TasksScreen
 
 @Composable
@@ -45,6 +47,7 @@ fun AppNavigation(
         TasksGraph.TaskCategoriesScreen::class -> R.string.manage_task_categories
         TasksGraph.TasksScreen::class -> R.string.tasks
         TasksGraph.CalendarScreen::class -> R.string.calendar
+        TasksGraph.RemindersScreen::class -> R.string.reminders
         AudioGraph.AudioScreen::class -> R.string.audio
         AudioGraph.AudioCategoriesScreen::class -> R.string.manage_audio_categories
         else -> null
@@ -65,6 +68,10 @@ fun AppNavigation(
             IconAction(
                 imageVector = Icons.Default.CalendarMonth,
                 onClick = { navController.navigate(TasksGraph.CalendarScreen) }
+            ),
+            IconAction(
+                imageVector = Icons.Default.Notifications,
+                onClick = { navController.navigate(TasksGraph.RemindersScreen) }
             ),
             IconAction(
                 imageVector = Icons.Default.Category,
@@ -124,6 +131,10 @@ fun AppNavigation(
                 composable<TasksGraph.CalendarScreen> {
                     ShowBackground()
                     CalendarScreen()
+                }
+                composable<TasksGraph.RemindersScreen> {
+                    ShowBackground()
+                    TaskRemindersScreen()
                 }
             }
 

@@ -19,7 +19,8 @@ interface TasksRemindersDao {
     suspend fun deleteReminder(id: Long)
 
     @Transaction
-    @Query("SELECT * FROM task_reminders")
+    @Query("""SELECT * FROM task_reminders
+        ORDER BY datetime, task_id ASC""")
     suspend fun getReminders(): List<RemindersAndTasksTuple>
 
 }

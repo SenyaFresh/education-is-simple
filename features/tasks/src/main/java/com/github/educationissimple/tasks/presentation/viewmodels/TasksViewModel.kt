@@ -89,6 +89,7 @@ class TasksViewModel @Inject constructor(
         collectCategories()
         collectSelectedSortType()
         collectSelectedCategoryId()
+        collectReminders()
     }
 
 
@@ -167,6 +168,14 @@ class TasksViewModel @Inject constructor(
     private fun changeTaskSearchText(text: String) {
         viewModelScope.launch {
             getTasksUseCase.changeTaskSearchText(text)
+        }
+    }
+
+    private fun collectReminders() {
+        viewModelScope.launch {
+            getRemindersUseCase.getAllReminders().collect {
+                _reminders.value = it
+            }
         }
     }
 

@@ -12,7 +12,7 @@ import java.time.LocalDate
 
 interface TasksDataRepository {
 
-    suspend fun changeSearchQuery(query: String?)
+    suspend fun changeTasksSearchQuery(query: String?)
 
     suspend fun changeSelectionDate(date: LocalDate?)
 
