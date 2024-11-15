@@ -9,6 +9,8 @@ import com.github.educationissimple.audio.domain.repositories.AudioRepository
 import com.github.educationissimple.audio_player.di.PlayerDeps
 import com.github.educationissimple.common.CoreProvider
 import com.github.educationissimple.common.di.AppScope
+import com.github.educationissimple.news.di.NewsDeps
+import com.github.educationissimple.news.domain.repositories.NewsRepository
 import com.github.educationissimple.notifications.di.ReminderDeps
 import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.di.TasksDeps
@@ -17,11 +19,13 @@ import dagger.BindsInstance
 import dagger.Component
 
 @[AppScope Component(modules = [AppModule::class, CoreModule::class])]
-interface AppComponent: TasksDeps, AudioDeps, PlayerDeps, ReminderDeps {
+interface AppComponent: TasksDeps, AudioDeps, PlayerDeps, ReminderDeps, NewsDeps {
 
     fun inject(mainActivity: MainActivity)
 
     fun remindersSyncWorkerFactory(): RemindersSyncWorker.Factory
+
+    override val newsRepository: NewsRepository
 
     override val context: Context
 

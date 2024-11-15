@@ -25,8 +25,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,9 +69,10 @@ fun NewsContentSheet(
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 )
             }
 
@@ -89,11 +91,11 @@ fun NewsContentSheet(
                         modifier = Modifier.weight(0.5f)
                     ) {
                         Text(
-                            text = news.author,
+                            text = news.source,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                     Spacer(modifier = Modifier.width(LocalSpacing.current.extraSmall))
@@ -124,11 +126,12 @@ fun NewsContentSheet(
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
                 Text(
                     text = news.title,
-                    fontSize = 16.sp
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
                 Text(text = news.content)
-
+                Spacer(modifier = Modifier.height(LocalSpacing.current.large))
             }
         }
     }

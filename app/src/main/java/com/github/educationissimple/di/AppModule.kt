@@ -3,11 +3,13 @@ package com.github.educationissimple.di
 import android.app.Application
 import android.content.Context
 import com.github.educationissimple.audio.di.AudioDataRepositoryModule
+import com.github.educationissimple.data.news.di.NewsDataRepositoryModule
 import com.github.educationissimple.data.tasks.di.modules.TasksDataRepositoryModule
 import com.github.educationissimple.glue.audio.di.AudioListHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioListPlayerHandlerModule
 import com.github.educationissimple.glue.audio.di.AudioRepositoryModule
 import com.github.educationissimple.glue.audio.di.AudioServiceManagerModule
+import com.github.educationissimple.glue.news.di.NewsRepositoryModule
 import com.github.educationissimple.glue.tasks.di.RemindersSchedulerModule
 import com.github.educationissimple.glue.tasks.di.TasksRepositoryModule
 import dagger.Module
@@ -22,7 +24,9 @@ import dagger.Provides
         AudioRepositoryModule::class,
         AudioListPlayerHandlerModule::class,
         AudioListHandlerModule::class,
-        AudioServiceManagerModule::class
+        AudioServiceManagerModule::class,
+        NewsDataRepositoryModule::class,
+        NewsRepositoryModule::class
     ]
 )
 class AppModule {

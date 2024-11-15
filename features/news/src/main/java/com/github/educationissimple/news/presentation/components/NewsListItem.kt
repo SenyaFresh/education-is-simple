@@ -1,16 +1,18 @@
 package com.github.educationissimple.news.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -37,6 +40,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.news.R
 import com.github.educationissimple.news.domain.entities.NewsEntity
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -47,6 +51,7 @@ fun NewsListItem(
     onMoreClick: () -> Unit
 ) {
     var showNewsContent by remember { mutableStateOf(false) }
+    var imageState by remember { mutableStateOf(ImageLoadingState.Loading) }
 
     if (showNewsContent) {
         NewsContentSheet(
@@ -67,24 +72,45 @@ fun NewsListItem(
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .fillMaxHeight()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = Neutral.Light.Medium),
             contentAlignment = Alignment.Center
         ) {
-            if (news.imageUrl == null) {
+            if (news.imageUrl == null || imageState == ImageLoadingState.Error) {
                 Icon(
                     imageVector = Icons.Default.Newspaper,
                     contentDescription = null,
                     tint = Neutral.Dark.Medium,
-                    modifier = Modifier.size(60.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(LocalSpacing.current.medium)
                 )
             } else {
+                if (imageState == ImageLoadingState.Loading) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .shimmerEffect()
+                    )
+                }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(news.imageUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    onLoading = {
+                        imageState = ImageLoadingState.Loading
+                    },
+                    onSuccess = {
+                        imageState = ImageLoadingState.Success
+                    },
+                    onError = {
+                        imageState = ImageLoadingState.Error
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -104,7 +130,7 @@ fun NewsListItem(
                 modifier = Modifier.padding(vertical = LocalSpacing.current.extraSmall)
             )
             Text(
-                text = news.author,
+                text = news.source,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Neutral.Dark.Medium,
@@ -139,13 +165,19 @@ fun NewsListItem(
     }
 }
 
+enum class ImageLoadingState {
+    Loading,
+    Success,
+    Error
+}
+
 @Preview(showSystemUi = true)
 @Composable
 fun NewsListItemPreview() {
     NewsListItem(
         news = NewsEntity(
             title = "Title title title title title title title title title title title title title title title title title title title title",
-            author = "Author",
+            source = "Author",
             publishedAt = "2 hours ago",
             imageUrl = null,
             content = "",

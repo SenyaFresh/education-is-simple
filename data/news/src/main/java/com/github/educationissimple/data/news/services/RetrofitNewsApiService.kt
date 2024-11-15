@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface RetrofitNewsApiService: NewsApiService {
 
-    @GET("top-headlines?country=ru&category=science&apiKey=${BuildConfig.NEWS_API_KEY}&pageSize=20")
+    @GET("top-headlines?category=science&apiKey=${BuildConfig.NEWS_API_KEY}&pageSize=20")
     override suspend fun getNews(@Query("page") page: Int): NewsResponse
 
 }

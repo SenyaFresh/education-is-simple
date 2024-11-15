@@ -1,5 +1,6 @@
 package com.github.educationissimple.news.presentation.screens
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,11 +9,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.github.educationissimple.common.Core
 import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.composables.ErrorMessage
 import com.github.educationissimple.news.R
@@ -35,11 +38,21 @@ fun NewsScreen(
 fun NewsContent(
     news: LazyPagingItems<NewsEntity>
 ) {
+    val uriHandler = LocalUriHandler.current
+
     LazyColumn {
-        items(count = news.itemCount, key = { index -> news[index]!!.url }) { index ->
+        items(count = news.itemCount) { index ->
             NewsListItem(
                 news = news[index]!!,
-                onMoreClick = { }
+                onMoreClick = {
+                    val urlParsed = kotlin.runCatching { Uri.parse(news[index]!!.url) }
+                    if (urlParsed.isSuccess && urlParsed.getOrNull() != null) {
+                        val url = urlParsed.getOrNull()!!
+                        uriHandler.openUri(url.toString())
+                    } else {
+                        Core.toaster.showToast("Ошибка. Ссылка недействительна.")
+                    }
+                }
             )
         }
 
@@ -49,7 +62,9 @@ fun NewsContent(
                     item {
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier.fillMaxWidth().fillParentMaxHeight()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight()
                         ) {
                             CircularProgressIndicator(color = Highlight.Darkest)
                         }
@@ -58,10 +73,17 @@ fun NewsContent(
 
                 loadState.refresh is LoadState.Error -> {
                     item {
-                        ErrorMessage(
-                            message = stringResource(R.string.loading_error),
-                            onClickRetry = { retry() }
-                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight()
+                        ) {
+                            ErrorMessage(
+                                message = stringResource(R.string.loading_error),
+                                onClickRetry = { retry() }
+                            )
+                        }
                     }
                 }
 
@@ -69,7 +91,9 @@ fun NewsContent(
                     item {
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = LocalSpacing.current.small)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = LocalSpacing.current.small)
                         ) {
                             CircularProgressIndicator(color = Highlight.Darkest)
                         }
@@ -78,10 +102,17 @@ fun NewsContent(
 
                 loadState.append is LoadState.Error -> {
                     item {
-                        ErrorMessage(
-                            message = stringResource(R.string.loading_error),
-                            onClickRetry = { retry() }
-                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight()
+                        ) {
+                            ErrorMessage(
+                                message = stringResource(R.string.loading_error),
+                                onClickRetry = { retry() }
+                            )
+                        }
                     }
                 }
             }

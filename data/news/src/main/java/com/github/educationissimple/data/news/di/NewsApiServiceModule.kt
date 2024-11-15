@@ -3,14 +3,17 @@ package com.github.educationissimple.data.news.di
 import com.github.educationissimple.common.di.AppScope
 import com.github.educationissimple.data.news.services.NewsApiService
 import com.github.educationissimple.data.news.services.RetrofitNewsApiService
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import retrofit2.Retrofit
 
 @Module
-interface NewsApiServiceModule {
+class NewsApiServiceModule {
 
-    @Binds
+    @Provides
     @AppScope
-    fun bindNewsApiService(impl: RetrofitNewsApiService): NewsApiService
+    fun provideNewsApiService(retrofit: Retrofit): NewsApiService {
+        return retrofit.create(RetrofitNewsApiService::class.java)
+    }
 
 }

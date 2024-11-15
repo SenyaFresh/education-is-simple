@@ -13,7 +13,7 @@ import com.github.educationissimple.components.composables.buttons.DefaultPrimar
 @Composable
 fun ErrorMessage(
     message: String,
-    onClickRetry: () -> Unit
+    onClickRetry: () -> Unit,
 ) {
     Column {
         Text(text = message)

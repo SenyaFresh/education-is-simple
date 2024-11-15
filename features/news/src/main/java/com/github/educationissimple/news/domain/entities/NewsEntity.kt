@@ -1,7 +1,7 @@
 package com.github.educationissimple.news.domain.entities
 
 data class NewsEntity(
-    val author: String,
+    val source: String,
     val title: String,
     val content: String,
     val imageUrl: String?,

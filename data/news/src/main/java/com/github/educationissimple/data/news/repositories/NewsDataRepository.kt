@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.github.educationissimple.data.news.entities.Article
 import kotlinx.coroutines.flow.Flow
 
-interface NewsRepository {
+interface NewsDataRepository {
 
     suspend fun getNews(): Flow<PagingData<Article>>
 

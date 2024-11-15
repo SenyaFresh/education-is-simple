@@ -8,4 +8,6 @@
     <string name="manage_audio_categories">Редактировать категории аудио</string>
     <string name="add_audio_error">Произошла ошибка при добавление аудиофайла.</string>
     <string name="reminders">Напоминания</string>
+    <string name="news">Новости</string>
+    <string name="science_news">Новости науки</string>
 </resources>

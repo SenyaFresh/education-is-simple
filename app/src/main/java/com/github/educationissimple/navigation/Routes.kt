@@ -34,6 +34,14 @@ data object AudioGraph {
 
 }
 
+@Serializable
+data object NewsGraph {
+
+    @Serializable
+    data object NewsScreen
+
+}
+
 fun NavBackStackEntry?.routeClass(): KClass<*>? {
     return this
         ?.destination

@@ -40,6 +40,7 @@ import com.github.educationissimple.audio.presentation.screens.AudioCategoriesSc
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.components.colors.Neutral
+import com.github.educationissimple.news.presentation.screens.NewsScreen
 import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
 import com.github.educationissimple.tasks.presentation.screens.TaskCategoriesScreen
@@ -92,6 +93,7 @@ fun AppNavigation(
         TasksGraph.RemindersScreen::class -> R.string.reminders
         AudioGraph.AudioScreen::class -> R.string.audio
         AudioGraph.AudioCategoriesScreen::class -> R.string.manage_audio_categories
+        NewsGraph.NewsScreen::class -> R.string.science_news
         else -> null
     }
     val leftIconAction: IconAction? = if (navController.previousBackStackEntry == null) {
@@ -214,6 +216,15 @@ fun AppNavigation(
                 composable<AudioGraph.AudioCategoriesScreen> {
                     ShowBackground()
                     AudioCategoriesScreen()
+                }
+            }
+
+            navigation<NewsGraph>(
+                startDestination = NewsGraph.NewsScreen
+            ) {
+                composable<NewsGraph.NewsScreen> {
+                    ShowBackground()
+                    NewsScreen()
                 }
             }
         }

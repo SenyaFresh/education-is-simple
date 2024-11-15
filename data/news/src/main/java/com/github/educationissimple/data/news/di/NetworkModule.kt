@@ -6,6 +6,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -21,14 +22,17 @@ class NetworkModule {
     @Provides
     @AppScope
     fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().build()
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            .build()
     }
 
     @Provides
     @AppScope
     @BaseURL
     fun provideBaseURL(): String {
-        return "https://api.openai.com/v1/chat/"
+        return "https://newsapi.org/v2/"
     }
 
     @Provides

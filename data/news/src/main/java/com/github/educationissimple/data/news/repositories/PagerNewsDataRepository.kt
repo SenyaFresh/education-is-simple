@@ -8,9 +8,9 @@ import com.github.educationissimple.data.news.sources.NewsPagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class PagerNewsRepository @Inject constructor(
+class PagerNewsDataRepository @Inject constructor(
     private val newsPagingSource: NewsPagingSource,
-) : NewsRepository {
+) : NewsDataRepository {
 
     override suspend fun getNews(): Flow<PagingData<Article>> {
         return Pager(
