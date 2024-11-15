@@ -3,4 +3,5 @@
     <string name="delete">Удалить\n</string>
     <string name="cancel">Отменить</string>
     <string name="confirm">Подтвердить</string>
+    <string name="retry">Повторить</string>
 </resources>
