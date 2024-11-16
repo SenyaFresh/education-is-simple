@@ -36,7 +36,7 @@ fun ActionableItemsListWithAdding(
     addPlaceholder: String,
     emptyListMessage: String,
     onDelete: (Long) -> Unit,
-    onAdd: (String) -> Unit
+    onAdd: ((String) -> Unit)? = null
 ) {
     var isAddingNewItem by remember { mutableStateOf(false) }
 
@@ -82,24 +82,26 @@ fun ActionableItemsListWithAdding(
             }
         }
 
-        if (isAddingNewItem) {
-            AddTextDialog(
-                title = addLabel,
-                placeholder = addPlaceholder,
-                onConfirm = { categoryName ->
-                    onAdd(categoryName)
-                    isAddingNewItem = false
-                },
-                onCancel = { isAddingNewItem = false }
-            )
-        } else {
-            Box(modifier = Modifier.fillMaxSize()) {
-                AddFloatingActionButton(
-                    onClick = { isAddingNewItem = true },
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(LocalSpacing.current.medium)
+        if (onAdd != null) {
+            if (isAddingNewItem) {
+                AddTextDialog(
+                    title = addLabel,
+                    placeholder = addPlaceholder,
+                    onConfirm = { categoryName ->
+                        onAdd(categoryName)
+                        isAddingNewItem = false
+                    },
+                    onCancel = { isAddingNewItem = false }
                 )
+            } else {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AddFloatingActionButton(
+                        onClick = { isAddingNewItem = true },
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(LocalSpacing.current.medium)
+                    )
+                }
             }
         }
     }

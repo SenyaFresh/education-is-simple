@@ -13,7 +13,7 @@ import com.github.educationissimple.data.tasks.tuples.RemindersAndTasksTuple
 interface TasksRemindersDao {
 
     @Insert(entity = TaskReminderDataEntity::class, onConflict = OnConflictStrategy.ABORT)
-    suspend fun createReminder(newReminder: NewReminderTuple)
+    suspend fun createReminder(newReminder: NewReminderTuple): Long
 
     @Query("DELETE FROM task_reminders WHERE id = :id")
     suspend fun deleteReminder(id: Long)

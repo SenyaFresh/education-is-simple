@@ -124,8 +124,8 @@ class RoomTasksDataSource @Inject constructor(
         return tasksRemindersDao.getReminders()
     }
 
-    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple) {
-        tasksRemindersDao.createReminder(newReminderTuple)
+    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple): Long {
+        return tasksRemindersDao.createReminder(newReminderTuple)
     }
 
     override suspend fun deleteTaskReminder(id: Long) {

@@ -45,10 +45,9 @@ fun TaskRemindersContent(
         addPlaceholder = stringResource(R.string.input_new_category_here),
         emptyListMessage = stringResource(R.string.no_reminders_yet),
         onDelete = { reminderId ->
-            // todo
-        },
-        onAdd = { reminderId ->
-            // todo
+            reminders.unwrapOrNull()?.find { it.id == reminderId }?.let {
+                onEvent(TasksEvent.DeleteTaskReminder(it))
+            }
         }
     )
 }

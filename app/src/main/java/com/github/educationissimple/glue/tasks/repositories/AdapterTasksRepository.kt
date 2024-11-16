@@ -125,8 +125,8 @@ class AdapterTasksRepository @Inject constructor(
     }
 
     override suspend fun createReminder(reminder: TaskReminder) {
-        reminderScheduler.schedule(reminder.toReminderItem())
-        tasksDataRepository.createTaskReminder(reminder.toNewReminderTuple())
+        val id = tasksDataRepository.createTaskReminder(reminder.toNewReminderTuple())
+        reminderScheduler.schedule(reminder.copy(id = id).toReminderItem())
     }
 
     override suspend fun deleteReminder(reminder: TaskReminder) {

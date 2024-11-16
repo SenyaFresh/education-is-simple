@@ -200,9 +200,10 @@ class RoomTasksDataRepository @Inject constructor(
         }
     }
 
-    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple) {
-        tasksDataSource.createTaskReminder(newReminderTuple)
+    override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple): Long {
+        val id = tasksDataSource.createTaskReminder(newReminderTuple)
         remindersLoader.newAsyncLoad(silently = false)
+        return id
     }
 
     override suspend fun deleteTaskReminder(id: Long) {

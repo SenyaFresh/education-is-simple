@@ -52,7 +52,7 @@ interface TasksDataSource {
 
     suspend fun getReminders(): List<RemindersAndTasksTuple>
 
-    suspend fun createTaskReminder(newReminderTuple: NewReminderTuple)
+    suspend fun createTaskReminder(newReminderTuple: NewReminderTuple): Long
 
     suspend fun deleteTaskReminder(id: Long)
 
