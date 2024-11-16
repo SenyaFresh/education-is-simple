@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +39,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.buttons.DefaultIconButton
 import com.github.educationissimple.components.composables.inputs.DefaultTextField
 import com.github.educationissimple.components.composables.items.ActionableListItem
@@ -195,7 +195,7 @@ fun PopUpTextFieldContent(
                 onClick = { showPriorityDialog = true },
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = selectedPriority.toColor(),
-                    contentColor = Neutral.Light.Lightest
+                    contentColor = Color.White
                 )
             ) {
                 Icon(

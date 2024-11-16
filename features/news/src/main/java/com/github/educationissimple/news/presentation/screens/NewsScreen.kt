@@ -16,13 +16,13 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.github.educationissimple.common.Core
-import com.github.educationissimple.components.composables.ErrorMessage
 import com.github.educationissimple.news.R
 import com.github.educationissimple.news.di.NewsDiContainer
 import com.github.educationissimple.news.di.rememberNewsDiContainer
 import com.github.educationissimple.news.domain.entities.NewsEntity
 import com.github.educationissimple.news.presentation.components.NewsListItem
 import com.github.educationissimple.news.presentation.viewmodels.NewsViewModel
+import com.github.educationissimple.presentation.ErrorMessage
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
 @Composable

@@ -28,8 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.R
-import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.ActionIcon
 import com.github.educationissimple.components.composables.shimmerEffect
 
@@ -69,8 +67,8 @@ fun ActionableListItem(
                 ActionIcon(
                     imageVector = Icons.Default.Delete,
                     text = stringResource(R.string.delete),
-                    contentColor = Neutral.Light.Lightest,
-                    containerColor = Support.Error.Dark,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
                     modifier = Modifier.height(60.dp),
                     onClick = onDelete
                 )
@@ -95,7 +93,7 @@ fun LoadingActionableListItem(withDelete: Boolean = false) {
             Box(
                 modifier = Modifier
                     .size(60.dp)
-                    .background(color = Neutral.Dark.Light)
+                    .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                     .align(Alignment.CenterEnd)
             )
         }

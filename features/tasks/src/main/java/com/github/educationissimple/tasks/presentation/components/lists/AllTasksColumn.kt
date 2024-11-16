@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.R
@@ -118,7 +118,7 @@ fun AllTasksColumn(
                     Text(
                         text = stringResource(R.string.add_task_by_pressing),
                         fontSize = 14.sp,
-                        color = Neutral.Dark.Lightest
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

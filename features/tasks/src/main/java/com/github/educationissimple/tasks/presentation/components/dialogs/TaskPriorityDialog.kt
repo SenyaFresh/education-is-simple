@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.dialogs.DefaultDialog
 import com.github.educationissimple.components.composables.inputs.DefaultRadioItem
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.Task
+import com.github.educationissimple.tasks.presentation.utils.NoPriorityColor
+import com.github.educationissimple.tasks.presentation.utils.SecondaryPriorityColor
+import com.github.educationissimple.tasks.presentation.utils.TopPriorityColor
 
 @Composable
 fun TaskPriorityDialog(
@@ -36,33 +36,32 @@ fun TaskPriorityDialog(
             text = stringResource(R.string.highest_priority),
             selected = priority == Task.Priority.TopPriority,
             onClick = { onPriorityChange(Task.Priority.TopPriority) },
-            textColor = Support.Warning.Dark,
-            selectedColor = Support.Warning.Dark,
-            unselectedColor = Support.Warning.Dark
+            textColor = TopPriorityColor,
+            selectedColor = TopPriorityColor,
+            unselectedColor = TopPriorityColor
         )
 
         DefaultRadioItem(
             text = stringResource(R.string.medium_priority),
             selected = priority == Task.Priority.SecondaryPriority,
             onClick = { onPriorityChange(Task.Priority.SecondaryPriority) },
-            textColor = Support.Warning.Medium,
-            selectedColor = Support.Warning.Medium,
-            unselectedColor = Support.Warning.Medium
+            textColor = SecondaryPriorityColor,
+            selectedColor = SecondaryPriorityColor,
+            unselectedColor = SecondaryPriorityColor
         )
 
         DefaultRadioItem(
             text = stringResource(R.string.low_priority),
             selected = priority == Task.Priority.NoPriority,
             onClick = { onPriorityChange(Task.Priority.NoPriority) },
-            textColor = Neutral.Dark.Lightest,
-            selectedColor = Neutral.Dark.Lightest,
-            unselectedColor = Neutral.Dark.Lightest
+            textColor = NoPriorityColor,
+            selectedColor = NoPriorityColor,
+            unselectedColor = NoPriorityColor
         )
 
         TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
             Text(
                 text = stringResource(R.string.ok),
-                color = Highlight.Darkest,
                 fontSize = 16.sp
             )
         }

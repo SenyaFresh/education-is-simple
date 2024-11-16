@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
@@ -57,9 +58,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.ActionIcon
 import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -222,8 +220,8 @@ private fun BoxScope.TaskActions(
         ActionIcon(
             imageVector = Icons.Default.DateRange,
             text = stringResource(R.string.date),
-            contentColor = Neutral.Light.Lightest,
-            containerColor = Highlight.Darkest,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.fillMaxHeight(),
             onClick = onDateClick
         )
@@ -231,7 +229,7 @@ private fun BoxScope.TaskActions(
         ActionIcon(
             imageVector = Icons.Default.Star,
             text = stringResource(R.string.priority),
-            contentColor = Neutral.Light.Lightest,
+            contentColor = Color.White,
             containerColor = taskPriority.toColor(),
             modifier = Modifier.fillMaxHeight(),
             onClick =
@@ -243,8 +241,8 @@ private fun BoxScope.TaskActions(
         ActionIcon(
             imageVector = Icons.Default.Delete,
             text = stringResource(R.string.delete),
-            contentColor = Neutral.Light.Lightest,
-            containerColor = Support.Error.Dark,
+            contentColor = MaterialTheme.colorScheme.onError,
+            containerColor = MaterialTheme.colorScheme.error,
             modifier = Modifier.fillMaxHeight(),
             onClick = onTaskDelete
         )
@@ -317,7 +315,7 @@ private fun TaskContent(
                     Text(
                         text = it,
                         fontSize = 12.sp,
-                        color = Neutral.Dark.Light
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -343,7 +341,7 @@ fun LoadingTaskListItem() {
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(4.dp))
                 .size(20.dp)
-                .background(color = Neutral.Dark.Light)
+                .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
         )
 
         Spacer(
@@ -354,7 +352,7 @@ fun LoadingTaskListItem() {
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(4.dp))
                 .size(height = 14.dp, width = (72..120).random().dp)
-                .background(color = Neutral.Dark.Light)
+                .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
         )
     }
 }

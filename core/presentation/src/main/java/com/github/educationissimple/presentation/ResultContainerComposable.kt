@@ -1,16 +1,9 @@
 package com.github.educationissimple.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,8 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import kotlinx.coroutines.delay
@@ -54,22 +45,15 @@ fun ResultContainerComposable(
             }
 
             is ResultContainer.Error -> {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
                 ) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        text = Core.errorHandler.getUserFriendlyMessage(container.exception)
+                    ErrorMessage(
+                        message = Core.errorHandler.getUserFriendlyMessage(container.exception),
+                        onClickRetry = { onTryAgain() }
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Button(onClick = { onTryAgain() }) {
-                        Text(stringResource(R.string.core_presentation_try_again))
-                    }
-
                 }
             }
 

@@ -1,8 +1,6 @@
 package com.github.educationissimple.audio.presentation.components.environment
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,8 +56,6 @@ import com.github.educationissimple.audio.domain.entities.PlayerController
 import com.github.educationissimple.audio.domain.utils.timeChangeToPosition
 import com.github.educationissimple.audio.presentation.entities.dummies.dummyAudio
 import com.github.educationissimple.audio.presentation.utils.formatDurationTime
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -128,15 +124,14 @@ fun AudioImage(audio: Audio) {
         Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Neutral.Light.Medium),
+            .clip(RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center
     ) {
         if (audio.imageBitmap == null) {
-            Image(
+            Icon(
                 imageVector = Icons.Default.MusicNote,
                 contentDescription = null,
-                modifier = Modifier.size(52.dp)
+                modifier = Modifier.fillMaxSize().padding(LocalSpacing.current.extraLarge * 2)
             )
         } else {
             AsyncImage(
@@ -196,15 +191,15 @@ fun AudioSlider(
             },
             valueRange = 0f..1f,
             colors = SliderDefaults.colors(
-                activeTrackColor = Highlight.Darkest,
-                inactiveTrackColor = Neutral.Light.Medium
+                activeTrackColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                inactiveTrackColor = MaterialTheme.colorScheme.primaryContainer,
             ),
             interactionSource = interactionSource,
             thumb = {
                 SliderDefaults.Thumb(
                     interactionSource = interactionSource,
                     thumbSize = thumbSize,
-                    colors = SliderDefaults.colors(thumbColor = Highlight.Darkest),
+                    colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.onPrimaryContainer),
                     modifier = Modifier.offset {
                         if (thumbSize.height < 20.dp || thumbSize.width < 20.dp) {
                             val offsetX = (20.dp - thumbSize.width).roundToPx() / 2
@@ -227,9 +222,9 @@ fun AudioSlider(
                 .fillMaxWidth()
                 .offset(y = (-12).dp)
         ) {
-            Text(text = formatDurationTime(currentTime), color = Neutral.Dark.Light)
+            Text(text = formatDurationTime(currentTime), color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = formatDurationTime(audio.duration), color = Neutral.Dark.Light)
+            Text(text = formatDurationTime(audio.duration), color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

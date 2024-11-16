@@ -1,6 +1,5 @@
 package com.github.educationissimple.tasks.presentation.components.items
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,7 +21,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
 @Composable
@@ -71,7 +69,6 @@ fun TaskPropertyItemPreview() {
     TaskPropertyItem(
         iconVector = Icons.AutoMirrored.Filled.StarHalf,
         label = "Приоритет",
-        modifier = Modifier.background(color = Neutral.Light.Lightest),
         rightArrowOpened = false,
         onPropertyClick = {}
     )

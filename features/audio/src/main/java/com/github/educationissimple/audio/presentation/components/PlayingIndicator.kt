@@ -8,12 +8,12 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.educationissimple.components.colors.Support
 
 @Composable
 fun PlayingIndicator(isPlaying: Boolean, modifier: Modifier = Modifier) {
@@ -28,10 +28,11 @@ fun PlayingIndicator(isPlaying: Boolean, modifier: Modifier = Modifier) {
         label = "resizing"
     )
 
+    val indicatorColor = MaterialTheme.colorScheme.primary
     Canvas(modifier = modifier
         .size(100.dp)
         .scale(if (isPlaying) sizeAnimation.value else 1f), onDraw = {
-        drawCircle(color = Support.Warning.Medium)
+        drawCircle(color = indicatorColor)
     })
 }
 

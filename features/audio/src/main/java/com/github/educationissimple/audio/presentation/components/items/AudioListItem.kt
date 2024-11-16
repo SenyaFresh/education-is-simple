@@ -45,7 +45,6 @@ import com.github.educationissimple.audio.R
 import com.github.educationissimple.audio.domain.entities.Audio
 import com.github.educationissimple.audio.presentation.components.PlayingIndicator
 import com.github.educationissimple.audio.presentation.entities.dummies.dummyAudio
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
@@ -158,7 +157,7 @@ fun LoadingAudioListItem() {
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(4.dp))
-                        .background(color = Neutral.Dark.Light)
+                        .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
 
@@ -171,13 +170,13 @@ fun LoadingAudioListItem() {
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(4.dp))
                         .size(height = 12.dp, width = (40..80).random().dp)
-                        .background(color = Neutral.Dark.Light)
+                        .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
                 Box(
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(4.dp))
                         .size(height = 10.dp, width = (32..72).random().dp)
-                        .background(color = Neutral.Dark.Light)
+                        .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
 
@@ -190,7 +189,7 @@ fun LoadingAudioListItem() {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = stringResource(R.string.audio_menu),
-                    tint = Neutral.Dark.Light
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
