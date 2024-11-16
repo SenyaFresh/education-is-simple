@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,7 +37,6 @@ import com.github.educationissimple.audio.presentation.components.environment.Cu
 import com.github.educationissimple.audio.presentation.screens.AudioCategoriesScreen
 import com.github.educationissimple.audio.presentation.screens.AudioListScreen
 import com.github.educationissimple.common.Core
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.news.presentation.screens.NewsScreen
 import com.github.educationissimple.sync.RemindersSyncWorker
 import com.github.educationissimple.tasks.presentation.screens.CalendarScreen
@@ -186,22 +183,18 @@ fun AppNavigation(
                 startDestination = TasksGraph.TasksScreen
             ) {
                 composable<TasksGraph.TasksScreen> {
-                    ShowBackground()
                     TasksScreen(
                         searchEnabled = tasksScreenSearchEnabled,
                         onSearchEnabledChange = { tasksScreenSearchEnabled = it }
                     )
                 }
                 composable<TasksGraph.TaskCategoriesScreen> {
-                    ShowBackground()
                     TaskCategoriesScreen()
                 }
                 composable<TasksGraph.CalendarScreen> {
-                    ShowBackground()
                     CalendarScreen()
                 }
                 composable<TasksGraph.RemindersScreen> {
-                    ShowBackground()
                     TaskRemindersScreen()
                 }
             }
@@ -210,11 +203,9 @@ fun AppNavigation(
                 startDestination = AudioGraph.AudioScreen
             ) {
                 composable<AudioGraph.AudioScreen> {
-                    ShowBackground()
                     AudioListScreen(onStartAudioService = onStartAudioService)
                 }
                 composable<AudioGraph.AudioCategoriesScreen> {
-                    ShowBackground()
                     AudioCategoriesScreen()
                 }
             }
@@ -223,15 +214,9 @@ fun AppNavigation(
                 startDestination = NewsGraph.NewsScreen
             ) {
                 composable<NewsGraph.NewsScreen> {
-                    ShowBackground()
                     NewsScreen()
                 }
             }
         }
     }
-}
-
-@Composable
-fun ShowBackground() {
-    Surface(modifier = Modifier.fillMaxSize(), color = Neutral.Light.Lightest) {}
 }

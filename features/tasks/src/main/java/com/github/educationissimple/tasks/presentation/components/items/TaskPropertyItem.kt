@@ -13,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,19 +46,19 @@ fun TaskPropertyItem(
         Icon(
             iconVector,
             contentDescription = null,
-            tint = Neutral.Dark.Dark,
+            tint = MaterialTheme.colorScheme.onTertiary,
             modifier = Modifier.size(24.dp)
         )
         Text(
             text = label,
-            color = Neutral.Dark.Medium,
+            color = MaterialTheme.colorScheme.onTertiary,
             fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = if (rightArrowOpened) Icons.AutoMirrored.Filled.ArrowBackIos else Icons.AutoMirrored.Filled.ArrowForwardIos,
             contentDescription = null,
-            tint = Neutral.Dark.Lightest,
+            tint = MaterialTheme.colorScheme.onTertiary,
             modifier = Modifier.size(20.dp)
         )
     }

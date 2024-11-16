@@ -16,11 +16,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,7 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.R
-import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.ActionIcon
@@ -44,19 +41,8 @@ fun ActionableListItem(
     onDelete: (() -> Unit)? = null,
     isActive: Boolean = false,
 ) {
-    val textColor by remember(isActive) {
-        derivedStateOf {
-            if (isActive) Neutral.Light.Lightest else Highlight.Darkest
-        }
-    }
-
-    val backgroundColor by remember(isActive) {
-        derivedStateOf {
-            if (isActive) Highlight.Darkest else Highlight.Lightest
-        }
-    }
     Card(
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        colors = CardDefaults.cardColors(containerColor = if (!isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(1.dp),
         onClick = onClick,
@@ -68,7 +54,7 @@ fun ActionableListItem(
         ) {
             Text(
                 text = label.uppercase(),
-                color = textColor,
+                color = if (!isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

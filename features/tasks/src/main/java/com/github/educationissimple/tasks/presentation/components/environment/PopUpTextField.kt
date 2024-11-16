@@ -19,6 +19,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,7 +72,7 @@ fun PopUpTextField(
     dialogWindowProvider.window.setGravity(Gravity.BOTTOM)
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = Neutral.Light.Lightest),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         modifier = modifier
     ) {
@@ -170,6 +171,7 @@ fun PopUpTextFieldContent(
                 .imePadding()
                 .focusRequester(focusRequester)
         )
+        Spacer(modifier = Modifier.padding(LocalSpacing.current.extraSmall))
         Row(
             horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
         ) {

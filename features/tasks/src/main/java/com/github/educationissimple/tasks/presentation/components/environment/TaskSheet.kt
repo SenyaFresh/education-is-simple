@@ -21,9 +21,9 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -43,9 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
-import com.github.educationissimple.components.colors.Support
 import com.github.educationissimple.components.composables.buttons.DefaultIconButton
 import com.github.educationissimple.components.composables.inputs.DefaultTextField
 import com.github.educationissimple.components.composables.items.ActionableListItem
@@ -172,8 +169,7 @@ fun TaskSheet(
 
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = onDismiss,
-        containerColor = Neutral.Light.Lightest
+        onDismissRequest = onDismiss
     ) {
         Column(
             modifier = Modifier
@@ -204,7 +200,6 @@ fun TaskSheet(
             }
             Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
             Card(
-                colors = CardDefaults.cardColors(containerColor = Neutral.Light.Light),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Row(
@@ -214,10 +209,6 @@ fun TaskSheet(
                     Checkbox(
                         checked = updatedTask.isCompleted,
                         onCheckedChange = { updatedTask = task.copy(isCompleted = it) },
-                        colors = CheckboxDefaults.colors(
-                            uncheckedColor = Neutral.Light.Darkest,
-                            checkedColor = Highlight.Darkest
-                        ),
                         modifier = Modifier.padding(start = 4.dp, top = 4.dp)
                     )
                     DefaultTextField(
@@ -236,7 +227,7 @@ fun TaskSheet(
             }
             Spacer(modifier = Modifier.height(LocalSpacing.current.semiMedium))
             Card(
-                colors = CardDefaults.cardColors(containerColor = Support.Success.Light),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiary),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column {
@@ -259,6 +250,7 @@ fun TaskSheet(
                                     onValueChange = { updatedTask = task.copy(description = it) },
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .padding(LocalSpacing.current.small)
                                         .height(100.dp),
                                     placeholder = { Text(stringResource(R.string.add_task_description), fontSize = 14.sp) }
                                 )

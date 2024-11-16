@@ -12,6 +12,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.domain.entities.TaskReminder
@@ -40,7 +39,7 @@ fun ReminderListItem(
     Card(
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(2.dp),
-        colors = CardDefaults.cardColors(containerColor = Neutral.Dark.Light),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onTertiary),
         modifier = Modifier.animateContentSize()
     ) {
         Row(
@@ -62,7 +61,6 @@ fun ReminderListItem(
                     Icon(
                         imageVector = actionIconVector,
                         contentDescription = null,
-                        tint = Highlight.Lightest
                     )
                 }
             }

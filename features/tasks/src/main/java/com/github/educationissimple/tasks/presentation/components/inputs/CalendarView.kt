@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
 import com.github.educationissimple.tasks.presentation.components.items.DayIcon
@@ -167,7 +167,7 @@ fun CalendarDaySelection(date: LocalDate, onDaySelect: (LocalDate) -> Unit) {
                 Text(
                     text = weekDay,
                     textAlign = TextAlign.Center,
-                    color = Neutral.Dark.Lightest,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.width(48.dp)
                 )

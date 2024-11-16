@@ -3,6 +3,7 @@ package com.github.educationissimple.components.composables.inputs
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
@@ -16,10 +17,10 @@ fun DefaultRadioItem(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,
-    textColor: Color,
-    selectedColor: Color,
-    unselectedColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textColor: Color = MaterialTheme.colorScheme.inverseSurface,
+    selectedColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedColor: Color = MaterialTheme.colorScheme.inverseSurface
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier

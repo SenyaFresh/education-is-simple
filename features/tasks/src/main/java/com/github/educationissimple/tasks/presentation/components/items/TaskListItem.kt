@@ -2,7 +2,6 @@ package com.github.educationissimple.tasks.presentation.components.items
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -144,11 +143,7 @@ fun TaskListItem(
     }
 
     Card(
-        modifier = modifier.border(
-            width = 1.dp,
-            color = task.priority.toColor(),
-            shape = CardDefaults.shape
-        ),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
         TaskCardContent(
@@ -269,7 +264,7 @@ private fun TaskContent(
     val priorityColor = task.priority.toColor()
 
     Surface(
-        color = if (isTaskCompleted) Highlight.Lightest else Neutral.Light.Lightest,
+        color = if (isTaskCompleted) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier
             .offset { IntOffset(offset.value.roundToInt(), 0) }
             .pointerInput(contextMenuWidth) {
@@ -307,10 +302,6 @@ private fun TaskContent(
             Checkbox(
                 checked = isTaskCompleted,
                 onCheckedChange = onTaskCompletionChange,
-                colors = CheckboxDefaults.colors(
-                    uncheckedColor = Neutral.Light.Darkest,
-                    checkedColor = Highlight.Darkest
-                ),
                 modifier = Modifier.scale(0.9f)
             )
 

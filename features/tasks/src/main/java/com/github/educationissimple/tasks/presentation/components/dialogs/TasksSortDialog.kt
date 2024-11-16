@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.dialogs.DefaultDialog
 import com.github.educationissimple.components.composables.inputs.DefaultRadioItem
 import com.github.educationissimple.tasks.R
@@ -46,10 +45,7 @@ fun TasksSortDialog(
                 selected = sortType == entry.key,
                 onClick = {
                     onSortTypeChange(entry.key)
-                },
-                textColor = Neutral.Dark.Darkest,
-                selectedColor = Highlight.Darkest,
-                unselectedColor = Neutral.Dark.Darkest
+                }
             )
         }
 

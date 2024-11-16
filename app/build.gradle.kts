@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.dagger)
+    implementation(libs.androidx.ui.text.google.fonts)
     ksp(libs.dagger.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

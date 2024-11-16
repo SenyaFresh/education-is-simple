@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +44,7 @@ fun RemindersList(
             }
         }
     ) {
-        Row{
+        Row {
             LazyColumn(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
@@ -61,7 +63,11 @@ fun RemindersList(
 
             DefaultIconButton(
                 onClick = onCreate,
-                modifier = Modifier.padding(LocalSpacing.current.small)
+                modifier = Modifier.padding(LocalSpacing.current.small),
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.onTertiary,
+                    contentColor =MaterialTheme.colorScheme.tertiary
+                )
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }

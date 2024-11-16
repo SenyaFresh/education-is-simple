@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -160,7 +161,7 @@ fun AudioTitle(audio: Audio, onDeleteClick: () -> Unit) {
     ) {
         Column {
             Text(text = audio.title, fontSize = 16.sp)
-            Text(text = audio.subtitle, fontSize = 12.sp, color = Neutral.Dark.Light)
+            Text(text = audio.subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         Spacer(modifier = Modifier.weight(1f))

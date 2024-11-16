@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.educationissimple.components.colors.Neutral
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,8 +31,7 @@ fun DefaultDialog(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             tonalElevation = AlertDialogDefaults.TonalElevation,
-            shape = RoundedCornerShape(12.dp),
-            color = Neutral.Light.Lightest
+            shape = RoundedCornerShape(12.dp)
         ) {
             Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(14.dp)) {
                 Text(

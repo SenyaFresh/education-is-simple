@@ -15,6 +15,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +41,6 @@ import com.github.educationissimple.audio.presentation.entities.dummies.dummyAud
 import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.audio.presentation.viewmodels.AudioViewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 
 @Composable
 fun CurrentAudioFloatingItem(
@@ -94,9 +93,9 @@ fun CurrentAudioFloatingItemContent(
             )
         }
         Column {
-            HorizontalDivider(color = Neutral.Light.Darkest, thickness = 1.dp)
+            HorizontalDivider(thickness = 1.dp)
             Surface(
-                color = Neutral.Light.Lightest,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 onClick = { showPlaylistController = true }
             ) {
                 Row(
@@ -104,7 +103,7 @@ fun CurrentAudioFloatingItemContent(
                 ) {
                     IconButton(
                         onClick = { onPlaylistController(PlayerController.Close) },
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Light),
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -120,14 +119,21 @@ fun CurrentAudioFloatingItemContent(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(text = audio.title)
-                        Text(text = audio.subtitle, fontSize = 10.sp, color = Neutral.Dark.Light)
+                        Text(
+                            text = audio.subtitle,
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
 
                     IconButton(
                         onClick = { onPlaylistController(PlayerController.PlayPause) },
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = Highlight.Darkest)
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
                         if (state.state == AudioListState.State.AUDIO_PLAYING) {
                             Icon(

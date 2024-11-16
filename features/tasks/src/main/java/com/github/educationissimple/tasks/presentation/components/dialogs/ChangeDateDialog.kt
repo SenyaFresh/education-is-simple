@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.composables.dialogs.DefaultDialog
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.presentation.components.inputs.CalendarView
@@ -49,7 +48,6 @@ fun ChangeDateDialog(
             }, modifier = Modifier.align(Alignment.End)) {
                 Text(
                     text = stringResource(R.string.ok),
-                    color = Highlight.Darkest,
                     fontSize = 16.sp
                 )
             }

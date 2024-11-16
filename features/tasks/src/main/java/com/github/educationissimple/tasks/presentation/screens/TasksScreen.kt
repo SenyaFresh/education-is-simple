@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.educationissimple.common.ResultContainer
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.buttons.AddFloatingActionButton
 import com.github.educationissimple.components.composables.environment.SearchBar
 import com.github.educationissimple.presentation.locals.LocalSpacing
@@ -143,7 +141,6 @@ fun TasksContent(
                     IconButton(
                         enabled = categories is ResultContainer.Done,
                         onClick = { showSortTypeDialog = true },
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = Neutral.Dark.Darkest),
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Sort,

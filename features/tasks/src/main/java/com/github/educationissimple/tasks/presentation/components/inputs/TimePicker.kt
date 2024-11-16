@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -23,12 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import java.time.LocalTime
 
 @Composable
@@ -60,17 +60,17 @@ fun TimePicker(
             OutlinedTextField(
                 value = formatTime(selectedHour, isHoursFocused),
                 onValueChange = { parseInput(it, 0..23)?.let { hour -> selectedHour = hour } },
-                modifier = Modifier.size(width = 100.dp, height = 80.dp),
-                textStyle = TextStyle.Default.copy(fontSize = 48.sp),
+                modifier = Modifier.size(width = 92.dp, height = 80.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Neutral.Light.Lightest,
-                    unfocusedContainerColor = Neutral.Light.Medium,
-                    focusedBorderColor = Highlight.Darkest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.Transparent
                 ),
-                interactionSource = hoursInteractionSource
+                interactionSource = hoursInteractionSource,
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 40.sp)
             )
-            Text(text = "Часы", color = Neutral.Dark.Dark)
+            Text(text = "Часы")
         }
 
         Column(
@@ -78,11 +78,12 @@ fun TimePicker(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+            val color = MaterialTheme.colorScheme.onSurface
             Canvas(modifier = Modifier.size(8.dp), onDraw = {
-                drawCircle(color = Neutral.Dark.Dark)
+                drawCircle(color = color)
             })
             Canvas(modifier = Modifier.size(8.dp), onDraw = {
-                drawCircle(color = Neutral.Dark.Dark)
+                drawCircle(color = color)
             })
         }
 
@@ -92,17 +93,17 @@ fun TimePicker(
             OutlinedTextField(
                 value = formatTime(selectedMinute, isMinutesFocused),
                 onValueChange = { parseInput(it, 0..59)?.let { minute -> selectedMinute = minute } },
-                modifier = Modifier.size(width = 100.dp, height = 80.dp),
-                textStyle = TextStyle.Default.copy(fontSize = 48.sp),
+                modifier = Modifier.size(width = 92.dp, height = 80.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Neutral.Light.Lightest,
-                    unfocusedContainerColor = Neutral.Light.Medium,
-                    focusedBorderColor = Highlight.Darkest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.Transparent
                 ),
-                interactionSource = minutesInteractionSource
+                interactionSource = minutesInteractionSource,
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontSize = 40.sp)
             )
-            Text(text = "Минуты", color = Neutral.Dark.Dark)
+            Text(text = "Минуты")
         }
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,7 +61,7 @@ fun AudioListItem(
     var showMenu by remember { mutableStateOf(false) }
 
     Surface(
-        color = if (isSelected) Neutral.Light.Medium else Neutral.Light.Lightest,
+        color = if (isSelected) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surface,
         modifier = Modifier.height(IntrinsicSize.Min),
         shape = RoundedCornerShape(4.dp),
         onClick = onClick
@@ -103,7 +104,7 @@ fun AudioListItem(
 
             Column {
                 Text(text = audio.title)
-                Text(text = audio.subtitle, fontSize = 10.sp, color = Neutral.Dark.Light)
+                Text(text = audio.subtitle, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -121,7 +122,6 @@ fun AudioListItem(
                 DropdownMenu(
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false },
-                    modifier = Modifier.background(color = Neutral.Light.Light)
                 ) {
                     DropdownMenuItem(
                         text = { Text(text = stringResource(R.string.delete)) },

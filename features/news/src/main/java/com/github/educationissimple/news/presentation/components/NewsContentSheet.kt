@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -33,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.news.domain.entities.NewsEntity
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
@@ -59,7 +58,9 @@ fun NewsContentSheet(
 
     ModalBottomSheet(sheetState = sheetState, onDismissRequest = onDismiss) {
         Column(
-            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (news.imageUrl != null) {
@@ -105,7 +106,7 @@ fun NewsContentSheet(
                         Spacer(modifier = Modifier.weight(1f))
                         IconButton(
                             onClick = onMoreClick,
-                            colors = IconButtonDefaults.iconButtonColors(contentColor = Highlight.Darkest)
+                            colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.OpenInNew,
@@ -121,7 +122,7 @@ fun NewsContentSheet(
                     text = news.publishedAt,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Neutral.Dark.Light
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
                 Text(
@@ -130,7 +131,7 @@ fun NewsContentSheet(
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
-                Text(text = news.content)
+                Text(text = news.content, color = MaterialTheme.colorScheme.secondary)
                 Spacer(modifier = Modifier.height(LocalSpacing.current.large))
             }
         }

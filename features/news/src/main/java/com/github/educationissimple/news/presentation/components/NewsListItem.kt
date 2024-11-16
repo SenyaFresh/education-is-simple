@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,8 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.github.educationissimple.components.colors.Highlight
-import com.github.educationissimple.components.colors.Neutral
 import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.news.R
 import com.github.educationissimple.news.domain.entities.NewsEntity
@@ -75,14 +74,14 @@ fun NewsListItem(
                 .fillMaxHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(16.dp))
-                .background(color = Neutral.Light.Medium),
+                .background(color = MaterialTheme.colorScheme.inverseSurface),
             contentAlignment = Alignment.Center
         ) {
             if (news.imageUrl == null || imageState == ImageLoadingState.Error) {
                 Icon(
                     imageVector = Icons.Default.Newspaper,
                     contentDescription = null,
-                    tint = Neutral.Dark.Medium,
+                    tint = MaterialTheme.colorScheme.inverseOnSurface,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(LocalSpacing.current.medium)
@@ -126,14 +125,13 @@ fun NewsListItem(
             )
             HorizontalDivider(
                 thickness = 1.dp,
-                color = Neutral.Light.Medium,
                 modifier = Modifier.padding(vertical = LocalSpacing.current.extraSmall)
             )
             Text(
                 text = news.source,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = Neutral.Dark.Medium,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.weight(0.5f)
             )
             Row(
@@ -143,7 +141,7 @@ fun NewsListItem(
                     text = news.publishedAt,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Neutral.Dark.Light,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.5f)
                 )
                 Spacer(modifier = Modifier.width(LocalSpacing.current.extraSmall))
@@ -155,7 +153,7 @@ fun NewsListItem(
                         text = stringResource(R.string.more),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Highlight.Darkest,
+                        color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier.clickable { onMoreClick() }
                     )

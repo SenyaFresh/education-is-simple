@@ -16,7 +16,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.github.educationissimple.common.Core
-import com.github.educationissimple.components.colors.Highlight
 import com.github.educationissimple.components.composables.ErrorMessage
 import com.github.educationissimple.news.R
 import com.github.educationissimple.news.di.NewsDiContainer
@@ -66,7 +65,7 @@ fun NewsContent(
                                 .fillMaxWidth()
                                 .fillParentMaxHeight()
                         ) {
-                            CircularProgressIndicator(color = Highlight.Darkest)
+                            CircularProgressIndicator()
                         }
                     }
                 }
@@ -95,7 +94,7 @@ fun NewsContent(
                                 .fillMaxWidth()
                                 .padding(vertical = LocalSpacing.current.small)
                         ) {
-                            CircularProgressIndicator(color = Highlight.Darkest)
+                            CircularProgressIndicator()
                         }
                     }
                 }
