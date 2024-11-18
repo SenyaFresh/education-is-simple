@@ -73,8 +73,7 @@ fun NewsListItem(
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(16.dp))
-                .background(color = MaterialTheme.colorScheme.inverseSurface),
+                .clip(RoundedCornerShape(16.dp)),
             contentAlignment = Alignment.Center
         ) {
             if (news.imageUrl == null || imageState == ImageLoadingState.Error) {
@@ -84,6 +83,7 @@ fun NewsListItem(
                     tint = MaterialTheme.colorScheme.inverseOnSurface,
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(color = MaterialTheme.colorScheme.inverseSurface)
                         .padding(LocalSpacing.current.medium)
                 )
             } else {

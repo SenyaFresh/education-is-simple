@@ -12,10 +12,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.common.ResultContainer
@@ -47,32 +48,34 @@ fun LazyListScope.tasksSubcolumn(
 
     // Subcolumn title.
     item {
-        Row(
-            Modifier
-                .padding(
-                    start = LocalSpacing.current.medium,
-                    top = LocalSpacing.current.semiMedium,
-                    end = LocalSpacing.current.medium
-                )
-                .clickable { onExpandChange(!isExpanded) }
-                .animateItem(
-                    fadeInSpec = tween(150),
-                    fadeOutSpec = tween(150),
-                    placementSpec = tween(150)
-                )
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+            .padding(
+                start = LocalSpacing.current.medium,
+                top = LocalSpacing.current.semiMedium,
+                end = LocalSpacing.current.medium
+            )
+            .clickable { onExpandChange(!isExpanded) }
+            .animateItem(
+                fadeInSpec = tween(150),
+                fadeOutSpec = tween(150),
+                placementSpec = tween(150)
+            )
         ) {
-            Text(text = title, fontWeight = FontWeight.Bold)
+            Text(text = title, style = MaterialTheme.typography.titleMedium)
             Icon(
                 if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
                 contentDescription = if (isExpanded) "Collapse" else "Expand",
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
     }
 
     // Subcolumn content.
     if (isExpanded) {
-        items(items = tasksContainer, key = { task -> listOf(task.id, task.isCompleted, task.date.toString()) }) { task ->
+        items(
+            items = tasksContainer,
+            key = { task -> listOf(task.id, task.isCompleted, task.date.toString()) }) { task ->
             TaskListItem(
                 task = task,
                 onTaskDelete = {

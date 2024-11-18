@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
@@ -97,6 +98,7 @@ fun TaskListItem(
     var contextMenuWidth by remember { mutableFloatStateOf(0f) }
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
+    val itemShape = CardDefaults.shape
 
     LaunchedEffect(isActionsRevealed, contextMenuWidth) {
         if (isActionsRevealed) {
@@ -142,6 +144,11 @@ fun TaskListItem(
 
     Card(
         modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = if (isTaskCompleted) MaterialTheme.colorScheme.surfaceContainerHigh
+            else MaterialTheme.colorScheme.surfaceContainerLow,
+        ),
+        shape = itemShape,
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
         TaskCardContent(
@@ -158,6 +165,7 @@ fun TaskListItem(
             offset = offset,
             contextMenuWidth = contextMenuWidth,
             onSizeChanged = { contextMenuWidth = it.width.toFloat() },
+            shape = itemShape,
             scope = scope
         )
     }
@@ -175,6 +183,7 @@ private fun TaskCardContent(
     offset: Animatable<Float, *>,
     contextMenuWidth: Float,
     onSizeChanged: (IntSize) -> Unit,
+    shape: Shape,
     scope: CoroutineScope
 ) {
     Box(
@@ -187,7 +196,8 @@ private fun TaskCardContent(
             onTaskDelete = onTaskDelete,
             onPriorityClick = onPriorityClick,
             onDateClick = onDateClick,
-            taskPriority = task.priority
+            taskPriority = task.priority,
+            shape = shape
         )
 
         TaskContent(
@@ -197,6 +207,7 @@ private fun TaskCardContent(
             offset = offset,
             contextMenuWidth = contextMenuWidth,
             scope = scope,
+            shape = shape,
             modifier = Modifier.clickable { onTaskClicked() }
         )
     }
@@ -209,12 +220,15 @@ private fun BoxScope.TaskActions(
     onPriorityClick: () -> Unit,
     onDateClick: () -> Unit,
     taskPriority: Task.Priority,
+    shape: Shape,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .align(Alignment.CenterEnd)
-            .onSizeChanged { size -> onSizeChanged(size) },
+            .onSizeChanged { size -> onSizeChanged(size) }
+            .padding(1.dp)
+            .clip(shape),
         verticalAlignment = Alignment.CenterVertically
     ) {
         ActionIcon(
@@ -257,12 +271,15 @@ private fun TaskContent(
     offset: Animatable<Float, *>,
     contextMenuWidth: Float,
     scope: CoroutineScope,
+    shape: Shape,
     modifier: Modifier = Modifier
 ) {
     val priorityColor = task.priority.toColor()
 
     Surface(
-        color = if (isTaskCompleted) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainerLow,
+        color = if (isTaskCompleted) MaterialTheme.colorScheme.surfaceContainerHigh
+        else MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = shape,
         modifier = Modifier
             .offset { IntOffset(offset.value.roundToInt(), 0) }
             .pointerInput(contextMenuWidth) {
@@ -319,13 +336,29 @@ private fun TaskContent(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Spacer(
+                modifier = Modifier
+                    .height(28.dp)
+                    .width(4.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.outline)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .width(LocalSpacing.current.small)
+            )
+
         }
     }
 }
 
 @Composable
 fun LoadingTaskListItem() {
-    Row (
+    Row(
         modifier = Modifier
             .clip(shape = CardDefaults.shape)
             .fillMaxWidth()
