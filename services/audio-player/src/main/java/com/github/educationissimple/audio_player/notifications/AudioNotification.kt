@@ -26,7 +26,7 @@ interface AudioNotification {
         /**
          * The unique identifier for the audio playback notification channel.
          */
-        internal const val NOTIFICATION_ID = 111
+        internal const val NOTIFICATION_ID = 100
 
         /**
          * The name of the audio playback notification channel.
