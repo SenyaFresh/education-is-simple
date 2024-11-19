@@ -7,8 +7,14 @@ import kotlin.properties.Delegates.notNull
  */
 interface PlayerDepsProvider {
 
+    /**
+     * [PlayerComponent] dependencies.
+     */
     val deps: PlayerDeps
 
+    /**
+     * Singleton instance of [PlayerDepsProvider] provided by [PlayerDepsStore].
+     */
     companion object : PlayerDepsProvider by PlayerDepsStore
 
 }
@@ -17,5 +23,9 @@ interface PlayerDepsProvider {
  * [PlayerComponent] dependencies store.
  */
 object PlayerDepsStore : PlayerDepsProvider {
+
+    /**
+     * [PlayerComponent] dependencies. Requires to be set before accessing them.
+     */
     override var deps: PlayerDeps by notNull()
 }

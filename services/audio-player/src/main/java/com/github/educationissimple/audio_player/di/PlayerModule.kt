@@ -25,10 +25,18 @@ import dagger.Provides
 @Module(includes = [NotificationModule::class, AudioPlayerHandlerModule::class, ServiceModule::class])
 class PlayerModule {
 
+    /**
+     * Provides [Context] for audio-player module.
+     * @param deps The [PlayerDeps] for [PlayerComponent].
+     */
     @Provides
     @Service
     fun provideContext(deps: PlayerDeps): Context = deps.context
 
+    /**
+     * Provides [AudioAttributes] for audio-player module with [C.AUDIO_CONTENT_TYPE_SPEECH] content type
+     * and [C.USAGE_MEDIA] usage.
+     */
     @Provides
     @Service
     fun provideAudioAttributes(): AudioAttributes = AudioAttributes.Builder()
@@ -36,6 +44,12 @@ class PlayerModule {
         .setUsage(C.USAGE_MEDIA)
         .build()
 
+    /**
+     * Provides [ExoPlayer] for audio-player module.
+     *
+     * @param context The [Context] needed for [ExoPlayer.Builder].
+     * @param audioAttributes The [AudioAttributes] needed for [ExoPlayer.Builder].
+     */
     @Provides
     @Service
     @UnstableApi
@@ -48,6 +62,12 @@ class PlayerModule {
         .setTrackSelector(DefaultTrackSelector(context))
         .build()
 
+    /**
+     * Provides [MediaSession] for audio-player module.
+     *
+     * @param context The [Context] needed for [MediaSession.Builder]
+     * @param player The [ExoPlayer] needed for [MediaSession.Builder]
+     */
     @Provides
     @Service
     fun provideMediaSession(
