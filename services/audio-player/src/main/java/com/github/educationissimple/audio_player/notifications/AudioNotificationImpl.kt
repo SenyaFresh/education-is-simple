@@ -20,6 +20,15 @@ import com.github.educationissimple.audio_player.notifications.AudioNotification
 import com.github.educationissimple.audio_player.services.AudioServiceManager
 import javax.inject.Inject
 
+/**
+ * Implementation of [AudioNotification] for managing audio playback notifications.
+ * This class integrates with [PlayerNotificationManager] to provide a customizable
+ * notification for controlling audio playback and integrates with a foreground service
+ * for persistent playback.
+ *
+ * @param context The [Context] used to access application resources and system services.
+ * @param mediaSession The [MediaSession] used for handling media controls and metadata.
+ */
 @UnstableApi
 class AudioNotificationImpl @Inject constructor(
     private val context: Context,
@@ -34,6 +43,11 @@ class AudioNotificationImpl @Inject constructor(
         }
     }
 
+    /**
+     * Starts the audio playback notification and binds it to the provided service.
+     *
+     * @param serviceManager The [AudioServiceManager] managing the audio playback service.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun startAudioNotification(serviceManager: AudioServiceManager) {
         if (playerNotificationManager == null) {
@@ -43,10 +57,16 @@ class AudioNotificationImpl @Inject constructor(
         startForeGroundNotificationService(serviceManager.getService())
     }
 
+    /**
+     * Stops the audio playback notification by unbinding it from the player.
+     */
     override fun stopAudioNotification() {
         playerNotificationManager?.setPlayer(null)
     }
 
+    /**
+     * Builds and configures the [PlayerNotificationManager] used for displaying the audio playback notification.
+     */
     @OptIn(UnstableApi::class)
     private fun buildNotification() {
         playerNotificationManager = PlayerNotificationManager.Builder(
@@ -71,6 +91,11 @@ class AudioNotificationImpl @Inject constructor(
             }
     }
 
+    /**
+     * Starts the foreground service with a notification.
+     *
+     * @param service The [Service] instance to be bound to the foreground notification.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startForeGroundNotificationService(service: Service) {
         val notification = Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -79,6 +104,9 @@ class AudioNotificationImpl @Inject constructor(
         service.startForeground(NOTIFICATION_ID, notification)
     }
 
+    /**
+     * Creates a notification channel for audio playback notifications.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val channel = NotificationChannel(

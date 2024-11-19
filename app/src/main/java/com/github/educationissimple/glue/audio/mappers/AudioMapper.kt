@@ -96,7 +96,8 @@ fun Audio.toAudioItem(): AudioItem {
         imageBitmap = imageBitmap,
         title = title,
         subtitle = subtitle,
-        duration = duration)
+        duration = duration
+    )
 }
 
 fun AudioPlayerListState.State.toAudioPlayerListStateState(): AudioListState.State {

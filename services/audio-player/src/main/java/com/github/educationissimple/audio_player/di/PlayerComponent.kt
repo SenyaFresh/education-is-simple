@@ -9,6 +9,10 @@ import com.github.educationissimple.common.di.Service
 import dagger.BindsInstance
 import dagger.Component
 
+
+/**
+ * Dagger component for audio-player module.
+ */
 @Service
 @Component(modules = [PlayerModule::class])
 interface PlayerComponent {

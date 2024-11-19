@@ -19,6 +19,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
+/**
+ * Main module for audio-player module.
+ */
 @Module(includes = [NotificationModule::class, AudioPlayerHandlerModule::class, ServiceModule::class])
 class PlayerModule {
 
@@ -53,6 +56,9 @@ class PlayerModule {
     ): MediaSession = MediaSession.Builder(context, player).build()
 }
 
+/**
+ * Notification module for audio-player module.
+ */
 @Module
 abstract class NotificationModule {
 
@@ -63,6 +69,9 @@ abstract class NotificationModule {
 
 }
 
+/**
+ * Service module for audio-player module.
+ */
 @Module
 abstract class ServiceModule {
 
@@ -72,6 +81,9 @@ abstract class ServiceModule {
 
 }
 
+/**
+ * Playlist handler module for audio-player module.
+ */
 @Module
 abstract class AudioPlayerHandlerModule {
 
