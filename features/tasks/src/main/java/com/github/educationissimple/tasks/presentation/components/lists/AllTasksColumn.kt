@@ -40,13 +40,16 @@ fun AllTasksColumn(
     todayTasks: ResultContainer<List<Task>>,
     futureTasks: ResultContainer<List<Task>>,
     completedTasks: ResultContainer<List<Task>>,
+    onReloadTasks: () -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
+    onReloadCategories: () -> Unit,
     onAddNewCategory: (String) -> Unit,
     onTaskDelete: (Long) -> Unit,
     onUpdateTask: (Task) -> Unit,
     getRemindersForTask: (Long) -> StateFlow<ResultContainer<List<TaskReminder>>>,
     onDeleteReminder: (TaskReminder) -> Unit,
     onCreateReminder: (TaskReminder) -> Unit,
+    onReloadReminders: () -> Unit
 ) {
     var taskExpansionStates by remember { mutableStateOf(TaskExpansionStates()) }
     ResultContainerComposable(
@@ -56,7 +59,7 @@ fun AllTasksColumn(
             futureTasks,
             completedTasks
         ),
-        onTryAgain = { },
+        onTryAgain = onReloadTasks,
         onLoading = {
             Column(
                 modifier = Modifier
@@ -142,7 +145,9 @@ fun AllTasksColumn(
                         onAddNewCategory = onAddNewCategory,
                         getRemindersForTask = getRemindersForTask,
                         onDeleteReminder = onDeleteReminder,
-                        onCreateReminder = onCreateReminder
+                        onCreateReminder = onCreateReminder,
+                        onReloadCategories = onReloadCategories,
+                        onReloadReminders = onReloadReminders
                     )
                 }
             }
@@ -188,6 +193,9 @@ fun AllTasksColumnPreview() {
         onAddNewCategory = {},
         getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
         onDeleteReminder = {},
-        onCreateReminder = {}
+        onCreateReminder = {},
+        onReloadTasks = {},
+        onReloadCategories = {},
+        onReloadReminders = {}
     )
 }

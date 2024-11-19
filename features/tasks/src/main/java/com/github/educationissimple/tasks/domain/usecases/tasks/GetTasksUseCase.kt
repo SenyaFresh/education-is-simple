@@ -50,4 +50,7 @@ class GetTasksUseCase @Inject constructor(private val tasksRepository: TasksRepo
         return tasksRepository.getSelectedSortType()
     }
 
+    suspend fun reloadTasks() {
+        tasksRepository.reloadTasks()
+    }
 }

@@ -78,7 +78,7 @@ fun CalendarContent(
 
     ResultContainerComposable(
         container = ResultContainer.wrap(notCompletedTasks, completedTasks),
-        onTryAgain = { }
+        onTryAgain = { onTasksEvent(TasksEvent.ReloadTasks) }
     ) {
         val taskSections = listOf(
             TaskSection(
@@ -146,7 +146,9 @@ fun CalendarContent(
                             onExpandChange = section.onExpandChange,
                             getRemindersForTask = getRemindersForTask,
                             onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
-                            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
+                            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) },
+                            onReloadCategories = { onTasksEvent(TasksEvent.ReloadCategories) },
+                            onReloadReminders = { onTasksEvent(TasksEvent.ReloadReminders) }
                         )
                     }
                 }

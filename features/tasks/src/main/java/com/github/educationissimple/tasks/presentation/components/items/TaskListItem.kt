@@ -88,6 +88,8 @@ fun TaskListItem(
     onTaskUpdate: (Task) -> Unit,
     onCreateReminder: (TaskReminder) -> Unit,
     onDeleteReminder: (TaskReminder) -> Unit,
+    onReloadCategories: () -> Unit,
+    onReloadReminders: () -> Unit,
     modifier: Modifier = Modifier,
     isActionsRevealed: Boolean = false
 ) {
@@ -138,7 +140,9 @@ fun TaskListItem(
             onAddNewCategory = onAddNewCategory,
             isSheetOpen = showTaskPropertiesSheet,
             onTaskUpdate = onTaskUpdate,
-            onDismiss = { showTaskPropertiesSheet = false }
+            onDismiss = { showTaskPropertiesSheet = false },
+            onReloadCategories = onReloadCategories,
+            onReloadReminders = onReloadReminders
         )
     }
 
@@ -417,7 +421,9 @@ fun TaskCardPreview() {
                 onTaskUpdate = {},
                 onAddNewCategory = {},
                 onCreateReminder = {},
-                onDeleteReminder = {}
+                onDeleteReminder = {},
+                onReloadCategories = {},
+                onReloadReminders = {}
             )
         }
     }

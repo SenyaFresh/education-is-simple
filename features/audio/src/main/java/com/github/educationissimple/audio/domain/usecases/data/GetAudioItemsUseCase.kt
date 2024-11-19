@@ -12,6 +12,10 @@ class GetAudioItemsUseCase @Inject constructor(private val audioRepository: Audi
         return audioRepository.getAudioItems()
     }
 
+    suspend fun reloadAudioItems() {
+        audioRepository.reloadAudioItems()
+    }
+
     suspend fun changeSelectedCategoryId(categoryId: Long?) {
         audioRepository.changeCategory(categoryId)
     }

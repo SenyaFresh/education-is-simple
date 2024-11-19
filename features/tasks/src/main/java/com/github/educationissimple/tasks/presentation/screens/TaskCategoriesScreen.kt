@@ -41,6 +41,9 @@ fun CategoriesContent(
         },
         onAdd = { categoryName ->
             onEvent(TasksEvent.AddCategory(categoryName))
+        },
+        onReloadItems = {
+            onEvent(TasksEvent.ReloadCategories)
         }
     )
 }

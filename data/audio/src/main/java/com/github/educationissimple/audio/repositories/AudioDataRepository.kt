@@ -10,6 +10,8 @@ interface AudioDataRepository {
 
     suspend fun getAudio(): Flow<ResultContainer<List<AudioDataEntity>>>
 
+    suspend fun reloadAudio()
+
     suspend fun addAudio(audio: AudioDataEntity)
 
     suspend fun deleteAudio(uri: String)
@@ -19,6 +21,8 @@ interface AudioDataRepository {
     suspend fun changeCategory(categoryId: Long?)
 
     suspend fun getCategories(): Flow<ResultContainer<List<AudioCategoryDataEntity>>>
+
+    suspend fun reloadCategories()
 
     suspend fun createCategory(newAudioCategoryTuple: NewAudioCategoryTuple)
 

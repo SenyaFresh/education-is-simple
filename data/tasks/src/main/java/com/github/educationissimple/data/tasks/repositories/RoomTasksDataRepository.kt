@@ -143,6 +143,10 @@ class RoomTasksDataRepository @Inject constructor(
         return completedTasksLoader.listen()
     }
 
+    override suspend fun reloadTasks() {
+        updateSources(silently = false)
+    }
+
     override suspend fun addTask(newTask: NewTaskTuple) {
         tasksDataSource.createTask(newTask)
         updateSources()
@@ -166,6 +170,10 @@ class RoomTasksDataRepository @Inject constructor(
 
     override suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>> {
         return categoriesLoader.listen()
+    }
+
+    override suspend fun reloadCategories() {
+        categoriesLoader.newAsyncLoad(silently = false)
     }
 
     override suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple) {
@@ -198,6 +206,10 @@ class RoomTasksDataRepository @Inject constructor(
                 list.filter { it.task.id == taskId }
             }
         }
+    }
+
+    override suspend fun reloadReminders() {
+        remindersLoader.newAsyncLoad(silently = false)
     }
 
     override suspend fun createTaskReminder(newReminderTuple: NewReminderTuple): Long {

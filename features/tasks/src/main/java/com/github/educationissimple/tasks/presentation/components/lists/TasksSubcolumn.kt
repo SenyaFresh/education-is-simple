@@ -40,6 +40,8 @@ fun LazyListScope.tasksSubcolumn(
     onCreateReminder: (TaskReminder) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     onAddNewCategory: (String) -> Unit,
+    onReloadCategories: () -> Unit,
+    onReloadReminders: () -> Unit,
     isExpanded: Boolean = true,
     onExpandChange: (Boolean) -> Unit = {}
 ) {
@@ -89,6 +91,8 @@ fun LazyListScope.tasksSubcolumn(
                 onCreateReminder = onCreateReminder,
                 onDeleteReminder = onDeleteReminder,
                 onAddNewCategory = onAddNewCategory,
+                onReloadCategories = onReloadCategories,
+                onReloadReminders = onReloadReminders,
                 modifier = Modifier
                     .padding(top = LocalSpacing.current.small)
                     .animateItem(
@@ -122,7 +126,9 @@ fun TasksColumnPreview() {
             onAddNewCategory = {},
             getRemindersForTask = { MutableStateFlow(ResultContainer.Done(emptyList())) },
             onDeleteReminder = {},
-            onCreateReminder = {}
+            onCreateReminder = {},
+            onReloadCategories = {},
+            onReloadReminders = {}
         )
     }
 }

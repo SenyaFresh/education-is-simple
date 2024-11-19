@@ -28,6 +28,8 @@ interface TasksDataRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<TaskDataEntity>>>
 
+    suspend fun reloadTasks()
+
     suspend fun getSelectedSortType() : Flow<ResultContainer<String?>>
 
     suspend fun addTask(newTask: NewTaskTuple)
@@ -40,6 +42,8 @@ interface TasksDataRepository {
 
     suspend fun getCategories(): Flow<ResultContainer<List<TaskCategoryDataEntity>>>
 
+    suspend fun reloadCategories()
+
     suspend fun getSelectedCategoryId() : Flow<ResultContainer<Long?>>
 
     suspend fun createCategory(newTaskCategoryTuple: NewTaskCategoryTuple)
@@ -51,6 +55,8 @@ interface TasksDataRepository {
     suspend fun getReminders() : Flow<ResultContainer<List<RemindersAndTasksTuple>>>
 
     suspend fun getRemindersForTask(taskId: Long) : Flow<ResultContainer<List<RemindersAndTasksTuple>>>
+
+    suspend fun reloadReminders()
 
     suspend fun createTaskReminder(newReminderTuple: NewReminderTuple): Long
 

@@ -24,6 +24,8 @@ interface TasksRepository {
 
     suspend fun getCompletedTasks() : Flow<ResultContainer<List<Task>>>
 
+    suspend fun reloadTasks()
+
     suspend fun changeTaskSearchText(text: String)
 
     suspend fun getSelectedSortType() : Flow<ResultContainer<SortType?>>
@@ -38,6 +40,8 @@ interface TasksRepository {
 
     suspend fun getCategories(): Flow<ResultContainer<List<TaskCategory>>>
 
+    suspend fun reloadCategories()
+
     suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>>
 
     suspend fun createCategory(name: String)
@@ -47,6 +51,8 @@ interface TasksRepository {
     suspend fun changeCategory(categoryId: Long?)
 
     suspend fun getAllReminders(): Flow<ResultContainer<List<TaskReminder>>>
+
+    suspend fun reloadReminders()
 
     suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskReminder>>>
 

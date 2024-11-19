@@ -25,6 +25,7 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 @Composable
 fun ActionableItemsFlowRow(
     items: ResultContainer<List<ActionableItem>>,
+    onReloadItems: () -> Unit,
     modifier: Modifier = Modifier,
     onItemClick: (Long) -> Unit = {},
     activeItemId: Long? = null,
@@ -33,7 +34,7 @@ fun ActionableItemsFlowRow(
 ) {
     ResultContainerComposable(
         container = items,
-        onTryAgain = { },
+        onTryAgain = onReloadItems,
         onLoading = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
@@ -82,6 +83,7 @@ fun CategoriesRowPreview() {
                 }
             ),
                 onItemClick = { },
+                onReloadItems = { },
                 maxLines = 1,
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState(0))

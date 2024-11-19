@@ -21,6 +21,7 @@ fun SelectCategoryDialog(
     onConfirm: (TaskCategory) -> Unit,
     onCancel: () -> Unit,
     onAddNewCategory: (String) -> Unit,
+    onReloadCategories: () -> Unit,
     modifier: Modifier = Modifier,
     initialActiveCategoryId: TaskCategoryId = NO_CATEGORY_ID
 ) {
@@ -37,6 +38,7 @@ fun SelectCategoryDialog(
         onCancel = onCancel,
         cancelLabel = stringResource(R.string.cancel),
         onAddNewItem = onAddNewCategory,
+        onReloadItems = onReloadCategories,
         modifier = modifier,
         initialActiveItemId = initialActiveCategoryId
     )
@@ -56,7 +58,8 @@ fun SelectCategoryDialogPreview() {
             ),
             onConfirm = { },
             onCancel = { },
-            onAddNewCategory = { }
+            onAddNewCategory = { },
+            onReloadCategories = { }
         )
     }
 }

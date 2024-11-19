@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.github.educationissimple.common.Core
 import com.github.educationissimple.common.ResultContainer
 import kotlinx.coroutines.delay
@@ -20,12 +20,9 @@ import kotlinx.coroutines.delay
 
 /**
  * Represents a container that can:
- *
- * show progress bar when [container] is [ResultContainer.Loading];
- *
- * show error when [container] is [ResultContainer.Error] and button to handle error;
- *
- * show [onSuccess] composable when [container] is [ResultContainer.Done].
+ * - show progress bar when [container] is [ResultContainer.Loading];
+ * - show error when [container] is [ResultContainer.Error] and button to handle error;
+ * - show [onSuccess] composable when [container] is [ResultContainer.Done].
  */
 @Composable
 fun ResultContainerComposable(
@@ -74,6 +71,6 @@ fun ResultContainerComposable(
 @Composable
 fun OnLoadingEffect() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(color = Color.Black)
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }

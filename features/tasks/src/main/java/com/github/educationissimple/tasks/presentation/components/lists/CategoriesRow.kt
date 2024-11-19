@@ -19,6 +19,7 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategory.Companion
 fun CategoriesRow(
     categories: ResultContainer<List<TaskCategory>>,
     onCategoryClick: (Long) -> Unit,
+    onReloadCategories: () -> Unit,
     modifier: Modifier = Modifier,
     firstCategoryLabel: String,
     activeCategoryId: Long = NO_CATEGORY_ID,
@@ -33,6 +34,7 @@ fun CategoriesRow(
             id = NO_CATEGORY_ID,
             name = firstCategoryLabel
         ),
+        onReloadItems = onReloadCategories,
         maxLines = maxLines
     )
 }
@@ -48,6 +50,7 @@ fun CategoriesRowPreview() {
                 }
             ),
                 onCategoryClick = { },
+                onReloadCategories = { },
                 firstCategoryLabel = "All",
                 maxLines = 1,
                 modifier = Modifier

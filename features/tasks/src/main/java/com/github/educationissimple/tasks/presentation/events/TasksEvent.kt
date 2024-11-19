@@ -7,26 +7,32 @@ import java.time.LocalDate
 
 sealed class TasksEvent {
 
-    data class ChangeTaskSearchText(val text: String): TasksEvent()
+    data class ChangeTaskSearchText(val text: String) : TasksEvent()
 
-    data class ChangeTasksSelectionDate(val date: LocalDate): TasksEvent()
+    data class ChangeTasksSelectionDate(val date: LocalDate) : TasksEvent()
 
-    data class UpdateTask(val updatedTask: Task): TasksEvent()
+    data class UpdateTask(val updatedTask: Task) : TasksEvent()
 
-    data class ChangeSortType(val sortType: SortType): TasksEvent()
+    data class ChangeSortType(val sortType: SortType) : TasksEvent()
 
-    data class AddTask(val task: Task): TasksEvent()
+    data class AddTask(val task: Task) : TasksEvent()
 
-    data class DeleteTask(val taskId: Long): TasksEvent()
+    data class DeleteTask(val taskId: Long) : TasksEvent()
 
-    data class ChangeCategory(val categoryId: Long?): TasksEvent()
+    data class ChangeCategory(val categoryId: Long?) : TasksEvent()
 
-    data class AddCategory(val name: String): TasksEvent()
+    data class AddCategory(val name: String) : TasksEvent()
 
-    data class DeleteCategory(val categoryId: Long): TasksEvent()
+    data class DeleteCategory(val categoryId: Long) : TasksEvent()
 
-    data class AddTaskReminder(val taskReminder: TaskReminder): TasksEvent()
+    data class AddTaskReminder(val taskReminder: TaskReminder) : TasksEvent()
 
-    data class DeleteTaskReminder(val taskReminder: TaskReminder): TasksEvent()
+    data class DeleteTaskReminder(val taskReminder: TaskReminder) : TasksEvent()
+
+    data object ReloadTasks : TasksEvent()
+
+    data object ReloadCategories : TasksEvent()
+
+    data object ReloadReminders : TasksEvent()
 
 }

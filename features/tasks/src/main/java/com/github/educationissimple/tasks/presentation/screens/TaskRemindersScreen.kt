@@ -48,6 +48,9 @@ fun TaskRemindersContent(
             reminders.unwrapOrNull()?.find { it.id == reminderId }?.let {
                 onEvent(TasksEvent.DeleteTaskReminder(it))
             }
+        },
+        onReloadItems = {
+            onEvent(TasksEvent.ReloadReminders)
         }
     )
 }

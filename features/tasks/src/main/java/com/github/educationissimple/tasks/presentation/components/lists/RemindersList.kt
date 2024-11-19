@@ -29,11 +29,12 @@ fun RemindersList(
     reminders: ResultContainer<List<TaskReminder>>,
     onDelete: (TaskReminder) -> Unit,
     onCreate: () -> Unit,
+    onReloadReminders: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ResultContainerComposable(
         container = reminders,
-        onTryAgain = {},
+        onTryAgain = onReloadReminders,
         onLoading = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),

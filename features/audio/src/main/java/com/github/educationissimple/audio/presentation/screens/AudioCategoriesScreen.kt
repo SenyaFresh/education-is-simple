@@ -42,6 +42,9 @@ fun CategoriesContent(
         },
         onAdd = { categoryName ->
             onEvent(AudioEvent.CreateCategoryEvent(categoryName))
+        },
+        onReloadItems = {
+            onEvent(AudioEvent.ReloadAudioCategoriesEvent)
         }
     )
 }

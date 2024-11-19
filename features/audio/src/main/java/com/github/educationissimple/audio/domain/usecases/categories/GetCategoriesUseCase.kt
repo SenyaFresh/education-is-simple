@@ -12,6 +12,10 @@ class GetCategoriesUseCase @Inject constructor(private val audioRepository: Audi
         return audioRepository.getCategories()
     }
 
+    suspend fun reloadCategories() {
+        audioRepository.reloadCategories()
+    }
+
     suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
         return audioRepository.getSelectedCategoryId()
     }

@@ -19,6 +19,7 @@ import com.github.educationissimple.components.entities.ActionableItem
 fun AudioCategoriesRow(
     categories: ResultContainer<List<AudioCategory>>,
     onCategoryClick: (Long) -> Unit,
+    onReloadCategories: () -> Unit,
     modifier: Modifier = Modifier,
     firstCategoryLabel: String,
     activeCategoryId: Long = NO_CATEGORY_ID,
@@ -27,6 +28,7 @@ fun AudioCategoriesRow(
     ActionableItemsFlowRow(
         items = categories.map { list -> list.map { ActionableItem(it.id, it.name) } },
         onItemClick = onCategoryClick,
+        onReloadItems = onReloadCategories,
         modifier = modifier,
         activeItemId = activeCategoryId,
         leadingItem = ActionableItem(
@@ -48,6 +50,7 @@ fun AudioCategoriesRowPreview() {
                 }
             ),
                 onCategoryClick = { },
+                onReloadCategories = { },
                 firstCategoryLabel = "All",
                 maxLines = 1,
                 modifier = Modifier

@@ -75,7 +75,9 @@ fun TaskSheet(
     onTaskUpdate: (Task) -> Unit,
     onCreateReminder: (TaskReminder) -> Unit,
     onDeleteReminder: (TaskReminder) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onReloadCategories: () -> Unit,
+    onReloadReminders: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var updatedTask by remember { mutableStateOf(task) }
@@ -127,6 +129,7 @@ fun TaskSheet(
             onCancel = {
                 showCategoriesDialog = false
             },
+            onReloadCategories = onReloadCategories,
             onAddNewCategory = onAddNewCategory,
             initialActiveCategoryId = updatedTask.categoryId ?: NO_CATEGORY_ID
         )
@@ -288,7 +291,8 @@ fun TaskSheet(
                                 RemindersList(
                                     reminders = reminders,
                                     onDelete = onDeleteReminder,
-                                    onCreate = { showReminderCreatorDialog = true }
+                                    onCreate = { showReminderCreatorDialog = true },
+                                    onReloadReminders = onReloadReminders
                                 )
                             }
                         }
@@ -318,6 +322,8 @@ fun TaskSheetPreview() {
         onAddNewCategory = {},
         onDismiss = {},
         onCreateReminder = {},
-        onDeleteReminder = {}
+        onDeleteReminder = {},
+        onReloadCategories = {},
+        onReloadReminders = {}
     )
 }

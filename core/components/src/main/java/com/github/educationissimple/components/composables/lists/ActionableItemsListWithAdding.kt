@@ -32,17 +32,18 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 @Composable
 fun ActionableItemsListWithAdding(
     items: ResultContainer<List<ActionableItem>>,
-    addLabel: String,
-    addPlaceholder: String,
+    onReloadItems: () -> Unit,
     emptyListMessage: String,
     onDelete: (Long) -> Unit,
+    addLabel: String,
+    addPlaceholder: String,
     onAdd: ((String) -> Unit)? = null
 ) {
     var isAddingNewItem by remember { mutableStateOf(false) }
 
     ResultContainerComposable(
         container = items,
-        onTryAgain = { },
+        onTryAgain = onReloadItems,
         onLoading = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.semiMedium),
@@ -115,11 +116,12 @@ fun CategoriesContentPreview() {
     }
     ActionableItemsListWithAdding(
         ResultContainer.Done(items),
-        "Add category",
-        "Category name",
+        addLabel = "Add category",
+        addPlaceholder = "Category name",
         onDelete = { },
         onAdd = { },
-        emptyListMessage = "List is empty"
+        emptyListMessage = "List is empty",
+        onReloadItems = { },
     )
 }
 
@@ -128,10 +130,11 @@ fun CategoriesContentPreview() {
 fun CategoriesContentLoadingPreview() {
     ActionableItemsListWithAdding(
         ResultContainer.Loading,
-        "Add category",
-        "Category name",
+        addLabel = "Add category",
+        addPlaceholder = "Category name",
         onDelete = { },
         onAdd = { },
-        emptyListMessage = "List is empty"
+        emptyListMessage = "List is empty",
+        onReloadItems = { },
     )
 }

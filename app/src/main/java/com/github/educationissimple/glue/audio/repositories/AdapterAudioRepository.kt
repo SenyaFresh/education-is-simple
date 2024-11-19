@@ -28,6 +28,10 @@ class AdapterAudioRepository @Inject constructor(
             .map { container -> container.map { list -> list.map { it.toAudio() } } }
     }
 
+    override suspend fun reloadAudioItems() {
+        audioDataRepository.reloadAudio()
+    }
+
     override suspend fun addAudioItem(uri: String, categoryId: Long?) {
         val audio = Uri.parse(uri).toAudioDataEntity(application)?.copy(categoryId = categoryId)
         audioDataRepository.addAudio(
@@ -41,6 +45,10 @@ class AdapterAudioRepository @Inject constructor(
 
     override suspend fun getCategories(): Flow<ResultContainer<List<AudioCategory>>> {
         return audioDataRepository.getCategories().mapToAudioCategory()
+    }
+
+    override suspend fun reloadCategories() {
+        audioDataRepository.reloadCategories()
     }
 
     override suspend fun createCategory(name: String) {

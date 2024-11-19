@@ -156,11 +156,12 @@ fun TasksContent(
                         onCategoryClick = {
                             onTasksEvent(TasksEvent.ChangeCategory(if (it != NO_CATEGORY_ID) it else null))
                         },
+                        onReloadCategories = { onTasksEvent(TasksEvent.ReloadCategories) },
                         firstCategoryLabel = stringResource(R.string.all),
+                        maxLines = 1,
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
-                            .padding(end = LocalSpacing.current.small),
-                        maxLines = 1
+                            .padding(end = LocalSpacing.current.small)
                     )
                 }
             }
@@ -180,7 +181,10 @@ fun TasksContent(
             onUpdateTask = onUpdateTask,
             getRemindersForTask = getRemindersForTask,
             onCreateReminder = { onTasksEvent(TasksEvent.AddTaskReminder(it)) },
-            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) }
+            onDeleteReminder = { onTasksEvent(TasksEvent.DeleteTaskReminder(it)) },
+            onReloadTasks = { onTasksEvent(TasksEvent.ReloadTasks) },
+            onReloadCategories = { onTasksEvent(TasksEvent.ReloadCategories) },
+            onReloadReminders = { onTasksEvent(TasksEvent.ReloadReminders) }
         )
     }
 
@@ -228,6 +232,7 @@ fun TasksContent(
             },
             focusRequester = focusRequester,
             onDismiss = { isAddingTask = false },
+            onReloadCategories = { onTasksEvent(TasksEvent.ReloadCategories) },
             categories = categories
         )
     }

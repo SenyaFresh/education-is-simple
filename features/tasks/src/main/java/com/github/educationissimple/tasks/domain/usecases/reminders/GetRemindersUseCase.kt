@@ -12,6 +12,10 @@ class GetRemindersUseCase @Inject constructor(private val tasksRepository: Tasks
         return tasksRepository.getRemindersForTask(taskId)
     }
 
+    suspend fun reloadReminders() {
+        tasksRepository.reloadReminders()
+    }
+
     suspend fun getAllReminders(): Flow<ResultContainer<List<TaskReminder>>> {
         return tasksRepository.getAllReminders()
     }

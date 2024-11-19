@@ -36,6 +36,10 @@ class RoomAudioDataRepository @Inject constructor(
         return audioLoader.listen()
     }
 
+    override suspend fun reloadAudio() {
+        audioLoader.newAsyncLoad(silently = false)
+    }
+
     override suspend fun addAudio(audio: AudioDataEntity) {
         audioDataSource.addAudio(audio)
         updateSources()
@@ -58,6 +62,10 @@ class RoomAudioDataRepository @Inject constructor(
 
     override suspend fun getCategories(): Flow<ResultContainer<List<AudioCategoryDataEntity>>> {
         return categoriesLoader.listen()
+    }
+
+    override suspend fun reloadCategories() {
+        categoriesLoader.newAsyncLoad(silently = false)
     }
 
     override suspend fun createCategory(newAudioCategoryTuple: NewAudioCategoryTuple) {

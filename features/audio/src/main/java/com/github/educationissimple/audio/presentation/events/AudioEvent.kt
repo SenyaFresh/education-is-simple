@@ -16,4 +16,8 @@ sealed class AudioEvent {
 
     data class ChangeCategoryEvent(val categoryId: Long?) : AudioEvent()
 
+    data object ReloadAudioItemsEvent : AudioEvent()
+
+    data object ReloadAudioCategoriesEvent : AudioEvent()
+
 }

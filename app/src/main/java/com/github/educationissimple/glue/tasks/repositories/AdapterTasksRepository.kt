@@ -57,6 +57,10 @@ class AdapterTasksRepository @Inject constructor(
         return tasksDataRepository.getCompletedTasks().mapToTask()
     }
 
+    override suspend fun reloadTasks() {
+        tasksDataRepository.reloadTasks()
+    }
+
     override suspend fun changeTaskSearchText(text: String) {
         tasksDataRepository.changeTasksSearchQuery(text)
     }
@@ -89,6 +93,10 @@ class AdapterTasksRepository @Inject constructor(
         return tasksDataRepository.getCategories().mapToTaskCategory()
     }
 
+    override suspend fun reloadCategories() {
+        tasksDataRepository.reloadCategories()
+    }
+
     override suspend fun getSelectedCategoryId(): Flow<ResultContainer<Long?>> {
         return tasksDataRepository.getSelectedCategoryId()
     }
@@ -118,6 +126,10 @@ class AdapterTasksRepository @Inject constructor(
 
     override suspend fun getAllReminders(): Flow<ResultContainer<List<TaskReminder>>> {
         return tasksDataRepository.getReminders().mapToTaskReminder()
+    }
+
+    override suspend fun reloadReminders() {
+        tasksDataRepository.reloadReminders()
     }
 
     override suspend fun getRemindersForTask(taskId: Long): Flow<ResultContainer<List<TaskReminder>>> {

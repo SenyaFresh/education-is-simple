@@ -107,7 +107,22 @@ class TasksViewModel @Inject constructor(
             is TasksEvent.ChangeTasksSelectionDate -> changeSelectionDate(event.date)
             is TasksEvent.AddTaskReminder -> createReminder(event.taskReminder)
             is TasksEvent.DeleteTaskReminder -> deleteReminder(event.taskReminder)
+            is TasksEvent.ReloadTasks -> reloadTasks()
+            is TasksEvent.ReloadCategories -> reloadCategories()
+            is TasksEvent.ReloadReminders -> reloadReminders()
         }
+    }
+
+    private fun reloadReminders() = viewModelScope.launch {
+        getRemindersUseCase.reloadReminders()
+    }
+
+    private fun reloadCategories() = viewModelScope.launch {
+        getCategoriesUseCase.reloadCategories()
+    }
+
+    private fun reloadTasks() = viewModelScope.launch {
+        getTasksUseCase.reloadTasks()
     }
 
     fun getRemindersForTask(taskId: Long): StateFlow<ResultContainer<List<TaskReminder>>> {

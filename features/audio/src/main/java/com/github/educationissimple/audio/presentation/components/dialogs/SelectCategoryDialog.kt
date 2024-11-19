@@ -17,6 +17,7 @@ import com.github.educationissimple.components.entities.ActionableItem
 fun SelectCategoryDialog(
     title: String,
     categories: ResultContainer<List<AudioCategory>>,
+    onTryAgain: () -> Unit,
     onConfirm: (AudioCategory) -> Unit,
     onCancel: () -> Unit,
     onAddNewCategory: (String) -> Unit,
@@ -26,6 +27,7 @@ fun SelectCategoryDialog(
     SelectOrCreateDialog(
         title = title,
         items = categories.map { list -> list.map { ActionableItem(it.id, it.name) } },
+        onReloadItems = onTryAgain,
         initialItem = ActionableItem(
             NO_CATEGORY_ID,
             stringResource(R.string.no_category)
@@ -54,7 +56,8 @@ fun SelectCategoryDialogPreview() {
             ),
             onConfirm = { },
             onCancel = { },
-            onAddNewCategory = { }
+            onAddNewCategory = { },
+            onTryAgain = { }
         )
     }
 }

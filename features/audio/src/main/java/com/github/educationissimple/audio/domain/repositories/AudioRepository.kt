@@ -9,11 +9,15 @@ interface AudioRepository {
 
     suspend fun getAudioItems(): Flow<ResultContainer<List<Audio>>>
 
+    suspend fun reloadAudioItems()
+
     suspend fun addAudioItem(uri: String, categoryId: Long?)
 
     suspend fun deleteAudioItem(uri: String)
 
     suspend fun getCategories(): Flow<ResultContainer<List<AudioCategory>>>
+
+    suspend fun reloadCategories()
 
     suspend fun createCategory(name: String)
 

@@ -125,7 +125,8 @@ fun AudioListContent(
                         showAddAudioDialog = false
                     },
                     onCancel = { showAddAudioDialog = false },
-                    onAddNewCategory = { onAudioEvent(AudioEvent.CreateCategoryEvent(it)) }
+                    onAddNewCategory = { onAudioEvent(AudioEvent.CreateCategoryEvent(it)) },
+                    onTryAgain = { onAudioEvent(AudioEvent.ReloadAudioCategoriesEvent) }
                 )
             }
         }
@@ -135,6 +136,7 @@ fun AudioListContent(
         AudioCategoriesRow(
             categories = audioCategories,
             onCategoryClick = { onAudioEvent(AudioEvent.ChangeCategoryEvent(it)) },
+            onReloadCategories = { onAudioEvent(AudioEvent.ReloadAudioCategoriesEvent) },
             firstCategoryLabel = "все",
             activeCategoryId = activeCategoryId,
             maxLines = 1,
@@ -158,7 +160,8 @@ fun AudioListContent(
                     showAudioPermissionDialog = true
                 }
             },
-            onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) }
+            onAudioDelete = { onAudioEvent(AudioEvent.DeleteAudioItemEvent(it)) },
+            onReloadAudioItems = { onAudioEvent(AudioEvent.ReloadAudioItemsEvent) }
         )
     }
 

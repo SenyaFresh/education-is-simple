@@ -19,6 +19,7 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
 @Composable
 fun AudioItemsColumn(
     audioItems: ResultContainer<List<Audio>>,
+    onReloadAudioItems: () -> Unit,
     selectedAudioUri: String? = null,
     playingAudioUri: String? = null,
     onAudioClick: (String) -> Unit,
@@ -40,7 +41,7 @@ fun AudioItemsColumn(
                 }
             }
         },
-        onTryAgain = { }
+        onTryAgain = onReloadAudioItems
     ) {
         LazyColumn(
             modifier = Modifier

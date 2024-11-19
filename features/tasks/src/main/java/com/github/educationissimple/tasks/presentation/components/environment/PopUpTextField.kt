@@ -60,6 +60,7 @@ fun PopUpTextField(
     onValueChange: (String) -> Unit,
     onAddClick: (TaskCategoryId, LocalDate, Task.Priority) -> Unit,
     onAddNewCategory: (String) -> Unit,
+    onReloadCategories: () -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
     focusRequester: FocusRequester,
     onDismiss: () -> Unit,
@@ -82,6 +83,7 @@ fun PopUpTextField(
             onAddClick = onAddClick,
             onAddNewCategory = onAddNewCategory,
             categories = categories,
+            onReloadCategories = onReloadCategories,
             focusRequester = focusRequester
         )
     }
@@ -94,6 +96,7 @@ fun PopUpTextFieldContent(
     onAddClick: (TaskCategoryId, LocalDate, Task.Priority) -> Unit,
     onAddNewCategory: (String) -> Unit,
     categories: ResultContainer<List<TaskCategory>>,
+    onReloadCategories: () -> Unit,
     focusRequester: FocusRequester
 ) {
     val noCategoryText = stringResource(R.string.no_category)
@@ -124,6 +127,7 @@ fun PopUpTextFieldContent(
                 showCategoriesDialog = false
             },
             onAddNewCategory = onAddNewCategory,
+            onReloadCategories = onReloadCategories,
             initialActiveCategoryId = selectedCategory.id
         )
     }
@@ -231,6 +235,7 @@ fun PopUpTextFieldPreview() {
         onAddNewCategory = {},
         focusRequester = FocusRequester(),
         onDismiss = { },
+        onReloadCategories = {},
         categories = ResultContainer.Done(listOf())
     )
 }

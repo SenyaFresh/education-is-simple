@@ -39,6 +39,7 @@ fun SelectOrCreateDialog(
     items: ResultContainer<List<ActionableItem>>,
     initialItem: ActionableItem,
     textFieldPlaceholder: String,
+    onReloadItems: () -> Unit,
     onConfirm: (ActionableItem) -> Unit,
     confirmLabel: String,
     onCancel: () -> Unit,
@@ -65,6 +66,7 @@ fun SelectOrCreateDialog(
             ActionableItemsFlowRow(
                 items = items,
                 onItemClick = { activeItemId = it },
+                onReloadItems = onReloadItems,
                 activeItemId = activeItemId,
                 modifier = Modifier
                     .heightIn(max = 120.dp)
@@ -138,6 +140,7 @@ fun SelectOrCreateDialogPreview() {
             ),
             onConfirm = { },
             onCancel = { },
+            onReloadItems = { },
             onAddNewItem = { },
             initialItem = ActionableItem(
                 id = 0,

@@ -65,14 +65,14 @@ class AudioViewModel @Inject constructor(
         MutableStateFlow<ResultContainer<AudioListState>>(ResultContainer.Loading)
     val audioListState = _audioListState.asStateFlow()
 
+    private var isPlayerInitialized = false
+
     init {
         collectAudioItems()
         collectPlayerState()
         collectAudioCategories()
         collectActiveCategoryId()
     }
-
-    private var isPlayerInitialized = false
 
     fun onEvent(event: AudioEvent) = debounce {
         when (event) {
@@ -82,7 +82,17 @@ class AudioViewModel @Inject constructor(
             is AudioEvent.CreateCategoryEvent -> onAddCategoryEvent(event.name)
             is AudioEvent.DeleteCategoryEvent -> onDeleteCategoryEvent(event.categoryId)
             is AudioEvent.ChangeCategoryEvent -> onChangeCategoryEvent(event.categoryId)
+            is AudioEvent.ReloadAudioItemsEvent -> onReloadAudioItems()
+            is AudioEvent.ReloadAudioCategoriesEvent -> onReloadAudioCategories()
         }
+    }
+
+    private fun onReloadAudioItems() = viewModelScope.launch {
+        getAudioItemsUseCase.reloadAudioItems()
+    }
+
+    private fun onReloadAudioCategories() = viewModelScope.launch {
+        getCategoriesUseCase.reloadCategories()
     }
 
     private fun collectAudioItems() = viewModelScope.launch {
