@@ -74,7 +74,7 @@ class AudioViewModel @Inject constructor(
 
     private var isPlayerInitialized = false
 
-    fun onEvent(event: AudioEvent) {
+    fun onEvent(event: AudioEvent) = debounce {
         when (event) {
             is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.uri, event.categoryId)
             is AudioEvent.DeleteAudioItemEvent -> onDeleteAudioItemEvent(event.uri)
@@ -89,8 +89,8 @@ class AudioViewModel @Inject constructor(
         getAudioItemsUseCase.getAudioItems().collect {
             _audioItems.value = it
             if (!isPlayerInitialized && it is ResultContainer.Done) {
-                initPlayerUseCase.initPlayer(it.unwrap())
                 isPlayerInitialized = true
+                initPlayerUseCase.initPlayer(it.unwrap())
             }
         }
     }
@@ -143,6 +143,7 @@ class AudioViewModel @Inject constructor(
                 changeSelectedAudioUseCase.close()
                 onStopAudioService()
             }
+
             is PlayerController.Next -> changeSelectedAudioUseCase.next()
             is PlayerController.Previous -> changeSelectedAudioUseCase.previous()
             is PlayerController.SelectMedia -> getIndexByUri(controller.uri)?.let {

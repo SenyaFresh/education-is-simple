@@ -62,12 +62,12 @@ class AudioNotificationImpl @Inject constructor(
             )
             .setSmallIconResourceId(R.drawable.ic_audio_playlist)
             .build()
-            .also {
-                it.setMediaSessionToken(mediaSession.platformToken)
-                it.setUseFastForwardActionInCompactView(true)
-                it.setUseRewindActionInCompactView(true)
-                it.setUseNextActionInCompactView(true)
-                it.setPriority(NotificationCompat.PRIORITY_LOW)
+            .apply {
+                setMediaSessionToken(mediaSession.platformToken)
+                setUseFastForwardActionInCompactView(true)
+                setUseRewindActionInCompactView(true)
+                setUseNextActionInCompactView(true)
+                setPriority(NotificationCompat.PRIORITY_LOW)
             }
     }
 

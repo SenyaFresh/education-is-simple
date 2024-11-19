@@ -23,7 +23,6 @@ class RealAudioListPlayerHandler @Inject constructor(
     private val state =
         MutableStateFlow<ResultContainer<AudioPlayerListState>>(ResultContainer.Loading)
     private var progressJob: Job? = null
-    private var initialized = false
     private var closed = false
 
     init {
@@ -33,7 +32,6 @@ class RealAudioListPlayerHandler @Inject constructor(
 
     override suspend fun initAudioItems(audioItemItems: List<AudioItem>) {
         player.setMediaItems(audioItemItems.map { it.toMediaItem() })
-        initialized = true
     }
 
     override suspend fun addAudio(audioItem: AudioItem) {
@@ -56,10 +54,8 @@ class RealAudioListPlayerHandler @Inject constructor(
     }
 
     override suspend fun selectMedia(index: Int) {
-        if (closed) {
-            closed = false
-        }
-        if (initialized && player.playbackState == Player.STATE_IDLE) {
+        if (closed) closed = false
+        if (player.playbackState == Player.STATE_IDLE) {
             player.prepare()
             player.playWhenReady = true
         }
@@ -89,10 +85,10 @@ class RealAudioListPlayerHandler @Inject constructor(
     }
 
     override suspend fun close() {
-        player.run {
-            stop()
-            playWhenReady = false
+        player.apply {
             seekToDefaultPosition(0)
+            playWhenReady = false
+            stop()
         }
         stopProgressing()
         state.value = ResultContainer.Done(

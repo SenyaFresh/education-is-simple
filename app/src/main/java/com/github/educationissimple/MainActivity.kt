@@ -14,6 +14,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var audioServiceManager: AudioServiceManager
 
+    private var isServiceRunning: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as BaseApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
@@ -28,12 +30,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onStartService() {
-        val intent = Intent(this, audioServiceManager.getServiceClass().java)
-        startForegroundService(intent)
+        if (!isServiceRunning) {
+            val intent = Intent(this, audioServiceManager.getServiceClass().java)
+            startForegroundService(intent)
+            isServiceRunning = true
+        }
     }
 
     private fun onStopService() {
-        val intent = Intent(this, audioServiceManager.getServiceClass().java)
-        stopService(intent)
+        if (isServiceRunning) {
+            val intent = Intent(this, audioServiceManager.getServiceClass().java)
+            stopService(intent)
+            isServiceRunning = false
+        }
     }
 }
