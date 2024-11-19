@@ -82,6 +82,9 @@ class PlayerModule {
 @Module
 abstract class NotificationModule {
 
+    /**
+     * Provides [AudioNotification] for audio-player module.
+     */
     @OptIn(UnstableApi::class)
     @Binds
     @Service
@@ -95,6 +98,9 @@ abstract class NotificationModule {
 @Module
 abstract class ServiceModule {
 
+    /**
+     * Provides [AudioServiceManager] for audio-player module.
+     */
     @Binds
     @Service
     abstract fun provideServiceManager(serviceManager: AudioServiceImpl): AudioServiceManager
@@ -107,6 +113,9 @@ abstract class ServiceModule {
 @Module
 abstract class AudioPlayerHandlerModule {
 
+    /**
+     * Provides [AudioListPlayerHandler] for audio-player module.
+     */
     @Binds
     @Service
     abstract fun bindAudioListPlayerHandler(realAudioListPlayerHandler: RealAudioListPlayerHandler): AudioListPlayerHandler
