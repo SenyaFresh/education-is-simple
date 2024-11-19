@@ -41,13 +41,16 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
+import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.presentation.components.items.DayIcon
+import com.github.educationissimple.tasks.presentation.utils.monthToString
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Month
@@ -88,7 +91,7 @@ fun CalendarView(
                     if (calendarState != CalendarState.MONTH_SELECTION) CalendarState.MONTH_SELECTION
                     else CalendarState.DAY_SELECTION
             }) {
-                Text(text = selectedDay.month.name, fontWeight = FontWeight.Bold)
+                Text(text = monthToString(selectedDay.month), fontWeight = FontWeight.Bold)
                 Icon(
                     if (calendarState == CalendarState.MONTH_SELECTION) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
                     contentDescription = if (calendarState == CalendarState.MONTH_SELECTION) "Collapse" else "Expand",
@@ -163,9 +166,17 @@ fun CalendarDaySelection(date: LocalDate, onDaySelect: (LocalDate) -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            listOf("ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС").forEach { weekDay ->
+            listOf(
+                R.string.monday_2_symbols,
+                R.string.tuesday_2_symbols,
+                R.string.wednesday_2_symbols,
+                R.string.thursday_2_symbols,
+                R.string.friday_2_symbols,
+                R.string.saturday_2_symbols,
+                R.string.sunday_2_symbols
+            ).forEach { weekDayResId ->
                 Text(
-                    text = weekDay,
+                    text = stringResource(weekDayResId),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
@@ -227,7 +238,7 @@ fun CalendarMonthSelection(
     ) { page ->
         Box(modifier = Modifier.fillMaxWidth()) {
             ActionableListItem(
-                label = Month.entries[page % 12].name,
+                label = monthToString(Month.entries[page % 12]),
                 onClick = { scope.launch { pagerState.scrollToPage(page) } },
                 modifier = Modifier
                     .align(Alignment.Center)

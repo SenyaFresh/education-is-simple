@@ -51,4 +51,23 @@
     <string name="notifications_permission_title">Разрешение для отправки уведомлений</string>
     <string name="go_to_settings">Настройки</string>
     <string name="grant">Ок</string>
+    <string name="monday_2_symbols">ПН</string>
+    <string name="tuesday_2_symbols">ВТ</string>
+    <string name="wednesday_2_symbols">СР</string>
+    <string name="thursday_2_symbols">ЧТ</string>
+    <string name="friday_2_symbols">ПТ</string>
+    <string name="saturday_2_symbols">СБ</string>
+    <string name="sunday_2_symbols">ВС</string>
+    <string name="january">Январь</string>
+    <string name="february">Февраль</string>
+    <string name="march">Март</string>
+    <string name="april">Апрель</string>
+    <string name="may">Май</string>
+    <string name="june">Июнь</string>
+    <string name="july">Июль</string>
+    <string name="august">Август</string>
+    <string name="september">Сентябрь</string>
+    <string name="october">Октябрь</string>
+    <string name="november">Ноябрь</string>
+    <string name="december">Декабрь</string>
 </resources>
