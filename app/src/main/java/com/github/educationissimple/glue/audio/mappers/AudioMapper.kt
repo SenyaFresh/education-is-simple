@@ -13,6 +13,11 @@ import com.github.educationissimple.audio.entities.AudioDataEntity
 import com.github.educationissimple.audio_player.entities.AudioItem
 import com.github.educationissimple.audio_player.entities.AudioPlayerListState
 
+/**
+ * Maps an [AudioDataEntity] object to an [Audio] object.
+ *
+ * @return The mapped [Audio] object.
+ */
 fun AudioDataEntity.toAudio(): Audio {
     return Audio(
         uri = uri,
@@ -24,6 +29,10 @@ fun AudioDataEntity.toAudio(): Audio {
     )
 }
 
+/**
+ * Projection array for querying audio data from the media store.
+ * This array contains the columns that will be retrieved from the content provider.
+ */
 private val projection: Array<String> = arrayOf(
     MediaStore.Audio.AudioColumns.ARTIST,
     MediaStore.Audio.AudioColumns.DURATION,
@@ -31,6 +40,12 @@ private val projection: Array<String> = arrayOf(
     MediaStore.Audio.Albums.ALBUM_ID
 )
 
+/**
+ * Converts a [Uri] to an [AudioDataEntity] object.
+ *
+ * @param application The application context.
+ * @return The converted [AudioDataEntity] object, or null if the conversion fails.
+ */
 fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
     var audioDataEntity: AudioDataEntity? = null
 
@@ -71,6 +86,14 @@ fun Uri.toAudioDataEntity(application: Application): AudioDataEntity? {
     return audioDataEntity
 }
 
+/**
+ * Retrieves the album art bitmap for a given album ID.
+ *
+ * @param application The application context.
+ * @param albumId The ID of the album.
+ *
+ * @return The album art bitmap, or null if the retrieval fails.
+ **/
 fun getAlbumBitmap(application: Application, albumId: Long): Bitmap? {
     val albumUri = ContentUris.withAppendedId(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, albumId)
 
@@ -80,6 +103,11 @@ fun getAlbumBitmap(application: Application, albumId: Long): Bitmap? {
     return null
 }
 
+/**
+ * Maps an [AudioPlayerListState] object to an [AudioListState] object.
+ *
+ * @return The mapped [AudioListState] object.
+ */
 fun AudioPlayerListState.toAudioListState(): AudioListState {
     return AudioListState(
         state = state.toAudioPlayerListStateState(),
@@ -89,6 +117,11 @@ fun AudioPlayerListState.toAudioListState(): AudioListState {
     )
 }
 
+/**
+ * Maps an [Audio] object to an [AudioItem] object.
+ *
+ * @return The mapped [AudioItem] object.
+ */
 fun Audio.toAudioItem(): AudioItem {
     return AudioItem(
         uri = uri,
@@ -100,6 +133,11 @@ fun Audio.toAudioItem(): AudioItem {
     )
 }
 
+/**
+ * Maps an [AudioListState.State] object to an [AudioPlayerListState.State] object.
+ *
+ * @return The mapped [AudioPlayerListState.State] object.
+ */
 fun AudioPlayerListState.State.toAudioPlayerListStateState(): AudioListState.State {
     return when (this) {
         AudioPlayerListState.State.AUDIO_PLAYING -> AudioListState.State.AUDIO_PLAYING

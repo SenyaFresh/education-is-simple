@@ -8,6 +8,9 @@ import com.github.educationissimple.tasks.domain.entities.TaskReminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Extension function to map a [RemindersAndTasksTuple] to a [TaskReminder].
+ */
 fun RemindersAndTasksTuple.mapToTaskReminder(): TaskReminder {
     return TaskReminder(
         id = reminder.id,
@@ -17,6 +20,9 @@ fun RemindersAndTasksTuple.mapToTaskReminder(): TaskReminder {
     )
 }
 
+/**
+ * Extension function to map a [Flow] of [ResultContainer] of [RemindersAndTasksTuple] to a [Flow] of [ResultContainer] of [TaskReminder].
+ */
 fun Flow<ResultContainer<List<RemindersAndTasksTuple>>>.mapToTaskReminder(): Flow<ResultContainer<List<TaskReminder>>> {
     return this.map { container ->
         container.map { list ->
@@ -25,6 +31,9 @@ fun Flow<ResultContainer<List<RemindersAndTasksTuple>>>.mapToTaskReminder(): Flo
     }
 }
 
+/**
+ * Extension function to map a [TaskReminder] to a [NewReminderTuple].
+ */
 fun TaskReminder.toNewReminderTuple(): NewReminderTuple {
     return NewReminderTuple(
         taskId = taskId,
@@ -32,6 +41,9 @@ fun TaskReminder.toNewReminderTuple(): NewReminderTuple {
     )
 }
 
+/**
+ * Extension function to map a [TaskReminder] to a [ReminderItem].
+ */
 fun TaskReminder.toReminderItem(): ReminderItem {
     return ReminderItem(
         id = id,

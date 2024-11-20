@@ -15,6 +15,9 @@ import com.github.educationissimple.glue.tasks.di.TasksRepositoryModule
 import dagger.Module
 import dagger.Provides
 
+/**
+ * Dagger module that provides dependencies for the app.
+ */
 @Module(
     includes = [
         TasksDataRepositoryModule::class,
@@ -31,6 +34,12 @@ import dagger.Provides
 )
 class AppModule {
 
+    /**
+     * Provides the application context.
+     *
+     * @param context The application context.
+     * @return The application context.
+     **/
     @Provides
     fun provideApplication(context: Context): Application {
         return context.applicationContext as Application

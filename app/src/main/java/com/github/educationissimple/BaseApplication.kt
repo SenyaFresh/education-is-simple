@@ -12,6 +12,12 @@ import com.github.educationissimple.news.di.NewsDepsStore
 import com.github.educationissimple.notifications.di.ReminderDepsStore
 import com.github.educationissimple.tasks.di.TasksDepsStore
 
+/**
+ * Base application class for setting up application-wide dependencies and configurations.
+ *
+ * Initializes the core components, dependencies, and worker factories required
+ * for the application.
+ */
 class BaseApplication : Application() {
 
     val appComponent: AppComponent by lazy {

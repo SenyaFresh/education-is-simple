@@ -10,6 +10,9 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * Dagger module providing core dependencies.
+ */
 @Module
 class CoreModule {
 

@@ -6,6 +6,9 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Extension function to map a [TaskCategoryDataEntity] to a [TaskCategory].
+ */
 fun TaskCategoryDataEntity.mapToTaskCategory(): TaskCategory {
     return TaskCategory(
         id = id,
@@ -13,6 +16,9 @@ fun TaskCategoryDataEntity.mapToTaskCategory(): TaskCategory {
     )
 }
 
+/**
+ * Extension function to map a [Flow] of [ResultContainer] of [TaskCategoryDataEntity] to a [Flow] of [ResultContainer] of [TaskCategory].
+ */
 fun Flow<ResultContainer<List<TaskCategoryDataEntity>>>.mapToTaskCategory(): Flow<ResultContainer<List<TaskCategory>>> {
     return this.map { container ->
         container.map { list ->

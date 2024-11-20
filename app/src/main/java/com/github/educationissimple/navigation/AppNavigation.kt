@@ -48,12 +48,26 @@ import java.time.Duration
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
+/**
+ * A composable function that sets up the navigation system for the app and handles the primary UI layout,
+ * including the top bar, bottom navigation bar, and navigation between different screens.
+ * It also manages the periodic sync for reminders and handles app exit behavior.
+ *
+ * This function initializes necessary services such as periodic work requests and manages navigation for three
+ * primary sections: Tasks, Audio, and News. It includes dynamic top bar actions based on the current screen and
+ * provides a mechanism to confirm app exit with a double-press on the back button.
+ *
+ * @param onStartAudioService A lambda function to start the audio service when required.
+ * @param onStopAudioService A lambda function to stop the audio service when required.
+ */
 @Composable
 fun AppNavigation(
     onStartAudioService: () -> Unit,
     onStopAudioService: () -> Unit
 ) {
     val context = LocalContext.current.applicationContext
+
+    // Initialize periodic work request for reminders sync after midnight.
     LaunchedEffect(Unit) {
         val currentTime = Calendar.getInstance()
         val midnight = Calendar.getInstance().apply {
@@ -83,6 +97,8 @@ fun AppNavigation(
 
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
+
+    // Determine the current screen's title based on the route of the current navigation entry.
     val titleRes: Int? = when (currentBackStackEntry.value.routeClass()) {
         TasksGraph.TaskCategoriesScreen::class -> R.string.manage_task_categories
         TasksGraph.TasksScreen::class -> R.string.tasks
@@ -93,16 +109,21 @@ fun AppNavigation(
         NewsGraph.NewsScreen::class -> R.string.science_news
         else -> null
     }
+
+    // Left icon action: handle navigation back if there is a previous screen.
     val leftIconAction: IconAction? = if (navController.previousBackStackEntry == null) {
         null
     } else {
         IconAction(Icons.AutoMirrored.Filled.KeyboardArrowLeft) { navController.popBackStack() }
     }
+
+    // Manage state for search enablement in the tasks screen.
     var tasksScreenSearchEnabled by remember { mutableStateOf(false) }
 
 
     var exit by remember { mutableStateOf(false) }
 
+    // Handle exit logic with a 2-second delay on back button press.
     LaunchedEffect(key1 = exit) {
         if (exit) {
             delay(2000)
@@ -110,6 +131,7 @@ fun AppNavigation(
         }
     }
 
+    // Back button press handler.
     BackHandler {
         if (exit) {
             context.startActivity(Intent(Intent.ACTION_MAIN).apply {
@@ -122,6 +144,7 @@ fun AppNavigation(
         }
     }
 
+    // Define right icon actions based on the current screen.
     val rightIconsActions: List<IconAction>? = when (currentBackStackEntry.value.routeClass()) {
         TasksGraph.TasksScreen::class -> listOf(
             IconAction(
@@ -152,6 +175,7 @@ fun AppNavigation(
         else -> null
     }
 
+    // Scaffold the layout with the top bar, bottom bar, and navigation host.
     Scaffold(
         topBar = {
             AppTopBar(

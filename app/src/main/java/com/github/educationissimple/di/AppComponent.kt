@@ -18,6 +18,16 @@ import com.github.educationissimple.tasks.domain.repositories.TasksRepository
 import dagger.BindsInstance
 import dagger.Component
 
+/**
+ * The AppComponent is the main Dagger component for dependency injection in the app.
+ *
+ * The component is responsible for injecting dependencies into the application’s various classes,
+ * including activities, services, and workers.
+ *
+ * It also binds various modules that provide the actual implementations of the dependencies required by the app.
+ *
+ * @AppScope indicates that the component has a singleton lifecycle within the application's lifetime.
+ */
 @[AppScope Component(modules = [AppModule::class, CoreModule::class])]
 interface AppComponent: TasksDeps, AudioDeps, PlayerDeps, ReminderDeps, NewsDeps {
 
@@ -36,8 +46,19 @@ interface AppComponent: TasksDeps, AudioDeps, PlayerDeps, ReminderDeps, NewsDeps
 
     val coreProvider: CoreProvider
 
+    /**
+     * Builder for creating an instance of [AppComponent].
+     * Requires context dependency before building.
+     */
     @Component.Builder
     interface Builder {
+        /**
+         * Binds an instance of [Context] to the component.
+         * This is required to ensure that the component has access to the application's context.
+         *
+         * @param context The application [Context].
+         * @return The builder instance.
+         */
         @BindsInstance
         fun context(context: Context) : Builder
 

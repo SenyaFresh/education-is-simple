@@ -4,6 +4,9 @@ import com.github.educationissimple.data.news.entities.Article
 import com.github.educationissimple.glue.news.utils.parseContent
 import com.github.educationissimple.news.domain.entities.NewsEntity
 
+/**
+ * Extension function to convert an [Article] object to a [NewsEntity] object.
+ */
 fun Article.toNewsEntity(): NewsEntity {
 
     return NewsEntity(

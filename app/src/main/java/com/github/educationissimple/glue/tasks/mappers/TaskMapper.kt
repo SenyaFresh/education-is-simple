@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
+/**
+ * Extension function to map a [TaskDataEntity] to a [Task].
+ */
 fun TaskDataEntity.mapToTask(): Task {
     return Task(
         id = id,
@@ -19,6 +22,9 @@ fun TaskDataEntity.mapToTask(): Task {
     )
 }
 
+/**
+ * Extension function to map a [Task] to a [TaskDataEntity].
+ */
 fun Task.mapToTaskDataEntity(): TaskDataEntity {
     return TaskDataEntity(
         id = id,
@@ -31,6 +37,9 @@ fun Task.mapToTaskDataEntity(): TaskDataEntity {
     )
 }
 
+/**
+ * Extension function to map a [Flow] of [ResultContainer] of [TaskDataEntity] to a [Flow] of [ResultContainer] of [Task].
+ */
 fun Flow<ResultContainer<List<TaskDataEntity>>>.mapToTask(): Flow<ResultContainer<List<Task>>> {
     return this.map { container ->
         container.map { list ->

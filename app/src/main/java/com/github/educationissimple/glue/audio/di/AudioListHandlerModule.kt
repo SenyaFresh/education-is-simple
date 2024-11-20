@@ -8,17 +8,29 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
+/**
+ * Dagger module that provides audio dependencies for the app.
+ */
 @Module
 interface AudioListHandlerModule {
 
+    /**
+     * Binds the [AdapterAudioListHandler] to the [AudioListHandler] interface.
+     */
     @Binds
     fun bindAudioListHandler(adapterAudioListHandler: AdapterAudioListHandler): AudioListHandler
 
 }
 
+/**
+ * Dagger module that provides audio dependencies from player module for the app.
+ */
 @Module
 class AudioListPlayerHandlerModule {
 
+    /**
+     * Provides an instance of [AudioListPlayerHandler].
+     */
     @Provides
     fun provideAudioListPlayerHandler(): AudioListPlayerHandler = PlayerComponentHolder.getInstance().playerListHandler()
 
