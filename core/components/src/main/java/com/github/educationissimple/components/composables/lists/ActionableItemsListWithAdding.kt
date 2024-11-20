@@ -29,6 +29,19 @@ import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A Composable function that displays a list of actionable items with the ability to add new items.
+ * If the list is empty, a message is displayed. The function handles displaying items, adding new ones, and
+ * deleting items. It also provides feedback for loading states and includes an option for reloading the items.
+ *
+ * @param items The list of actionable items wrapped in a [ResultContainer], which can represent loading, success, or failure states.
+ * @param onReloadItems A lambda to reload the items if necessary, such as when the data fails to load.
+ * @param emptyListMessage The message to display when the list of items is empty.
+ * @param onDelete A lambda function that is called when an item is deleted, receiving the item's ID.
+ * @param addLabel The label to display for the add dialog's title.
+ * @param addPlaceholder The placeholder text to show inside the text field when adding a new item.
+ * @param onAdd An optional lambda that is called when a new item is added, receiving the item's name.
+ */
 @Composable
 fun ActionableItemsListWithAdding(
     items: ResultContainer<List<ActionableItem>>,

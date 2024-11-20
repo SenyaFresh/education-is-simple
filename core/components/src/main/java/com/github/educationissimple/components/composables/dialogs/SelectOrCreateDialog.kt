@@ -33,6 +33,26 @@ import com.github.educationissimple.components.composables.lists.ActionableItems
 import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A Composable function that displays a dialog allowing the user to select an existing item or create a new one.
+ *
+ * This dialog displays a list of selectable items, with the option to create a new item by entering text in a text field.
+ * The user can confirm or cancel the action. If a new item is created, the corresponding callback is triggered.
+ * The dialog provides buttons for confirming or canceling the selection and an option to reload the list of items.
+ *
+ * @param title The title displayed at the top of the dialog.
+ * @param items A [ResultContainer] containing the list of [ActionableItem]s to be displayed as selectable options.
+ * @param initialItem The item to be selected initially in case no item is chosen by the user.
+ * @param textFieldPlaceholder The placeholder text displayed inside the input field for adding new items.
+ * @param onReloadItems A lambda function that is called when the user requests to reload the list of items.
+ * @param onConfirm A lambda function triggered when the user confirms their selection. It receives the selected [ActionableItem].
+ * @param confirmLabel The label displayed on the confirm button.
+ * @param onCancel A lambda function that is triggered when the cancel button is clicked or when the dialog is dismissed.
+ * @param cancelLabel The label displayed on the cancel button.
+ * @param onAddNewItem A lambda function that is called when the user adds a new item via the text field.
+ * @param modifier An optional [Modifier] to customize the appearance or behavior of the dialog.
+ * @param initialActiveItemId An optional initial item ID that is pre-selected in the dialog. It defaults to null if no initial selection is made.
+ */
 @Composable
 fun SelectOrCreateDialog(
     title: String,

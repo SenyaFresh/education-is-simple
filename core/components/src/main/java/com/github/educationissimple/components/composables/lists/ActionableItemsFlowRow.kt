@@ -21,6 +21,23 @@ import com.github.educationissimple.components.entities.ActionableItem
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A Composable function that displays a row of actionable items in a flow layout. It supports dynamic item loading,
+ * displays loading states, and provides a callback for item click events.
+ *
+ * The items can be passed as a [ResultContainer], allowing for different states like loading, success, and failure.
+ * The function optionally supports displaying a "leading item" at the beginning of the list. Each item is rendered as
+ * an [ActionableListItem], and the `onItemClick` lambda is triggered when an item is clicked. The layout ensures that
+ * items are spaced out evenly and are capable of handling multiple lines of items.
+ *
+ * @param items The list of actionable items wrapped in a [ResultContainer] that handles loading, success, and failure states.
+ * @param onReloadItems A lambda function to reload the items if the data fails to load or requires refreshing.
+ * @param modifier A [Modifier] for custom layout and styling of the row.
+ * @param onItemClick A lambda function that is called when an item is clicked, passing the item's ID.
+ * @param activeItemId The ID of the currently active item, if any. The active item will be styled differently.
+ * @param leadingItem An optional item that will be displayed first in the list, before the other items.
+ * @param maxLines The maximum number of lines to display the items in. Defaults to [Int.MAX_VALUE] for unlimited lines.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ActionableItemsFlowRow(

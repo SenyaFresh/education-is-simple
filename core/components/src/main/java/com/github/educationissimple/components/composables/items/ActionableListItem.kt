@@ -31,6 +31,19 @@ import com.github.educationissimple.components.R
 import com.github.educationissimple.components.composables.ActionIcon
 import com.github.educationissimple.components.composables.shimmerEffect
 
+/**
+ * A Composable function that represents an actionable list item, which can be clicked and optionally deleted.
+ *
+ * The list item is displayed as a [Card] with a label and a delete icon. The background color changes depending on whether
+ * the item is active or not. The delete icon is shown only if the `onDelete` lambda is provided. Clicking the list item
+ * triggers the `onClick` action, and clicking the delete icon triggers the `onDelete` action if provided.
+ *
+ * @param label The label text to be displayed in the list item.
+ * @param modifier A [Modifier] for custom layout and styling.
+ * @param onClick A lambda that gets called when the list item is clicked.
+ * @param onDelete A lambda that gets called when the delete icon is clicked, or null if no delete action is needed.
+ * @param isActive A boolean value indicating whether the item is active. This alters the background color of the item.
+ */
 @Composable
 fun ActionableListItem(
     label: String,

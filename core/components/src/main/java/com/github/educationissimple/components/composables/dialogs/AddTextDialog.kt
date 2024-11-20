@@ -23,6 +23,21 @@ import com.github.educationissimple.components.composables.buttons.DefaultSecond
 import com.github.educationissimple.components.composables.inputs.DefaultTextField
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A Composable function that displays a dialog with a text input field and confirm/cancel actions.
+ *
+ * This function creates a dialog that allows the user to input text, providing a confirm and cancel option.
+ * It uses the `DefaultDialog` to render the dialog's framework, and includes a `DefaultTextField` for input and
+ * two buttons (`DefaultSecondaryButton` for cancel and `DefaultPrimaryButton` for confirm).
+ * The input text is validated before triggering the confirm action.
+ *
+ * @param title The title displayed at the top of the dialog.
+ * @param placeholder The placeholder text displayed within the input field.
+ * @param onConfirm A lambda function that is triggered when the confirm button is clicked, passing the entered text.
+ *                  This function will only be called if the input text is not blank.
+ * @param onCancel A lambda function that is triggered when the cancel button is clicked or when the dialog is dismissed.
+ * @param modifier An optional [Modifier] to customize the appearance or behavior of the dialog.
+ */
 @Composable
 fun AddTextDialog(
     title: String,
