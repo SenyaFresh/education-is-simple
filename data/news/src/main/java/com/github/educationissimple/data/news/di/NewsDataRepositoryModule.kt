@@ -17,10 +17,6 @@ interface NewsDataRepositoryModule {
     /**
      * Binds the [PagerNewsDataRepository] implementation to the [NewsDataRepository] interface.
      *
-     * This method ensures that whenever a [NewsDataRepository] is needed, the [PagerNewsDataRepository]
-     * implementation is provided. This allows the repository to handle network requests for news articles
-     * using a paging approach.
-     *
      * @param impl The [PagerNewsDataRepository] implementation.
      * @return A bound [NewsDataRepository] instance.
      */
