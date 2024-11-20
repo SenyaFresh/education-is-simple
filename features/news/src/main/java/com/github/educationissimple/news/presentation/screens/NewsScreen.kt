@@ -25,6 +25,9 @@ import com.github.educationissimple.news.presentation.viewmodels.NewsViewModel
 import com.github.educationissimple.presentation.ErrorMessage
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A composable function that serves as the main screen for displaying a list of news articles.
+ */
 @Composable
 fun NewsScreen(
     diContainer: NewsDiContainer = rememberNewsDiContainer(),

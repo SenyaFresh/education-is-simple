@@ -37,6 +37,14 @@ import coil.request.ImageRequest
 import com.github.educationissimple.news.domain.entities.NewsEntity
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A modal bottom sheet composable that displays detailed news content with optional image, title, source, and more.
+ *
+ * @param news The [NewsEntity] containing details of the news to be displayed.
+ * @param onMoreClick A callback triggered when the "More" action is clicked, typically to open the full article in a browser.
+ * @param isSheetOpen A boolean indicating whether the sheet should be open.
+ * @param onDismiss A callback triggered when the sheet is dismissed by the user.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsContentSheet(

@@ -44,6 +44,14 @@ import com.github.educationissimple.news.R
 import com.github.educationissimple.news.domain.entities.NewsEntity
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * A composable function to display a news item as a list element, with a clickable layout
+ * that opens a detailed bottom sheet for the news content. Handles image loading states
+ * and provides an option to view more details via a callback.
+ *
+ * @param news The [NewsEntity] containing the news details to display.
+ * @param onMoreClick A callback triggered when the "More" text is clicked, typically to open the full article in a browser.
+ */
 @Composable
 fun NewsListItem(
     news: NewsEntity,
