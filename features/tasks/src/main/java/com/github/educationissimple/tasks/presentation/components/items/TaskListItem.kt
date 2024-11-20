@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -381,7 +380,7 @@ private fun TaskContent(
                 modifier = Modifier
                     .height(28.dp)
                     .width(4.dp)
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(MaterialTheme.shapes.small)
                     .background(MaterialTheme.colorScheme.outline)
             )
 
@@ -410,7 +409,7 @@ fun LoadingTaskListItem() {
 
         Box(
             modifier = Modifier
-                .clip(shape = RoundedCornerShape(4.dp))
+                .clip(shape = MaterialTheme.shapes.extraSmall)
                 .size(20.dp)
                 .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
         )
@@ -421,7 +420,7 @@ fun LoadingTaskListItem() {
 
         Box(
             modifier = Modifier
-                .clip(shape = RoundedCornerShape(4.dp))
+                .clip(shape = MaterialTheme.shapes.extraSmall)
                 .size(height = 14.dp, width = (72..120).random().dp)
                 .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
         )

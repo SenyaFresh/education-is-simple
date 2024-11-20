@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
@@ -75,7 +74,7 @@ fun AudioListItem(
     Surface(
         color = if (isSelected) MaterialTheme.colorScheme.surfaceContainerLow else MaterialTheme.colorScheme.surface,
         modifier = Modifier.height(IntrinsicSize.Min),
-        shape = RoundedCornerShape(4.dp),
+        shape = MaterialTheme.shapes.extraSmall,
         onClick = onClick
     ) {
         Row(
@@ -88,7 +87,7 @@ fun AudioListItem(
             Box(
                 Modifier
                     .size(40.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .clip(MaterialTheme.shapes.extraSmall),
                 contentAlignment = Alignment.Center
             ) {
                 if (audio.imageBitmap == null) {
@@ -153,7 +152,9 @@ fun AudioListItem(
 
 @Composable
 fun LoadingAudioListItem() {
-    Surface {
+    Surface(
+        shape = MaterialTheme.shapes.extraSmall
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -169,7 +170,7 @@ fun LoadingAudioListItem() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(MaterialTheme.shapes.extraSmall)
                         .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             }
@@ -181,13 +182,13 @@ fun LoadingAudioListItem() {
             ) {
                 Box(
                     modifier = Modifier
-                        .clip(shape = RoundedCornerShape(4.dp))
+                        .clip(shape = MaterialTheme.shapes.extraSmall)
                         .size(height = 12.dp, width = (40..80).random().dp)
                         .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
                 Box(
                     modifier = Modifier
-                        .clip(shape = RoundedCornerShape(4.dp))
+                        .clip(shape = MaterialTheme.shapes.extraSmall)
                         .size(height = 10.dp, width = (32..72).random().dp)
                         .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 )

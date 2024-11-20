@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -54,7 +53,7 @@ fun ActionableListItem(
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = if (!isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
-        shape = RoundedCornerShape(18.dp),
+        shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(1.dp),
         onClick = onClick,
         modifier = modifier,
@@ -95,7 +94,7 @@ fun LoadingActionableListItem(withDelete: Boolean = false) {
     val modifier = if (withDelete) Modifier.fillMaxWidth() else Modifier
     Box(
         modifier = modifier
-            .clip(shape = RoundedCornerShape(18.dp))
+            .clip(shape = MaterialTheme.shapes.large)
             .height(
                 if (withDelete) 50.dp else 30.dp
             )

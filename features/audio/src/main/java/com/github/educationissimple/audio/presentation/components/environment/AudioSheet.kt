@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Forward10
@@ -138,7 +137,7 @@ fun AudioImage(audio: Audio) {
         Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(MaterialTheme.shapes.large),
         contentAlignment = Alignment.Center
     ) {
         if (audio.imageBitmap == null) {

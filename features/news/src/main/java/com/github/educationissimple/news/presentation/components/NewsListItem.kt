@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material3.HorizontalDivider
@@ -81,7 +80,7 @@ fun NewsListItem(
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(MaterialTheme.shapes.large),
             contentAlignment = Alignment.Center
         ) {
             if (news.imageUrl == null || imageState == ImageLoadingState.Error) {

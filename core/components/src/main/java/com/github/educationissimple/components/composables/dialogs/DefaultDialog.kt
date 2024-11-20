@@ -3,10 +3,10 @@ package com.github.educationissimple.components.composables.dialogs
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +46,7 @@ fun DefaultDialog(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             tonalElevation = AlertDialogDefaults.TonalElevation,
-            shape = RoundedCornerShape(12.dp)
+            shape = MaterialTheme.shapes.medium
         ) {
             Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(14.dp)) {
                 Text(
