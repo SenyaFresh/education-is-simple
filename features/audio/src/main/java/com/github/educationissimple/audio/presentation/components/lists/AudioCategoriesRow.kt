@@ -15,6 +15,18 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.lists.ActionableItemsFlowRow
 import com.github.educationissimple.components.entities.ActionableItem
 
+/**
+ * Composable that displays a horizontal list of audio categories, with the option to select a category
+ * and reload the categories if necessary. It also includes an option for a first category label.
+ *
+ * @param categories The result container that holds the list of audio categories to be displayed.
+ * @param onCategoryClick A callback function to be invoked when a category is clicked. It provides the selected category's ID.
+ * @param onReloadCategories A callback function to reload the categories.
+ * @param modifier A modifier to be applied to the row.
+ * @param firstCategoryLabel The label for the first item in the row, usually representing a default or "no category" option.
+ * @param activeCategoryId The ID of the currently active (selected) category. Default is [NO_CATEGORY_ID].
+ * @param maxLines The maximum number of lines allowed for the categories. Default is [Int.MAX_VALUE], which allows unlimited lines.
+ */
 @Composable
 fun AudioCategoriesRow(
     categories: ResultContainer<List<AudioCategory>>,

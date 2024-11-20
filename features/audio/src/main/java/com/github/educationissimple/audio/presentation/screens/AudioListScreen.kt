@@ -43,6 +43,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 
+/**
+ * Composable function that represents the screen for managing audio items and categories.
+ */
 @Composable
 fun AudioListScreen(
     onStartAudioService: () -> Unit,

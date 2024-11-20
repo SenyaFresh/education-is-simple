@@ -42,6 +42,15 @@ import com.github.educationissimple.audio.presentation.events.AudioEvent
 import com.github.educationissimple.audio.presentation.viewmodels.AudioViewModel
 import com.github.educationissimple.common.ResultContainer
 
+/**
+ * Composable that displays a floating item showing the current audio and controls for audio playback and deletion.
+ *
+ * The item updates its content based on the current audio state, allowing users to interact with the audio, such as controlling playback or deleting the audio.
+ *
+ * @param onStopAudioService A callback invoked when the audio service should be stopped.
+ * @param diContainer The dependency injection container that provides the necessary dependencies for the view model.
+ * @param viewModel The view model used for managing audio playback state.
+ */
 @Composable
 fun CurrentAudioFloatingItem(
     onStopAudioService: () -> Unit,

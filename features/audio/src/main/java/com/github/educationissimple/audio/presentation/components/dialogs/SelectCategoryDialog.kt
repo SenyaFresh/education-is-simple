@@ -13,6 +13,22 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.dialogs.SelectOrCreateDialog
 import com.github.educationissimple.components.entities.ActionableItem
 
+/**
+ * Displays a dialog for selecting or creating a new audio category.
+ *
+ * The dialog shows a list of available audio categories. The user can either select an existing
+ * category or create a new one by entering a name. The dialog includes options to confirm the selection,
+ * cancel the dialog, or reload the categories if necessary.
+ *
+ * @param title The title to be displayed at the top of the dialog.
+ * @param categories A container holding the list of audio categories.
+ * @param onTryAgain A callback to reload the categories in case of an error.
+ * @param onConfirm A callback to confirm the selection of an audio category.
+ * @param onCancel A callback to cancel the dialog.
+ * @param onAddNewCategory A callback to add a new category by providing a name.
+ * @param modifier A modifier to be applied to the dialog's root view.
+ * @param initialActiveCategoryId The ID of the category that is initially selected. Defaults to [NO_CATEGORY_ID] if no category is selected.
+ */
 @Composable
 fun SelectCategoryDialog(
     title: String,

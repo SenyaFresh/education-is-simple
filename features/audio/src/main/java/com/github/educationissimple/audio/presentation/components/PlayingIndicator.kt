@@ -15,6 +15,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * A composable that displays a visual indicator to show whether an audio is currently playing. The indicator
+ * animates with a resizing effect when the audio is playing and remains a fixed size when paused.
+ *
+ * @param isPlaying A boolean that indicates whether the audio is currently playing. The animation is active
+ * when `isPlaying` is `true`, and the indicator remains static when `isPlaying` is `false`.
+ * @param modifier An optional modifier to customize the appearance or behavior of the indicator.
+ */
 @Composable
 fun PlayingIndicator(isPlaying: Boolean, modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "resizing")

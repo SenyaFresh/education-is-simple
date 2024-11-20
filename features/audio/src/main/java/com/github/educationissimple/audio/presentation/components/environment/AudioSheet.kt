@@ -58,6 +58,20 @@ import com.github.educationissimple.audio.presentation.entities.dummies.dummyAud
 import com.github.educationissimple.audio.presentation.utils.formatDurationTime
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * Displays a bottom sheet for controlling audio playback.
+ *
+ * The bottom sheet allows the user to view the audio's image, title, control playback actions, and adjust the audio progress.
+ * It also includes the option to delete the audio.
+ *
+ * @param audio The audio data containing the title, image, and duration.
+ * @param isPlaying Boolean indicating whether the audio is currently playing.
+ * @param currentTime The current playback position of the audio in milliseconds.
+ * @param onPlayerController A callback to handle player control actions, such as play/pause, next, previous, etc.
+ * @param onDeleteClick A callback for handling audio deletion.
+ * @param isSheetOpen Boolean indicating whether the sheet should be open or not.
+ * @param onDismiss A callback for dismissing the sheet when the user taps outside or performs a dismiss action.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AudioSheet(

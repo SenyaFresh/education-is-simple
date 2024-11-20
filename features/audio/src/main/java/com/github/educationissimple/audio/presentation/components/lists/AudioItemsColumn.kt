@@ -16,6 +16,19 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * Composable that displays a vertical list of audio items with the option to reload the list,
+ * select, and delete individual items. This component handles displaying loading states and errors
+ * while showing the audio items when available.
+ *
+ * @param audioItems The result container holding a list of audio items to be displayed. It can be in a loading,
+ * error, or success state.
+ * @param onReloadAudioItems A callback function to reload the audio items when the data is in a error state.
+ * @param selectedAudioUri The URI of the currently selected audio item. Used to highlight the selected audio.
+ * @param playingAudioUri The URI of the audio currently playing. Used to indicate the playing item.
+ * @param onAudioClick A callback function to be invoked when an audio item is clicked, passing the URI of the selected audio.
+ * @param onAudioDelete A callback function to be invoked when an audio item is deleted, passing the URI of the deleted audio.
+ */
 @Composable
 fun AudioItemsColumn(
     audioItems: ResultContainer<List<Audio>>,

@@ -29,6 +29,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing audio items, audio categories, and player state for the audio app.
+ *
+ * This ViewModel interacts with use cases that handle audio item and category operations,
+ * audio control, and player state management. It provides data streams for the audio items,
+ * categories, the currently active category, and the current audio item. It also allows handling
+ * user actions such as adding, deleting, or changing audio items and categories, as well as controlling
+ * the audio player (play, pause, next, previous, etc.).
+ **/
 class AudioViewModel @Inject constructor(
     private val onStartAudioService: () -> Unit,
     private val onStopAudioService: () -> Unit,
@@ -46,25 +55,31 @@ class AudioViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase
 ) : BaseViewModel() {
 
+    /** The state flow of audio categories. */
     private val _audioCategories =
         MutableStateFlow<ResultContainer<List<AudioCategory>>>(ResultContainer.Loading)
     val audioCategories = _audioCategories.asStateFlow()
 
+    /** The state flow of audio items. */
     private val _audioItems =
         MutableStateFlow<ResultContainer<List<Audio>>>(ResultContainer.Loading)
     val audioItems = _audioItems.asStateFlow()
 
+    /** The current selected audio item. */
     private val _currentAudioItem = MutableStateFlow<Audio?>(null)
     val currentAudioItem = _currentAudioItem
 
+    /** The state flow of the currently active category. */
     private val _activeCategoryId =
         MutableStateFlow<ResultContainer<Long?>>(ResultContainer.Loading)
     val activeCategoryId = _activeCategoryId.asStateFlow()
 
+    /** The state flow of the current audio list state. */
     private var _audioListState =
         MutableStateFlow<ResultContainer<AudioListState>>(ResultContainer.Loading)
     val audioListState = _audioListState.asStateFlow()
 
+    /** Flag to check if the audio player has been initialized. */
     private var isPlayerInitialized = false
 
     init {
@@ -74,6 +89,7 @@ class AudioViewModel @Inject constructor(
         collectActiveCategoryId()
     }
 
+    /** Handles incoming audio events like adding, deleting items, or controlling the player. */
     fun onEvent(event: AudioEvent) = debounce {
         when (event) {
             is AudioEvent.AddAudioItemEvent -> onAddAudioItemEvent(event.uri, event.categoryId)
@@ -87,14 +103,17 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    /** Reloads the audio items from the use case. */
     private fun onReloadAudioItems() = viewModelScope.launch {
         getAudioItemsUseCase.reloadAudioItems()
     }
 
+    /** Reloads the audio categories from the use case. */
     private fun onReloadAudioCategories() = viewModelScope.launch {
         getCategoriesUseCase.reloadCategories()
     }
 
+    /** Collects the audio items and initializes the audio player if not initialized. */
     private fun collectAudioItems() = viewModelScope.launch {
         getAudioItemsUseCase.getAudioItems().collect {
             _audioItems.value = it
@@ -105,12 +124,14 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    /** Collects the audio categories. */
     private fun collectAudioCategories() = viewModelScope.launch {
         getCategoriesUseCase.getCategories().collect {
             _audioCategories.value = it
         }
     }
 
+    /** Collects the player state. */
     private fun collectPlayerState() = viewModelScope.launch {
         getPlayerStateUseCase.getPlayerState().collect { state ->
             _audioListState.value = state
@@ -119,34 +140,41 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    /** Collects the currently active category ID. */
     private fun collectActiveCategoryId() = viewModelScope.launch {
         getCategoriesUseCase.getSelectedCategoryId().collect {
             _activeCategoryId.value = it
         }
     }
 
+    /** Handles adding an audio item to the repository and the audio player. */
     private fun onAddAudioItemEvent(uri: String, categoryId: Long?) = viewModelScope.launch {
         addAudioToRepoUseCase.addAudioItem(uri, categoryId)
         addAudioToPlayerUseCase.addAudio(uri)
     }
 
+    /** Handles deleting an audio item from the repository and the audio player. */
     private fun onDeleteAudioItemEvent(uri: String) = viewModelScope.launch {
         deleteAudioFromRepoUseCase.deleteAudioItem(uri)
         deleteAudioFromPlayerUseCase.deleteAudio(getIndexByUri(uri) ?: -1)
     }
 
+    /** Handles adding a new audio category. */
     private fun onAddCategoryEvent(name: String) = viewModelScope.launch {
         addAudioCategoryUseCase.addCategory(name)
     }
 
+    /** Handles deleting an audio category. */
     private fun onDeleteCategoryEvent(categoryId: Long) = viewModelScope.launch {
         deleteAudioCategoryUseCase.deleteCategory(categoryId)
     }
 
+    /** Handles changing the currently active category. */
     private fun onChangeCategoryEvent(categoryId: Long?) = viewModelScope.launch {
         getAudioItemsUseCase.changeSelectedCategoryId(categoryId)
     }
 
+    /** Handles incoming player events. */
     private fun onPlayerEvent(controller: PlayerController) = viewModelScope.launch {
         when (controller) {
             is PlayerController.Close -> {
@@ -166,12 +194,16 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    /** Retrieves the index of an audio item by its URI. */
     private fun getIndexByUri(uri: String): Int? {
         return if (audioItems.value is ResultContainer.Done) audioItems.value.unwrap()
             .indexOfFirst { it.uri == uri }
         else null
     }
 
+    /**
+     * Factory for creating instances of [AudioViewModel] with assisted injection.
+     */
     @Suppress("UNCHECKED_CAST")
     class Factory @AssistedInject constructor(
         @Assisted("onStartAudioService") private val onStartAudioService: () -> Unit,

@@ -48,6 +48,19 @@ import com.github.educationissimple.audio.presentation.entities.dummies.dummyAud
 import com.github.educationissimple.components.composables.shimmerEffect
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
+/**
+ * Composable that displays an item in the audio list, including the audio's image, title, subtitle,
+ * and an optional "delete" menu for audio removal.
+ *
+ * The item highlights when selected and shows a playing indicator if the audio is currently playing.
+ *
+ * @param audio The audio object containing the information to be displayed (e.g., title, subtitle, image).
+ * @param onClick A callback function to be invoked when the audio list item is clicked.
+ * @param onAudioDelete A callback function to be invoked when the delete option is selected.
+ * @param isAudioPlaying A boolean value indicating whether the audio is currently playing.
+ * @param isSelected A boolean value indicating whether the item is selected.
+ * @param modifier A modifier to be applied to the audio list item.
+ */
 @Composable
 fun AudioListItem(
     audio: Audio,

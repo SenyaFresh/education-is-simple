@@ -15,6 +15,9 @@ import com.github.educationissimple.common.ResultContainer
 import com.github.educationissimple.components.composables.lists.ActionableItemsListWithAdding
 import com.github.educationissimple.components.entities.ActionableItem
 
+/**
+ * Composable function that represents the screen for managing audio categories.
+ */
 @Composable
 fun AudioCategoriesScreen(
     diContainer: AudioDiContainer = rememberAudioDiContainer(),

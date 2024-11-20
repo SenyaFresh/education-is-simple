@@ -24,6 +24,20 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 
+/**
+ * Displays a dialog when the audio permission is denied.
+ *
+ * The dialog presents either a rationale explaining why the permission is needed
+ * or provides options to go to the app settings or request the permission again.
+ *
+ * If the permission is denied with the option to show a rationale, the dialog will display
+ * the rationale along with buttons to either dismiss the dialog or open the app settings.
+ * If the permission is denied without the rationale, the dialog will prompt the user
+ * to either dismiss the dialog or request the permission again.
+ *
+ * @param audioPermissionState The current state of the audio permission request.
+ * @param onDismiss A callback to dismiss the dialog when the user interacts with it.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun DeniedAudioPermissionDialog(audioPermissionState: PermissionState, onDismiss: () -> Unit) {
