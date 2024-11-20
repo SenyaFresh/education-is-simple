@@ -9,6 +9,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.components.composables.dialogs.AddTextDialog
 import com.github.educationissimple.tasks.R
 
+/**
+ * Displays a dialog for adding a new category.
+ *
+ * This composable function presents a dialog with a text input field that allows the user to
+ * enter a new category name. The dialog includes "Confirm" and "Cancel" actions:
+ * - When the user confirms, the provided [onConfirm] callback is triggered with the input text.
+ * - When the user cancels, the provided [onCancel] callback is triggered.
+ *
+ * The dialog's appearance can be customized with the [modifier] parameter.
+ *
+ * @param onConfirm A callback function to be invoked when the user confirms the action. It takes
+ * the entered category name as a parameter.
+ * @param onCancel A callback function to be invoked when the user cancels the action.
+ * @param modifier A [Modifier] that can be used to customize the layout or appearance of the dialog.
+ */
 @Composable
 fun AddCategoryDialog(
     onConfirm: (String) -> Unit,

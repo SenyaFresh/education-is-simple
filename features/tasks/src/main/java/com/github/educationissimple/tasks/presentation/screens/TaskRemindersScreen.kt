@@ -17,6 +17,9 @@ import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * Displays the screen for managing task reminders.
+ */
 @Composable
 fun TaskRemindersScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),

@@ -17,6 +17,19 @@ import com.github.educationissimple.components.composables.inputs.DefaultRadioIt
 import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.domain.entities.SortType
 
+/**
+ * Displays a dialog for selecting the sorting type for tasks.
+ *
+ * The dialog allows the user to choose a sorting criterion for tasks:
+ * - Sort by date (ascending or descending)
+ * - Sort by priority
+ * - Sort by text (alphabetically ascending or descending)
+ *
+ * @param onDismiss A callback function that is triggered when the dialog is dismissed.
+ * @param onSortTypeChange A callback function triggered when the user selects a sort type. It receives the selected [SortType] as a parameter.
+ * @param sortType The current sort type of the tasks. This value is used to highlight the selected sort type in the dialog.
+ * @param modifier A [Modifier] to customize the appearance of the dialog.
+ */
 @Composable
 fun TasksSortDialog(
     onDismiss: () -> Unit,

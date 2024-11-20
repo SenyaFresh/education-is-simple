@@ -24,7 +24,21 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 
-
+/**
+ * Displays a dialog informing the user that the notifications permission has been denied.
+ *
+ * This composable function is shown when the app requests notifications permission, but the user has denied it.
+ * It provides the user with the following options:
+ * - **Cancel**: Dismiss the dialog without taking any action.
+ * - **Go to Settings** (if rationale is shown): Directs the user to the app's settings page to manually enable the notifications permission.
+ * - **Grant Permission** (if rationale is not shown): Requests the notifications permission again by launching the permission request flow.
+ *
+ * The dialog is displayed only when the notifications permission has been denied. It also checks whether the rationale for the denial should be shown (i.e., whether the user should be informed why the permission is needed).
+ *
+ * @param notificationsPermissionState The current permission state of the notifications permission.
+ * The state is used to determine if the permission is denied and whether a rationale should be shown.
+ * @param onDismiss A callback function to dismiss the dialog when the user presses cancel or closes it.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun DeniedNotificationsPermissionDialog(notificationsPermissionState: PermissionState, onDismiss: () -> Unit) {

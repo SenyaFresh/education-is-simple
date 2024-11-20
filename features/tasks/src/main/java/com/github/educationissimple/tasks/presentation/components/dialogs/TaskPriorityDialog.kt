@@ -20,6 +20,18 @@ import com.github.educationissimple.tasks.presentation.utils.NoPriorityColor
 import com.github.educationissimple.tasks.presentation.utils.SecondaryPriorityColor
 import com.github.educationissimple.tasks.presentation.utils.TopPriorityColor
 
+/**
+ * Displays a dialog for selecting the priority of a task.
+ *
+ * The dialog allows the user to choose between three priority levels for a task:
+ * top priority, secondary priority, and no priority.
+ * It provides options to either select a priority or cancel the dialog.
+ *
+ * @param onDismiss A callback function triggered when the dialog is dismissed.
+ * @param onPriorityChange A callback function triggered when the user selects a priority. It receives the selected [Task.Priority] as a parameter.
+ * @param priority The current priority of the task. This is used to highlight the selected priority in the dialog.
+ * @param modifier A [Modifier] to customize the appearance of the dialog.
+ */
 @Composable
 fun TaskPriorityDialog(
     onDismiss: () -> Unit,

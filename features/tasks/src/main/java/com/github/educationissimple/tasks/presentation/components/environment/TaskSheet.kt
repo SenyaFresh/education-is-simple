@@ -64,6 +64,28 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import java.time.LocalDate
 
+/**
+ * Provides a bottom sheet interface for displaying and editing
+ * a task's properties. The user can update the task's description, priority, date, category,
+ * and reminders. The sheet includes various dialogs for managing task properties:
+ * - A dialog for selecting the task's category.
+ * - A dialog for changing the task's due date.
+ * - A dialog for selecting the task's priority.
+ * - A dialog for creating or managing reminders.
+ *
+ * @param task The task to be displayed and edited in the bottom sheet. This is the original
+ * task that can be updated with the user’s changes.
+ * @param categories A container holding the list of task categories available for selection.
+ * @param reminders A container holding the list of reminders associated with the task.
+ * @param onAddNewCategory A callback function invoked when the user wants to add a new category.
+ * @param isSheetOpen A boolean flag indicating whether the bottom sheet is open or closed.
+ * @param onTaskUpdate A callback function invoked when the user confirms their changes to the task.
+ * @param onCreateReminder A callback function invoked when the user creates a new reminder.
+ * @param onDeleteReminder A callback function invoked when the user deletes an existing reminder.
+ * @param onDismiss A callback function invoked when the user dismisses the bottom sheet.
+ * @param onReloadCategories A callback function invoked to reload the task categories.
+ * @param onReloadReminders A callback function invoked to reload the task reminders.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun TaskSheet(

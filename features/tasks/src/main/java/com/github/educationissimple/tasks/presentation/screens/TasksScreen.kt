@@ -52,6 +52,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
+/**
+ * Displays the screen for managing tasks.
+ */
 @Composable
 fun TasksScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),

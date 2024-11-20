@@ -31,6 +31,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.LocalTime
 
+/**
+ * Displays a time picker with hour and minute input fields.
+ *
+ * This composable function renders a UI for selecting time, with separate input fields for hours
+ * and minutes. The time is passed back to the parent component through the [onTimeSelect] callback.
+ *
+ * The time picker includes:
+ * - Hour input field: Allows the user to select a value between 0 and 23.
+ * - Minute input field: Allows the user to select a value between 0 and 59.
+ *
+ * The appearance and layout of the time picker can be customized with the [modifier] parameter.
+ *
+ * @param modifier A [Modifier] that can be used to customize the layout or appearance of the time picker.
+ * @param selectedTime The currently selected time to display in the time picker. Defaults to the current time.
+ * @param onTimeSelect A callback function to be invoked when the user selects a new time. It takes
+ * the selected [LocalTime] as a parameter.
+ */
 @Composable
 fun TimePicker(
     modifier: Modifier = Modifier,

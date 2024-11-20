@@ -22,6 +22,23 @@ import com.github.educationissimple.tasks.R
 import com.github.educationissimple.tasks.presentation.components.inputs.CalendarView
 import java.time.LocalDate
 
+/**
+ * Displays a dialog for selecting a date.
+ *
+ * This composable function presents a dialog that allows the user to select a date using a calendar view.
+ * - The user can pick a date by selecting a day on the calendar.
+ * - When the user confirms their selection, the provided [onConfirm] callback is triggered with the selected date.
+ * - When the dialog is dismissed, the [onDismiss] callback is triggered.
+ *
+ * The dialog's appearance can be customized using the [modifier] parameter. By default, the dialog
+ * opens with the current date as the initial selection.
+ *
+ * @param onConfirm A callback function to be invoked when the user confirms their date selection. It takes
+ * the selected [LocalDate] as a parameter.
+ * @param onDismiss A callback function to be invoked when the user dismisses the dialog (e.g., pressing "back").
+ * @param modifier A [Modifier] that can be used to customize the layout or appearance of the dialog.
+ * @param initialDate The initial date shown on the calendar when the dialog opens. Defaults to the current date.
+ */
 @Composable
 fun ChangeDateDialog(
     onConfirm: (LocalDate) -> Unit,

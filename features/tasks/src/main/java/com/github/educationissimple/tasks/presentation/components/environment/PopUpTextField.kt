@@ -54,6 +54,20 @@ import com.github.educationissimple.tasks.presentation.components.dialogs.TaskPr
 import com.github.educationissimple.tasks.presentation.utils.toColor
 import java.time.LocalDate
 
+/**
+ * A composable dialog displaying a text field at the bottom of screen for inputting a task, with options to select category,
+ * set a reminder date, and set priority. The dialog allows adding a task with the selected properties.
+ *
+ * @param text The current text in the task input field.
+ * @param onValueChange A callback invoked when the task input text changes.
+ * @param onAddClick A callback invoked when the user clicks the add button. It receives the selected category ID, date, and priority.
+ * @param onAddNewCategory A callback to create a new task category.
+ * @param onReloadCategories A callback to reload the task categories.
+ * @param categories A container holding the list of available task categories.
+ * @param focusRequester A [FocusRequester] to manage the focus of the task input field.
+ * @param onDismiss A callback invoked when the dialog is dismissed.
+ * @param modifier A [Modifier] to customize the appearance of the dialog.
+ */
 @Composable
 fun PopUpTextField(
     text: String,

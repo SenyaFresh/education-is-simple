@@ -15,6 +15,9 @@ import com.github.educationissimple.tasks.domain.entities.TaskCategory
 import com.github.educationissimple.tasks.presentation.events.TasksEvent
 import com.github.educationissimple.tasks.presentation.viewmodels.TasksViewModel
 
+/**
+ * Displays the screen for managing task categories.
+ */
 @Composable
 fun TaskCategoriesScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),

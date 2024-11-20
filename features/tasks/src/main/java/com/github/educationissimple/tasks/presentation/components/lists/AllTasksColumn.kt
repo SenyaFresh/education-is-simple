@@ -34,6 +34,36 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
+/**
+ * Displays all tasks grouped into different categories: previous tasks, today's tasks, future tasks, and completed tasks.
+ *
+ * This composable function organizes tasks into separate sections with expandable/collapsible lists for each group:
+ * "Previous Tasks", "Today's Tasks", "Future Tasks", and "Completed Tasks". Each section can be expanded or collapsed based on user interaction.
+ * When a section is expanded, the tasks within that section are displayed. When collapsed, the tasks are hidden.
+ * The tasks can also be deleted, updated, and reminders can be created or deleted for each task.
+ *
+ * Also handles loading states and empty task states by showing appropriate loading indicators or a message indicating no tasks are available.
+ *
+ * - The task sections (previous, today, future, completed) are shown as separate expandable sections, each with a title and the tasks within it.
+ * - The task lists are only visible if the corresponding section is expanded.
+ * - Tasks are managed with actions for deletion and updates, and reminders can be added or deleted.
+ * - When no tasks are present, a message prompting the user to add tasks is displayed.
+ *
+ * @param previousTasks A [ResultContainer] containing the list of previous tasks.
+ * @param todayTasks A [ResultContainer] containing the list of today's tasks.
+ * @param futureTasks A [ResultContainer] containing the list of future tasks.
+ * @param completedTasks A [ResultContainer] containing the list of completed tasks.
+ * @param onReloadTasks A callback function to reload the tasks.
+ * @param categories A [ResultContainer] containing the list of task categories.
+ * @param onReloadCategories A callback function to reload the categories.
+ * @param onAddNewCategory A callback function to add a new task category.
+ * @param onTaskDelete A callback function to delete a task by its ID.
+ * @param onUpdateTask A callback function to update a task with the given [Task] object.
+ * @param getRemindersForTask A function to retrieve reminders for a specific task by its ID.
+ * @param onDeleteReminder A callback function to delete a task reminder.
+ * @param onCreateReminder A callback function to create a task reminder.
+ * @param onReloadReminders A callback function to reload the reminders.
+ */
 @Composable
 fun AllTasksColumn(
     previousTasks: ResultContainer<List<Task>>,

@@ -78,6 +78,40 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.roundToInt
 
+/**
+ * Displays a list item for a task with interactive actions such as completing, updating, and deleting.
+ *
+ * This composable function creates a list item that represents a task. The task's details, such as its text, completion status, date, and priority, are displayed.
+ * The item includes clickable areas that trigger various actions:
+ * - Marking the task as completed or incomplete.
+ * - Changing the task's priority.
+ * - Changing the task's due date.
+ * - Deleting the task.
+ * - Opening a properties sheet where additional details like categories and reminders can be managed.
+ *
+ * The task’s completion status affects its appearance, and its priority is visually highlighted with a colored indicator.
+ * If the task has a due date which is not today, it is displayed below the task's title.
+ * The appearance of the list item can be customized using the [modifier] parameter.
+ *
+ * The task item also supports a context menu with actions revealed when [isActionsRevealed] is true.
+ * The task can be updated through various actions, including:
+ * - Changing its completion status via the checkbox.
+ * - Updating its priority or due date via corresponding dialogs.
+ * - Deleting the task via an action button.
+ *
+ * @param task A [Task] object representing the task to be displayed, which includes properties such as text, completion status, date, and priority.
+ * @param categories A [ResultContainer] containing the list of [TaskCategory] objects associated with the task.
+ * @param getReminders A function that returns a [StateFlow] of [ResultContainer] wrapping a list of [TaskReminder] objects for the task.
+ * @param onAddNewCategory A callback function that handles adding a new category to the task.
+ * @param onTaskDelete A callback function triggered when the task is deleted.
+ * @param onTaskUpdate A callback function that handles updates to the task, such as marking it as completed or changing its priority.
+ * @param onCreateReminder A callback function to create a new reminder for the task.
+ * @param onDeleteReminder A callback function to delete a reminder from the task.
+ * @param onReloadCategories A callback function to reload the task's categories.
+ * @param onReloadReminders A callback function to reload the task's reminders.
+ * @param modifier A [Modifier] to customize the appearance and layout of the task item.
+ * @param isActionsRevealed A boolean flag indicating whether the actions (delete, update, etc.) should be revealed.
+ */
 @Composable
 fun TaskListItem(
     task: Task,

@@ -29,7 +29,35 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
-
+/**
+ * Displays a collapsible list of tasks within a subcolumn, with the ability to expand and collapse the content.
+ *
+ * This composable function creates a subcolumn for displaying a list of tasks. It includes a title that can be clicked to toggle the visibility of the task list.
+ * Each task in the list can be interacted with (deleted, updated) and can have reminders associated with it. The content can be expanded or collapsed based on the [isExpanded] state,
+ * which is controlled by the [onExpandChange] callback.
+ *
+ * - The subcolumn header contains the [title] and an icon (either an up or down arrow) indicating whether the content is expanded or collapsed.
+ * - The task items are displayed with a fade-in/fade-out animation when the subcolumn is expanded or collapsed.
+ * - For each task, a [TaskListItem] is displayed that provides options to delete, update, and manage reminders.
+ * - The task list is shown only if it is not empty.
+ *
+ * The [tasksContainer] holds the list of tasks to be displayed, and the [getRemindersForTask] function provides the reminders for each individual task.
+ * The task's categories and reminder actions (create, delete, and reload) are also handled through the provided callbacks.
+ *
+ * @param title The title of the subcolumn, displayed above the task list.
+ * @param tasksContainer A list of [Task] objects representing the tasks to be displayed in the subcolumn.
+ * @param onTaskDelete A callback function invoked when a task is deleted. It receives the task ID as a parameter.
+ * @param onUpdateTask A callback function invoked when a task is updated. It receives the updated [Task] object as a parameter.
+ * @param getRemindersForTask A function that returns a [StateFlow] containing the list of reminders for a given task.
+ * @param onDeleteReminder A callback function invoked when a reminder is deleted. It receives the [TaskReminder] to be deleted.
+ * @param onCreateReminder A callback function invoked when a new reminder is created. It receives the [TaskReminder] to be created.
+ * @param categories A [ResultContainer] containing the list of [TaskCategory] objects associated with the tasks.
+ * @param onAddNewCategory A callback function invoked to add a new category. It receives the name of the category as a parameter.
+ * @param onReloadCategories A callback function invoked to reload the categories list.
+ * @param onReloadReminders A callback function invoked to reload the reminders list.
+ * @param isExpanded A boolean value indicating whether the task list is expanded or collapsed. Default value is `true`.
+ * @param onExpandChange A callback function invoked when the expand/collapse state changes. It receives the new state (`true` for expanded, `false` for collapsed).
+ */
 fun LazyListScope.tasksSubcolumn(
     title: String,
     tasksContainer: List<Task>,

@@ -55,6 +55,30 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Month
 
+/**
+ * Displays a calendar view with month, year, and day selection capabilities.
+ *
+ * This composable function renders a calendar interface where the user can select a specific
+ * day, month, or year. The calendar allows for dynamic navigation through months and years,
+ * as well as selecting specific days. The calendar’s state transitions between day, month, and
+ * year selection modes based on user interaction.
+ *
+ * The calendar view is initially populated with the selected date and updates the [selectedDate]
+ * whenever the user selects a new date. The current selection is communicated to the parent
+ * through the [onDaySelect] callback.
+ *
+ * The view allows the user to:
+ * - Navigate between months using left and right arrow buttons.
+ * - Select a month or year to change the calendar’s display.
+ * - Select a day and update the selected date.
+ *
+ * The appearance of the calendar view can be customized with the [modifier] parameter.
+ *
+ * @param modifier A [Modifier] that can be used to customize the layout or appearance of the calendar.
+ * @param selectedDate The currently selected date to display in the calendar. Defaults to the current date.
+ * @param onDaySelect A callback function to be invoked when the user selects a new day. It takes
+ * the selected [LocalDate] as a parameter.
+ */
 @Composable
 fun CalendarView(
     modifier: Modifier = Modifier,

@@ -25,6 +25,18 @@ import com.github.educationissimple.tasks.presentation.components.inputs.Calenda
 import com.github.educationissimple.tasks.presentation.components.inputs.TimePicker
 import java.time.LocalDateTime
 
+/**
+ * Displays a dialog to allow the user to pick both a date and a time.
+ *
+ * The dialog initially asks the user to select a date. Once a date is selected, the user can proceed to select the time.
+ * After both the date and time are selected, the user can confirm the selection.
+ *
+ * @param onConfirm A callback function that is triggered when the user confirms their selection.
+ * It receives the selected date and time as a [LocalDateTime] parameter.
+ * @param onDismiss A callback function that is triggered when the dialog is dismissed.
+ * @param modifier A modifier to customize the dialog's appearance and layout.
+ * @param initialDateTime The initial date and time to be displayed in the dialog. The default value is the current date and time.
+ */
 @Composable
 fun PickDateTimeDialog(
     onConfirm: (LocalDateTime) -> Unit,

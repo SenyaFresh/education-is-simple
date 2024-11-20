@@ -43,6 +43,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
+/**
+ * Displays the calendar screen, which includes the tasks and reminders for the current date.
+ * This screen allows the user to view tasks that are either completed or not completed, along with their associated categories and reminders.
+ **/
 @Composable
 fun CalendarScreen(
     diContainer: TasksDiContainer = rememberTasksDiContainer(),
