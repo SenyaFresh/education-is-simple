@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.github.educationissimple.audio_player.services.AudioServiceManager
 import com.github.educationissimple.navigation.AppNavigation
 import com.github.educationissimple.ui.theme.EducationIsSimpleTheme
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as BaseApplication).appComponent.inject(this)
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             EducationIsSimpleTheme {

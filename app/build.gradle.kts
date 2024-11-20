@@ -65,6 +65,7 @@ dependencies {
     api(project(":services:audio-player"))
     api(project(":services:notifications"))
 
+    implementation(libs.core.splashscreen)
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.okhttp)

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.EducationIsSimple" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.EducationIsSimple" parent="android:Theme.Material.Light.NoActionBar" />
 
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#111318</item>
+        <item name="postSplashScreenTheme">@style/Theme.EducationIsSimple</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_app_logo_animation</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
     </style>
 </resources>

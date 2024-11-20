@@ -30,9 +30,10 @@ paging = "3.3.4"
 retrofit = "2.9.0"
 okhttp = "4.11.0"
 uiTextGoogleFonts = "1.7.5"
+splashScreen = "1.0.1"
 
 [libraries]
-
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen"}
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp"}
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
