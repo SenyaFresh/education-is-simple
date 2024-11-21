@@ -95,7 +95,7 @@ fun NewsContent(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = LocalSpacing.current.small)
+                                .padding(vertical = LocalSpacing.current.medium)
                         ) {
                             CircularProgressIndicator()
                         }
@@ -108,7 +108,7 @@ fun NewsContent(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillParentMaxHeight()
+                                .padding(vertical = LocalSpacing.current.medium)
                         ) {
                             ErrorMessage(
                                 message = stringResource(R.string.loading_error),

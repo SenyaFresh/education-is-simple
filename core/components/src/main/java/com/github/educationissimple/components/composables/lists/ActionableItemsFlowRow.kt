@@ -56,13 +56,14 @@ fun ActionableItemsFlowRow(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = modifier.padding(vertical = LocalSpacing.current.small)
+                modifier = Modifier.padding(vertical = LocalSpacing.current.small)
             ) {
                 repeat(5) {
                     LoadingActionableListItem()
                 }
             }
-        }
+        },
+        modifier = modifier
     ) {
         val displayedItems = (leadingItem?.let {
             listOf(
@@ -74,7 +75,7 @@ fun ActionableItemsFlowRow(
             maxLines = maxLines,
             horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
             verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            modifier = modifier
+            modifier = Modifier
         ) { index ->
             val category = displayedItems[index]
             key(category.id, activeItemId) {

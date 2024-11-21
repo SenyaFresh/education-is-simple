@@ -99,12 +99,15 @@ fun SelectOrCreateDialog(
                 onValueChange = { newItemText = it },
                 placeholder = { Text(textFieldPlaceholder) },
                 trailingIcon = {
-                    DefaultIconButton(onClick = {
-                        if (newItemText.isNotBlank()) {
-                            onAddNewItem(newItemText)
-                            newItemText = ""
-                        }
-                    }) {
+                    DefaultIconButton(
+                        onClick = {
+                            if (newItemText.isNotBlank()) {
+                                onAddNewItem(newItemText)
+                                newItemText = ""
+                            }
+                        },
+                        enabled = items is ResultContainer.Done
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Send,
                             contentDescription = "Add new item",
@@ -131,9 +134,10 @@ fun SelectOrCreateDialog(
                     label = confirmLabel,
                     onClick = {
                         onConfirm(
-                            getSelectedCategory(items.unwrap(), activeItemId) ?: initialItem
+                            getSelectedCategory(items.unwrapOrNull(), activeItemId) ?: initialItem
                         )
                     },
+                    enabled = items is ResultContainer.Done,
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
@@ -143,8 +147,8 @@ fun SelectOrCreateDialog(
     }
 }
 
-private fun getSelectedCategory(categories: List<ActionableItem>, id: Long?): ActionableItem? {
-    return categories.firstOrNull { it.id == id }
+private fun getSelectedCategory(categories: List<ActionableItem>?, id: Long?): ActionableItem? {
+    return categories?.firstOrNull { it.id == id }
 }
 
 @Preview(showSystemUi = true)

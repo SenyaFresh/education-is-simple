@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.educationissimple.audio.domain.entities.Audio
+import com.github.educationissimple.audio.domain.entities.AudioListState
 import com.github.educationissimple.audio.presentation.components.items.AudioListItem
 import com.github.educationissimple.audio.presentation.components.items.LoadingAudioListItem
 import com.github.educationissimple.common.ResultContainer
@@ -23,23 +24,21 @@ import com.github.educationissimple.presentation.locals.LocalSpacing
  *
  * @param audioItems The result container holding a list of audio items to be displayed. It can be in a loading,
  * error, or success state.
+ * @param audioListState The result container holding the current audio list state.
  * @param onReloadAudioItems A callback function to reload the audio items when the data is in a error state.
- * @param selectedAudioUri The URI of the currently selected audio item. Used to highlight the selected audio.
- * @param playingAudioUri The URI of the audio currently playing. Used to indicate the playing item.
  * @param onAudioClick A callback function to be invoked when an audio item is clicked, passing the URI of the selected audio.
  * @param onAudioDelete A callback function to be invoked when an audio item is deleted, passing the URI of the deleted audio.
  */
 @Composable
 fun AudioItemsColumn(
     audioItems: ResultContainer<List<Audio>>,
+    audioListState: ResultContainer<AudioListState>,
     onReloadAudioItems: () -> Unit,
-    selectedAudioUri: String? = null,
-    playingAudioUri: String? = null,
     onAudioClick: (String) -> Unit,
     onAudioDelete: (String) -> Unit
 ) {
     ResultContainerComposable(
-        container = audioItems,
+        container = ResultContainer.wrap(audioItems, audioListState),
         onLoading = {
             Column(
                 modifier = Modifier
@@ -68,8 +67,10 @@ fun AudioItemsColumn(
                     audio = audio,
                     onClick = { onAudioClick(audio.uri) },
                     onAudioDelete = { onAudioDelete(audio.uri) },
-                    isAudioPlaying = audio.uri == playingAudioUri,
-                    isSelected = audio.uri == selectedAudioUri
+                    isAudioPlaying = (audioListState.unwrapOrNull()?.state == AudioListState.State.AUDIO_PLAYING)
+                            && audio.uri == audioListState.unwrapOrNull()?.currentAudioUri,
+                    isSelected = (audioListState.unwrapOrNull()?.state != AudioListState.State.IDLE)
+                            && audio.uri == audioListState.unwrapOrNull()?.currentAudioUri
                 )
             }
         }

@@ -25,10 +25,15 @@ import androidx.compose.ui.text.style.TextOverflow
  */
 @Composable
 fun DefaultPrimaryButton(
-    label: String, onClick: () -> Unit, modifier: Modifier = Modifier, colors: ButtonColors? = null
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    colors: ButtonColors? = null,
+    enabled: Boolean = true
 ) = Button(
     onClick = onClick,
     colors = colors ?: ButtonDefaults.buttonColors(),
+    enabled = enabled,
     modifier = modifier
 ) {
     Text(

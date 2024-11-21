@@ -150,12 +150,7 @@ fun AudioListContent(
 
         AudioItemsColumn(
             audioItems = audioItems,
-            selectedAudioUri =
-            if (audioListState.unwrapOrNull()?.state == AudioListState.State.IDLE) null
-            else audioListState.unwrapOrNull()?.currentAudioUri,
-            playingAudioUri =
-            if (audioListState.unwrapOrNull()?.state != AudioListState.State.AUDIO_PLAYING) null
-            else audioListState.unwrapOrNull()?.currentAudioUri,
+            audioListState = audioListState,
             onAudioClick = {
                 if (audioPermissionState.status is PermissionStatus.Granted) {
                     onAudioEvent(AudioEvent.PlayerEvent(PlayerController.SelectMedia(it)))
