@@ -38,7 +38,7 @@ fun AudioItemsColumn(
     onAudioDelete: (String) -> Unit
 ) {
     ResultContainerComposable(
-        container = ResultContainer.wrap(audioItems, audioListState),
+        container = audioItems,
         onLoading = {
             Column(
                 modifier = Modifier
