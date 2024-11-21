@@ -5,9 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
-import android.os.Build
 import androidx.annotation.OptIn
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media3.common.util.UnstableApi
@@ -38,9 +36,7 @@ class AudioNotificationImpl @Inject constructor(
     private var playerNotificationManager: PlayerNotificationManager? = null
 
     init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
-        }
     }
 
     /**
@@ -48,7 +44,6 @@ class AudioNotificationImpl @Inject constructor(
      *
      * @param serviceManager The [AudioServiceManager] managing the audio playback service.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun startAudioNotification(serviceManager: AudioServiceManager) {
         if (playerNotificationManager == null) {
             buildNotification()
@@ -96,7 +91,6 @@ class AudioNotificationImpl @Inject constructor(
      *
      * @param service The [Service] instance to be bound to the foreground notification.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun startForeGroundNotificationService(service: Service) {
         val notification = Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setCategory(Notification.CATEGORY_SERVICE)
@@ -107,7 +101,6 @@ class AudioNotificationImpl @Inject constructor(
     /**
      * Creates a notification channel for audio playback notifications.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
