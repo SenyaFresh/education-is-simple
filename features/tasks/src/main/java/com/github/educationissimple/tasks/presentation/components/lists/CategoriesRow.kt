@@ -43,6 +43,7 @@ fun CategoriesRow(
     onCategoryClick: (Long) -> Unit,
     onReloadCategories: () -> Unit,
     modifier: Modifier = Modifier,
+    errorModifier: Modifier = Modifier,
     firstCategoryLabel: String,
     activeCategoryId: Long = NO_CATEGORY_ID,
     maxLines: Int = Int.MAX_VALUE
@@ -51,6 +52,7 @@ fun CategoriesRow(
         items = categories.map { list -> list.map { ActionableItem(it.id, it.name) } },
         onItemClick = onCategoryClick,
         modifier = modifier,
+        errorModifier = errorModifier,
         activeItemId = activeCategoryId,
         leadingItem = ActionableItem(
             id = NO_CATEGORY_ID,

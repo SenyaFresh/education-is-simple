@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.educationissimple.common.ResultContainer
+import com.github.educationissimple.components.R
 import com.github.educationissimple.components.composables.items.ActionableListItem
 import com.github.educationissimple.components.composables.items.LoadingActionableListItem
 import com.github.educationissimple.components.entities.ActionableItem
+import com.github.educationissimple.presentation.ErrorMessage
 import com.github.educationissimple.presentation.ResultContainerComposable
 import com.github.educationissimple.presentation.locals.LocalSpacing
 
@@ -44,47 +48,62 @@ fun ActionableItemsFlowRow(
     items: ResultContainer<List<ActionableItem>>,
     onReloadItems: () -> Unit,
     modifier: Modifier = Modifier,
+    errorModifier: Modifier = Modifier,
     onItemClick: (Long) -> Unit = {},
     activeItemId: Long? = null,
     leadingItem: ActionableItem? = null,
     maxLines: Int = Int.MAX_VALUE
 ) {
-    ResultContainerComposable(
-        container = items,
-        onTryAgain = onReloadItems,
-        onLoading = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = LocalSpacing.current.small)
-            ) {
-                repeat(5) {
-                    LoadingActionableListItem()
-                }
-            }
-        },
-        modifier = modifier
-    ) {
-        val displayedItems = (leadingItem?.let {
-            listOf(
-                leadingItem
+    if (items is ResultContainer.Error) {
+        Box(
+            modifier = errorModifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            ErrorMessage(
+                message = items.exception.message ?: stringResource(R.string.unknown_error),
+                onClickRetry = onReloadItems,
+                modifier = errorModifier
             )
-        } ?: emptyList()) + items.unwrap()
-        ContextualFlowRow(
-            itemCount = displayedItems.size,
-            maxLines = maxLines,
-            horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
-            modifier = Modifier
-        ) { index ->
-            val category = displayedItems[index]
-            key(category.id, activeItemId) {
-                ActionableListItem(
-                    label = category.name,
-                    isActive = category.id == activeItemId,
-                    onClick = { onItemClick(category.id) },
-                    modifier = Modifier
+        }
+    }
+    else{
+        ResultContainerComposable(
+            container = items,
+            onTryAgain = onReloadItems,
+            onLoading = {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = LocalSpacing.current.small)
+                ) {
+                    repeat(5) {
+                        LoadingActionableListItem()
+                    }
+                }
+            },
+            modifier = modifier
+        ) {
+            val displayedItems = (leadingItem?.let {
+                listOf(
+                    leadingItem
                 )
+            } ?: emptyList()) + items.unwrap()
+            ContextualFlowRow(
+                itemCount = displayedItems.size,
+                maxLines = maxLines,
+                horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium),
+                modifier = Modifier
+            ) { index ->
+                val category = displayedItems[index]
+                key(category.id, activeItemId) {
+                    ActionableListItem(
+                        label = category.name,
+                        isActive = category.id == activeItemId,
+                        onClick = { onItemClick(category.id) },
+                        modifier = Modifier
+                    )
+                }
             }
         }
     }

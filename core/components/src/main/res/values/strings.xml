@@ -4,4 +4,5 @@
     <string name="cancel">Отменить</string>
     <string name="confirm">Подтвердить</string>
     <string name="retry">Повторить</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

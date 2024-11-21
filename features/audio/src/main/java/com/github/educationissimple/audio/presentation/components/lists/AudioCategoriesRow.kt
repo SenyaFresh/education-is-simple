@@ -33,6 +33,7 @@ fun AudioCategoriesRow(
     onCategoryClick: (Long) -> Unit,
     onReloadCategories: () -> Unit,
     modifier: Modifier = Modifier,
+    errorModifier: Modifier = Modifier,
     firstCategoryLabel: String,
     activeCategoryId: Long = NO_CATEGORY_ID,
     maxLines: Int = Int.MAX_VALUE
@@ -42,6 +43,7 @@ fun AudioCategoriesRow(
         onItemClick = onCategoryClick,
         onReloadItems = onReloadCategories,
         modifier = modifier,
+        errorModifier = errorModifier,
         activeItemId = activeCategoryId,
         leadingItem = ActionableItem(
             id = NO_CATEGORY_ID,
