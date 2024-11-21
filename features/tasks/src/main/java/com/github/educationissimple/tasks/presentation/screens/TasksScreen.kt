@@ -140,7 +140,7 @@ fun TasksContent(
                     modifier = Modifier.padding(LocalSpacing.current.small)
                 )
             } else {
-                // Выбор категории и меню.
+                // Categories row and menu.
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -174,7 +174,7 @@ fun TasksContent(
 
         Spacer(modifier = Modifier.height(LocalSpacing.current.extraSmall))
 
-        // Список задач.
+        // Tasks list.
         AllTasksColumn(
             previousTasks = previousTasks,
             todayTasks = todayTasks,
