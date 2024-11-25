@@ -23,6 +23,7 @@
     <li>
       <a href="#installation">Installation</a>
     </li>
+    <li><a href="#demo">Demo</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -43,6 +44,10 @@ Listen to audiobooks and podcasts while you're on the go to make every minute co
 
 Download APK file from the latest release and install it on your device.
 
+<!-- APP DEMO -->
+## Demo
+
+https://github.com/user-attachments/assets/49b32a31-74df-494b-908d-8dab115f05f8
 
 <!-- USAGE EXAMPLES -->
 ## Usage
